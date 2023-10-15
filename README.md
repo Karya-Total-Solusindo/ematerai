@@ -15,6 +15,8 @@
 - Super-Admin
 - Admin
 - Client 
+## Themes
+using [Argon Dashboard 2 Laravel](https://www.creative-tim.com/product/argon-dashboard-laravel)
 
 ## Plugin 
 - [spatie/laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction)
