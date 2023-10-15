@@ -7,9 +7,14 @@
 "Simplifikasi Pembubuhan MeteraiPada Sistem Elektronik"
 “Tingkatkan pengalaman permetereian dalam aspek keamanan, kenyamanan, ketersediaan, dan kemudahan bagi masyarakat.”
 ## Feature
-- [] Dashboard
-- [] Sign In use username or email
+- [x] Dashboard
+- [x] Sign In use username or email
 - [x] User Permission
+- [ ] Other
+## Default Rules
+- Super-Admin
+- Admin
+- Client 
 
 ## Plugin 
 - [spatie/laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction)
