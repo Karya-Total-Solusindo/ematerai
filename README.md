@@ -6,6 +6,16 @@
 ## About E-materai
 "Simplifikasi Pembubuhan MeteraiPada Sistem Elektronik"
 “Tingkatkan pengalaman permetereian dalam aspek keamanan, kenyamanan, ketersediaan, dan kemudahan bagi masyarakat.”
+## Feature
+- [] Dashboard
+- [] Sign In use username or email
+- [x] User Permission
+
+## Plugin 
+- [spatie/laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction)
+- [Laravel Collective](https://laravelcollective.com/docs/6.x/html) 
+
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
