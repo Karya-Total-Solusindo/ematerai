@@ -12,7 +12,7 @@
 "Simplifikasi Pembubuhan MeteraiPada Sistem Elektronik"
 “Tingkatkan pengalaman permetereian dalam aspek keamanan, kenyamanan, ketersediaan, dan kemudahan bagi masyarakat.”
 <p align="center">
-<img src="/public/img/screenshot.png" height="50px" alt="screenshot">
+<img src="/public/img/screenshot.png" height="50%" alt="screenshot">
 </p>
 
 ## Feature
