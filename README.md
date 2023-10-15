@@ -4,7 +4,8 @@
 </p>
 
 ## About E-materai
-
+"Simplifikasi Pembubuhan MeteraiPada Sistem Elektronik"
+“Tingkatkan pengalaman permetereian dalam aspek keamanan, kenyamanan, ketersediaan, dan kemudahan bagi masyarakat.”
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
