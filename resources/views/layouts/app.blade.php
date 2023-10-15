@@ -21,6 +21,7 @@
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('assets/css/validity.css') }}" rel="stylesheet" />
+    <link id="pagestyle" href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" />
 
 </head>
 

@@ -24,11 +24,11 @@
                                         @csrf
                                         @method('post')
                                         <div class="flex flex-col mb-3">
-                                            <input type="username" name="username" class="form-control form-control-lg" value="{{ env('APP_DEBUG') == true? old('username') ?? 'admin@test.com':'' }}" aria-label="Username" placeholder="Email or Username">
+                                            <input autocomplete="false" type="username" name="username" class="form-control form-control-lg" value="{{ env('APP_DEBUG') == true? old('username') ?? 'admin@test.com':'' }}" aria-label="Username" placeholder="Email or Username">
                                             @error('username') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                         </div>
                                         <div class="flex flex-col mb-3">
-                                            <input type="password" name="password" class="form-control form-control-lg" aria-label="Password" value="{{env('APP_DEBUG') == true?'secret':''}}" placeholder="Password">
+                                            <input autocomplete="false" type="password" name="password" class="form-control form-control-lg" aria-label="Password" value="{{env('APP_DEBUG') == true?'secret':''}}" placeholder="Password">
                                             @error('password') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                         </div>
                                         <div class="form-check form-switch">
@@ -53,11 +53,11 @@
                                     </p>
                                 </div>
                             </div>
+                            @include('layouts.footers.guest.footer')
                         </div>
-                        <div
-                            class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
+                        <div class="col-6 d-lg-flex d-none h-100 my-auto pe-0 position-absolute top-0 end-0 text-center justify-content-center flex-column">
                             {{-- <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/signin-ill.jpg'); background-size: cover;"> --}}
-                            <div class="position-relative bg-gradient-primary h-100 m-3 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('{{ asset('img/e-meterai.jpg') }}'); background-size: cover;">
+                            <div class="position-relative bg-gradient-primary h-100 m-4 px-7 border-radius-lg d-flex flex-column justify-content-center overflow-hidden" style="background-image: url('{{ asset('img/e-meterai.jpg') }}'); background-size: cover;">
                                 <span class="mask bg-gradient-primary opacity-6"></span>
                                 <h4 class="mt-5 text-white font-weight-bolder position-relative">"Simplifikasi Pembubuhan MeteraiPada Sistem Elektronik"</h4>
                                 <p class="text-white position-relative">“Tingkatkan pengalaman permetereian dalam aspek keamanan, kenyamanan, ketersediaan, dan kemudahan bagi masyarakat.”</p>
@@ -66,6 +66,7 @@
                     </div>
                 </div>
             </div>
+
         </section>
     </main>
 @endsection

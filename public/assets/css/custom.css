@@ -1,0 +1,12 @@
+.navbar-login{
+    background-color: #fb6340d6 !important
+}
+.navbar-login a{
+    /* background-color: #fb6340 !important; */
+    color: white !important;
+    font-weight: bold;
+}
+.navbar-login i{
+    /* background-color: #fb6340 !important; */
+    color: white !important;
+}
