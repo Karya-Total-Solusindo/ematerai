@@ -8,7 +8,7 @@
         <div class="card mb-4">
             <div class="card-header pb-0">
                 <h6>Users</h6>
-                @role('Super-Admin', 'web')
+                @role('Superadmin', 'web')
                     I am a super-admin!
                 @else
                     I am not a super-admin...

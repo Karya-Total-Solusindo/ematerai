@@ -42,7 +42,7 @@
                     <span class="mask bg-primary opacity-6"></span>
                 </div>
             @endif
-            @role('Super-Admin', 'web')
+            @role('Superadmin', 'web')
                 @include('layouts.navbars.auth.sidenavsuper')
             @else
                 @include('layouts.navbars.auth.sidenav')

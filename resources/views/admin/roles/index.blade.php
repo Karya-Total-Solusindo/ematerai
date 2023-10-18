@@ -20,7 +20,7 @@
                         <a class="btn btn-success btn-sm ms-auto" href="{{ route('roles.create') }}"> Create New Role </a>
                     @endcan
                 </div>
-                @role('Super-Admin', 'web')
+                @role('Superadmin', 'web')
                     I am a super-admin!
                 @else
                     I am not a super-admin...
