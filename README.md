@@ -37,6 +37,11 @@
 - [spatie/laravel-permission](https://spatie.be/docs/laravel-permission/v5/introduction)
 - [Laravel Collective](https://laravelcollective.com/docs/6.x/html)
 
+# INSTALL
+''sudo chown -R $USER:www-data storage''
+''chmod -R 775 storage''
+
+
 ## License
 
 The Laravel framework is open-sourced software licensed under the [MIT license](https://opensource.org/licenses/MIT).
