@@ -5,7 +5,6 @@
             aria-hidden="true" id="iconSidenav"></i>
         <a class="navbar-brand m-0" href="{{ route('home') }}"
             target="_blank">
-            {{Route::currentRouteName() }}
             {{-- <img src="{{ asset('./img/logo-ct-dark.png') }}" class="navbar-brand-img h-100" alt="main_logo"> --}}
             <img src="https://farpoint.co.id/wp-content/themes/farpoint/img/fp-logo.png" class="navbar-brand-img h-100" alt="main_logo"><br>
             <span class="ms-1 font-weight-bold">{{ env('APP_NAME') }}</span>
