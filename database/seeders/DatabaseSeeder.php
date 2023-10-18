@@ -30,7 +30,7 @@ class DatabaseSeeder extends Seeder
             'password' => 'secret',
         ]);
 
-        $role = Role::create(['name' => 'Super Admin']);
+        $role = Role::create(['name' => 'Superadmin']);
         $permissions = Permission::pluck('id','id')->all();
         $role->syncPermissions($permissions);
         $sadmin->assignRole([$role->id]);

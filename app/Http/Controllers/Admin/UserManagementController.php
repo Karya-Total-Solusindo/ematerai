@@ -28,12 +28,6 @@ class UserManagementController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-        // $users = User::orderBy('id','DESC')->paginate(5);
-        // $roles = Role::pluck('name','name')->find('id');
-        // $userRole = $users->roles->pluck('name','name')->all();
-        // return view('admin.user', compact('users','roles'))
-        // ->with('i', ($request->input('page', 1) - 1) * 5);
-
         $users = User::orderBy('id','DESC')->paginate(5);
         return view('admin.users.user',compact('users'))
 
