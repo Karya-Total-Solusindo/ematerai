@@ -4,6 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
+use Mockery\Matcher\Any;
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -22,7 +23,19 @@ class AppServiceProvider extends ServiceProvider
     {
         //
         Blade::directive('datetime', function (string $expression) {
-            return "<?= echo ($expression)->format('m/d/Y H:i'); ?>";
+            return ($expression)->format('m/d/Y H:i');
+        });
+        #TODO - urlRoot
+        /**
+         * example '{host}/users/123'
+         * get flag "users" by url requst
+        */
+        Blade::directive('segmentURL',function($expression=1){
+            $seg = request()->segment((int)$expression);
+            return "'".$seg."'";
+            if($expression){
+            }
+            //return "'home'";
         });
     }
 }
