@@ -21,6 +21,8 @@
 - [X] Dashboard
 - [X] Sign In use username or email
 - [X] User Permission
+- [ ] Configure
+  - [ ] Create Directory
 - [ ] Other
 
 ## Default Rules
