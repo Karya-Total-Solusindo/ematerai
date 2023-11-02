@@ -2,28 +2,22 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
+use App\Models\Directory;
+use App\Models\User;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
-use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
-use DB;
 
-
-class ConfigureConttroller extends Controller
+class DirectoryController extends Controller
 {
-    function __construct()
-    {
-        $this->middleware('permission:configure-list|configure-create|configure-edit|configure-delete', ['only' => ['index','store']]);
-        $this->middleware('permission:configure-create', ['only' => ['create','store']]);
-        $this->middleware('permission:configure-edit', ['only' => ['edit','update']]);
-        $this->middleware('permission:configure-delete', ['only' => ['destroy']]);
-    }
     /**
      * Display a listing of the resource.
      */
-    public function index(Request $request)
+    public function index()
     {
-        return view("client.configure.index");
+        $datas =  Directory::with('company')->get();
+        return view("client.configure.directory.index", compact("datas"));
     }
 
     /**
@@ -31,7 +25,9 @@ class ConfigureConttroller extends Controller
      */
     public function create()
     {
-        return view("client.configure.index");
+        $user = Auth::user()->id;
+        $datas = Company::with('user')->find($user)->get();
+        return view("client.configure.directory.index",compact('datas'));
     }
 
     /**
@@ -39,13 +35,9 @@ class ConfigureConttroller extends Controller
      */
     public function store(Request $request)
     {
-        // $this->validate($request, [
-        //     'name' => 'required',
-        //     'category' => 'required'
-        // ]);
         $input = $request->all();
-        $name = $input['name'];
-        $category =  strtolower($input['category']);
+        $name = $input['company'];
+        $category =  strtolower($input['name']);
         $path = public_path().'/docs/'.$name.'/'.$category.'/in';
         File::makeDirectory($path, $mode = 0777, true, true);
         $path = public_path().'/docs/'.$name.'/'.$category.'/out';
@@ -53,21 +45,23 @@ class ConfigureConttroller extends Controller
         $path = public_path().'/docs/'.$name.'/'.$category.'/backup';
         File::makeDirectory($path, $mode = 0777, true, true);
         // Session::flash('message', 'Image are uploaded successfully');
-        return redirect()->route('configure')->with('success','User created successfully');
+        return redirect()->route('directory.index')->with('success','User created successfully');
     }
 
     /**
      * Display the specified resource.
      */
-    public function show(string $id)
+    public function show(Directory $directory)
     {
-        //
+        $datas = Company::with('directory')->find($directory->id);
+        // return Company::with('directory')->find($directory->id);
+        return view("client.configure.directory.index", compact("datas"));
     }
 
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(string $id)
+    public function edit(Directory $directory)
     {
         //
     }
@@ -75,7 +69,7 @@ class ConfigureConttroller extends Controller
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Directory $directory)
     {
         //
     }
@@ -83,7 +77,7 @@ class ConfigureConttroller extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(string $id)
+    public function destroy(Directory $directory)
     {
         //
     }

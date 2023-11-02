@@ -52,9 +52,11 @@
             @endrole
                 <main class="main-content border-radius-lg">
                     @yield('content')
+                    @include('layouts.footers.auth.footer')
                 </main>
             @include('components.fixed-plugin')
         @endif
+        
     @endauth
 
     <!--   Core JS Files   -->

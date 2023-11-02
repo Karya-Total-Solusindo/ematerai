@@ -1,5 +1,7 @@
 <?php
 
+use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DirectoryController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -71,7 +73,8 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::get('/configure', [ConfigureConttroller::class, 'index'])->middleware('auth')->name('configure');
     Route::get('/configure/create', [ConfigureConttroller::class, 'create'])->middleware('auth')->name('configurecreate');
     Route::post('/configure/store', [ConfigureConttroller::class, 'store'])->middleware('auth')->name('configure-store');
-    
+    Route::resource('/configure/company', CompanyController::class);
+    Route::resource('/configure/directory', DirectoryController::class);
     /**
      * GLOBAL
      */
