@@ -11,7 +11,7 @@
         </a>
     </div>
     <hr class="horizontal dark mt-0">
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+    <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main" style="height: 100%;">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'home' ? 'active' : '' }}" href="{{ route('home') }}">
@@ -22,7 +22,8 @@
                     <span class="nav-link-text ms-1">Dashboard</span>
                 </a>
             </li>
-            <li class="nav-item mt-3 d-flex align-items-center">
+            
+            {{-- <li class="nav-item mt-3 d-flex align-items-center">
                 <div class="ps-4">
                     <i class="fa fa-folder" style="color: #f4645f;"></i>
                 </div>
@@ -36,11 +37,8 @@
                     </div>
                     <span class="nav-link-text ms-1">Profile</span>
                 </a>
-            </li>
-
-            <li class="nav-item mt-3">
-                <h6 class="ps-4 ms-2 text-uppercase text-xs font-weight-bolder opacity-6">Pages</h6>
-            </li>
+            </li> --}}
+            @include('layouts.navbars.client.sidebar')
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'tables') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'tables']) }}">
                     <div
@@ -52,7 +50,7 @@
             </li>
         </ul>
     </div>
-    <div class="sidenav-footer mx-3 ">
+    {{-- <div class="sidenav-footer mx-3 "> --}}
         {{-- <div class="card card-plain shadow-none" id="sidenavCard">
             <img class="w-50 mx-auto" src="/img/illustrations/icon-documentation-warning.svg"
                 alt="sidebar_illustration">
@@ -67,5 +65,5 @@
             class="btn btn-dark btn-sm w-100 mb-3">Documentation</a>
         <a class="btn btn-primary btn-sm mb-0 w-100"
             href="#" target="_blank" type="button">Upgrade to PRO</a> --}}
-    </div>
+    {{-- </div> --}}
 </aside>

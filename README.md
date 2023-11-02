@@ -11,6 +11,7 @@
 
 "Simplifikasi Pembubuhan MeteraiPada Sistem Elektronik"
 “Tingkatkan pengalaman permetereian dalam aspek keamanan, kenyamanan, ketersediaan, dan kemudahan bagi masyarakat.”
+
 <p align="center">
 <img src="/public/img/screenshot.png" height="50%" alt="screenshot">
 </p>
@@ -38,9 +39,18 @@
 - [Laravel Collective](https://laravelcollective.com/docs/6.x/html)
 
 # INSTALL
+
 ''sudo chown -R $USER:www-data storage''
 ''chmod -R 775 storage''
 
+`composer require spatie/laravel-permission`
+
+`php artisan vendor:publish --provider="Spatie\Permission\PermissionServiceProvider`
+
+`php artisan optimize:clear`
+`php artisan migrate`
+
+`php artisan migrate:refresh --seed`
 
 ## License
 

@@ -17,12 +17,15 @@
     <!-- Font Awesome Icons -->
     {{-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> --}}
     <script src="{{ asset('assets/js/plugins/fontawesome_42d5adcbca.js') }}" crossorigin="anonymous"></script>
+    <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script>
+
     <link href="{{ asset('assets/css/nucleo-svg.css" rel="stylesheet') }}" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('assets/css/validity.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" />
-
+    <link id="pagestyle" href="{{ asset('assets/css/sidebar-nav.css') }}" rel="stylesheet" />
+    
 </head>
 
 <body class="{{ $class ?? '' }}">
@@ -43,7 +46,7 @@
                 </div>
             @endif
             @role('Superadmin', 'web')
-                @include('layouts.navbars.auth.sidenavsuper')
+                @include('layouts.navbars.auth.sidenavsuper') 
             @else
                 @include('layouts.navbars.auth.sidenav')
             @endrole

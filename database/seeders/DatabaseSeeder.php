@@ -53,21 +53,21 @@ class DatabaseSeeder extends Seeder
             'firstname' => 'User',
             'lastname' => 'User',
             'email' => 'user@test.com',
-            'password' => '12345678',
+            'password' => '123456',
         ]),
         User::create([
             'username' => 'userdua',
             'firstname' => 'User',
             'lastname' => 'Dua',
             'email' => 'userdua@test.com',
-            'password' => '12345678',
+            'password' => '123456',
         ]),
         User::create([
             'username' => 'usertiga',
             'firstname' => 'User',
             'lastname' => 'Tiga',
             'email' => 'usertiga@test.com',
-            'password' => '12345678',
+            'password' => '123456',
         ]),
     ];
 
