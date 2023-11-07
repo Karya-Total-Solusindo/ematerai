@@ -9,12 +9,12 @@
             {{-- <p class="card-text">Text</p> --}}
             <div class="col-md-12">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" name="name" id="name" value="{{ $data->name }}" required>
+                <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $data->name??'') }}" required>
                 <span></span>
             </div>
             <div class="col-md-12">
                 <label for="detail" class="form-label">desciptions</label>
-                <input type="text" class="form-control" name="detail" id="detail" value="{{ $data->detail }}">
+                <input type="text" class="form-control" name="detail" id="detail" value="{{ old('detail', $data->detail??'') }}">
                 <span></span>
             </div>
         </div>

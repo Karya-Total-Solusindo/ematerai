@@ -5,7 +5,7 @@
         @if (Route::currentRouteName() == 'directory.create')
             @include('client.configure.directory.form')
         @elseif (Route::currentRouteName() == 'directory.edit')
-            @include('client.configure.directory.form')
+            @include('client.configure.directory.edit')
         @elseif (Route::currentRouteName() == 'directory.show')
             @include('client.configure.directory.show')       
         @else

@@ -16,7 +16,14 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
-        $datas = Company::orderBy('id','DESC')->paginate(5);
+        $datas = Company::where([
+            [function ($query) use ($request) {
+                if (($s = $request->s)) {
+                    $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        ->get();
+                }
+            }]
+        ])->orderBy('id','DESC')->paginate(5);
         return view('client.configure.company.index',compact('datas'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
         // return view("client.configure.company.index");

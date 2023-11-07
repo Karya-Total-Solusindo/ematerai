@@ -14,9 +14,9 @@ class Company extends Model
     protected $fillable = [
         'name', 'detail','user_id'
     ];
-    public function User()
+    public function user()
     {
-        return $this->belongsTo(User::class,'user_id','id');
+        return $this->belongsTo(User::class,'user_id');
     }
     public function directory()
     {

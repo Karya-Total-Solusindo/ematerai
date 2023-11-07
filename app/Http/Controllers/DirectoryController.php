@@ -5,18 +5,30 @@ namespace App\Http\Controllers;
 use App\Models\Company;
 use App\Models\Directory;
 use App\Models\User;
+use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Database\Eloquent\Collection;
 
 class DirectoryController extends Controller
 {
     /**
      * Display a listing of the resource.
      */
-    public function index()
+    public function index(Request $request)
     {
-        $datas =  Directory::with('company')->get();
+        // $datas =  Directory::with('user')->find(1)->get('company_id');
+        $datas =  Directory::where([
+            [function ($query) use ($request) {
+                if (($s = $request->s)) {
+                    $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        ->get();
+                }
+            }]
+        ])->with('company')->paginate(5);
         return view("client.configure.directory.index", compact("datas"));
     }
 
@@ -25,9 +37,15 @@ class DirectoryController extends Controller
      */
     public function create()
     {
+        DB::enableQueryLog();
         $user = Auth::user()->id;
-        $datas = Company::with('user')->find($user)->get();
-        return view("client.configure.directory.index",compact('datas'));
+        // return $datas = User::with('company')->find($user)->get('*');
+        $datas =  Company::where('user_id',$user)->get();
+         DB::getQueryLog();
+        if($datas->count()){
+            return view("client.configure.directory.index",compact('datas'));
+        }
+        return redirect()->route('company.index')->with('success','You have to create a company');
     }
 
     /**
@@ -36,13 +54,24 @@ class DirectoryController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
-        $name = $input['company'];
-        $category =  strtolower($input['name']);
-        $path = public_path().'/docs/'.$name.'/'.$category.'/in';
+        $companyId = $input['company'];
+        $company = Company::find($input['company'])->name;
+        $this->validate($request, [
+            'name' => 'required',
+        ]);
+        $uniq = [
+            'company_id'=>  $companyId,
+            'name'=> $input['name'],
+            'active'=> 1,
+        ];
+        $Company = Directory::updateOrCreate($uniq,['active'=> 1]);
+
+        $name =  strtolower($input['name']);
+        $path = public_path().'/docs/'.$company.'/'.$name.'/in';
         File::makeDirectory($path, $mode = 0777, true, true);
-        $path = public_path().'/docs/'.$name.'/'.$category.'/out';
+        $path = public_path().'/docs/'.$company.'/'.$name.'/out';
         File::makeDirectory($path, $mode = 0777, true, true);
-        $path = public_path().'/docs/'.$name.'/'.$category.'/backup';
+        $path = public_path().'/docs/'.$company.'/'.$name.'/backup';
         File::makeDirectory($path, $mode = 0777, true, true);
         // Session::flash('message', 'Image are uploaded successfully');
         return redirect()->route('directory.index')->with('success','User created successfully');
@@ -53,8 +82,8 @@ class DirectoryController extends Controller
      */
     public function show(Directory $directory)
     {
-        $datas = Company::with('directory')->find($directory->id);
-        // return Company::with('directory')->find($directory->id);
+        $datas = Directory::with('company')->find($directory->id);
+        // Company::with('directory')->find($directory->id);
         return view("client.configure.directory.index", compact("datas"));
     }
 
@@ -63,7 +92,14 @@ class DirectoryController extends Controller
      */
     public function edit(Directory $directory)
     {
-        //
+        $user = Auth::user()->id;
+        $id = $directory->id;
+        $company = User::with('company')->where('id',$user)->get();
+        $datas = Directory::where('id',$id)->get();
+        if($datas->count()){
+            return view("client.configure.directory.index",compact('directory','company'));
+        }
+        return redirect()->route('company.index')->with('success','You have to create a company');
     }
 
     /**

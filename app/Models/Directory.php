@@ -16,6 +16,11 @@ class Directory extends Model
 
     public function company()
     {
-        return $this->belongsTo(Company::class,'company_id','id');
+        // return $this->belongsTo(Company::class,'directories','id','company_id');
+        return $this->belongsTo(Company::class);
+    }
+    public function user()
+    {
+        return $this->belongsToMany(User::class,'companies','id','user_id');
     }
 }

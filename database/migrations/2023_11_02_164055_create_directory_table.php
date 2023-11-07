@@ -19,7 +19,7 @@ return new class extends Migration
             $table->unsignedBigInteger('company_id');
             $table->string('name');
             $table->text('detail')->nullable();
-            $table->set('active',[1,0]);
+            $table->set('active',[1,0])->default(1);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
            // $table->timestamps();

@@ -11,6 +11,16 @@
             {{-- <p class="card-text">Text</p> --}}
         </div>
         <div class="card-body px-0 pt-0 pb-2">
+            @if ($errors->any())
+            <div class="alert alert-danger">
+                <strong>Whoops!</strong> There were some problems with your input.<br><br>
+                <ul>
+                    @foreach ($errors->all() as $error)
+                        <li>{{ $error }}</li>
+                    @endforeach
+                </ul>
+            </div>
+        @endif
             <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
                     <thead>
@@ -29,6 +39,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        
                         @foreach ($datas as $data)
                         <tr>
                             <td>
@@ -56,5 +67,6 @@
                 </table>
             </div>
         </div>
+        {{ $datas->links() }}
     </div>
 </div>

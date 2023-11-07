@@ -7,7 +7,7 @@
         <div class="col">file 1</div>
         <div class="col">file 1</div>
         <div class="col">file 1</div>
-        {{ var_dump($datas->comapnies) }}
+        {{-- {{ $datas }} --}}
     </div>
   </div>
 </div>

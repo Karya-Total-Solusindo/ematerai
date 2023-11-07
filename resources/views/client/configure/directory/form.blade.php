@@ -3,23 +3,22 @@
         Configure
     </div> --}}
     <form action="{{ Route('directory.store') }}" method="post">
-        <input type="hidden" name="_token" value="{{ csrf_token() }}" />
-        <div class="card-body">
+        @csrf
+            <div class="card-body">
             <h4 class="card-title">Create Directory</h4>
-            <p class="card-text">Text</p>
+            {{-- <p class="card-text">Text</p> --}}
             <div class="col-md-12">
-                    <label for="company" class="form-label">Company</label>
-                    <select class="form-select form-select-lg" name="company" id="company" required>
-                        <option value="" selected>Select one</option>
-                        @foreach ($datas as $data)
-                            <option value="{{ $data->id }}">{{ $data->name }}</option>
-                        @endforeach
-                    </select>
+                <label for="company" class="form-label">Company</label>
+                <select class="form-select form-select-lg" name="company" id="company" required>
+                    @foreach ($datas as $d)
+                        <option value="{{ $d->id }}"> {{ $d->name }}</option>
+                    @endforeach
+                </select>
                 <span></span>
             </div>
             <div class="col-md-12">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" name="name" id="name" value="{{ $data->name }}" required>
+                <input type="text" class="form-control" autocomplete="off" name="name" id="name" value="{{ $directory->name ?? '' }}" required>
                 <span></span>
                 
             </div>
@@ -27,13 +26,13 @@
         <div class="card-footer text-muted text-end">
             <div class="row">
                 <div class="col-6 text-start">
+                    {{-- <button type="submit" class="btn btn-primary">Submit</button> --}}
+                </div>
+                <div class="col-6 text-end">
                     <a class="btn btn-danger" href="{{ route('directory.index') }}">
                             Close 
                     </a>
-                    <button type="submit" class="btn btn-primary">Submit</button>
-                </div>
-                <div class="col-6 text-end">
-                    <button type="submit" class="btn btn-primary">Submit</button>
+                    <button type="submit" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>
