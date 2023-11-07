@@ -54,6 +54,7 @@ class DirectoryController extends Controller
     public function store(Request $request)
     {
         $input = $request->all();
+        //dd($input);
         $companyId = $input['company'];
         $company = Company::find($input['company'])->name;
         $this->validate($request, [
@@ -64,7 +65,18 @@ class DirectoryController extends Controller
             'name'=> $input['name'],
             'active'=> 1,
         ];
-        $Company = Directory::updateOrCreate($uniq,['active'=> 1]);
+        $data = [
+            'active'=> 1,
+            'template'=> $input['template'] ?? '0',
+            'x1'=> $input['x1'] ?? '0',
+            'x2'=> $input['x2'] ?? '0',
+            'y1'=> $input['y1'] ?? '0',
+            'y2'=> $input['y2'] ?? '0',
+            'height' => $input['dokumen_height'] ?? '0',
+            'width' => $input['dokumen_width'] ?? '0',
+            'page' => $input['dokumen_page'] ?? '0',
+        ];
+        $Company = Directory::updateOrCreate($uniq,$data);
 
         $name =  strtolower($input['name']);
         $path = public_path().'/docs/'.$company.'/'.$name.'/in';

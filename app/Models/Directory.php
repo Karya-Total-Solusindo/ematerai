@@ -12,6 +12,14 @@ class Directory extends Model
     protected $fillable = [
         'name',
         'company_id',
+        'template',
+        'x1',
+        'x2',
+        'y1',
+        'y2',
+        'height',
+        'width',
+        'page',
     ];
 
     public function company()

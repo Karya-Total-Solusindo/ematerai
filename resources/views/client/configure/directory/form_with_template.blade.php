@@ -1,4 +1,3 @@
-
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/css/imgareaselect-animated.css" integrity="sha512-VOWGVItJ5anAaHwRzNFPo8YGbAGDl34AkUq0/Dkn4UJxK0ag95IZQWoitH6xM7Bq6C3i2VW5oFzkL1+wYkLdmQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 <style>
@@ -78,80 +77,125 @@ a.btn-sm{
   font-size: 13px;
 }
 </style>
-<div class="card p-2">
-  <div class="card-head">
-      <h6>Stamp Position Placement</h6>
-  </div>
-  <div class="row">
-    <div class="col-md-12">
-      <a  class="btn btn-primary btn-block btn-sm col-12" id="upload-button">Pilih File PDF</a> 
-      <div class="row">
-        <div class="col-md-3">
-          <font style="font-weight: bold"><strong>Lower Left X</strong></font>
-          <input type="text" class="form-control" name="lower_left_x" value="" style="width: 100%"/>
-        </div>
-        <div class="col-md-3">
-          <font style="font-weight: bold"><strong>Lower Left Y</strong></font>
-          <input type="text" class="form-control" name="lower_left_y" value="" style="width: 100%"/>
-        </div>
-        <div class="col-md-3">
-          <font style="font-weight: bold"><strong>Upper Right X</strong></font>
-          <input type="text" class="form-control" name="upper_right_x" value="" style="width: 100%"/>
-        </div>
-        <div class="col-md-3">
-          <font style="font-weight: bold"><strong>Upper Right Y</strong></font>
-          <input type="text" class="form-control" name="upper_right_y" value="" style="width: 100%"/>
-        </div>
-      </div>
-      <form action="{{route('stemp.store')}}" method="POST">
+<div class="card mb-4">
+    {{-- <div class="card-header">
+        Configure
+    </div> --}}
+    <form action="{{ Route('directory.store') }}" method="post">
         @csrf
-        <input type="file" id="file-to-upload" accept="application/pdf" />
-        <input type="hidden" name="x1" value="" required/>
-        <input type="hidden" name="x2" value="" required />
-        <input type="hidden" name="y1" value="" required />
-        <input type="hidden" name="y2" value="" required />
-        <input type="hidden" name="dokumen_height" value="" required="required" />
-        <input type="hidden" name="dokumen_width" value="" required="required" />
-        <input type="hidden" name="dokumen_page" id="dokumen_page" required>
-        <input type="hidden" name="digital_signature_path" id="digital_signature_path" width: 100px; height: 100px; value="{{asset('assets/img/meterai.png') }}">
-        <input type="hidden" name="is_visible_sign" id="is_visible_sign" value="True">
-        
-      <div id="pdf-main-container">
-        <div id="pdf-loader">Loading document ...</div>
-        <div id="pdf-contents">
-          <div id="pdf-meta" class="p-0 mb-0"></div>
-            <div class="row mb-0">
-              <div id="pdf-buttonss" class="btn-group btn-group-sm mb-0" role="group" aria-label="Page Control">
-                <a id="pdf-first" class="btn btn-secondary btn-sm">First</a>
-                <a id="pdf-prev" class="btn btn-secondary btn-sm"><i class="fa fa-step-backward" aria-hidden="true"></i> Prev</a>
-                <div id="page-count-container" class="btn disabled" >Page <div id="pdf-current-page" class="p-0 mb-0"></div> of <div id="pdf-total-pages"></div></div>
-                {{-- <div id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div> --}}
-                <a id="pdf-next" class="btn btn-secondary btn-sm">Next <i class="fa fa-step-forward" aria-hidden="true"></i></a>
-                <a id="pdf-last" class="btn btn-secondary btn-sm">Last</a>
+            <div class="card-body">
+            <h4 class="card-title">Create Directory</h4>
+            {{-- <p class="card-text">Text</p> --}}
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="company" class="form-label">Company</label>
+                    <select class="form-select form-select" name="company" id="company" required>
+                        @foreach ($datas as $d)
+                            <option value="{{ $d->id }}"> {{ $d->name }}</option>
+                        @endforeach
+                    </select>
+                    <span></span>
+                </div>
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" autocomplete="off" name="name" id="name" value="{{ $directory->name ?? '' }}" required>
+                    <span></span>
+                </div>
+                <div class="col-md-6">
+                  <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="template" value="" id="template">
+                    <label class="form-check-label" for="template">
+                      With Template.
+                    </label>
+                  </div>
+                    <span></span>
               </div>
             </div>
-          {{-- <canvas id="pdf-canvas" width="1000"></canvas> --}}
-          <canvas id="pdf-canvas"  width="1000"></canvas>
-          <div id="page-loader">Loading page ...</div>
-          <div class="row mb-0">
-            <div id="pdf-buttonss" class="btn-group btn-group-sm mb-0" role="group" aria-label="Page Control">
-              <a id="pdf-first-b" class="btn btn-secondary btn-sm">First</a>
-              <a id="pdf-prev-b" class="btn btn-secondary btn-sm"><i class="fa fa-step-backward" aria-hidden="true"></i> Prev</a>
-              <div id="page-count-container" class="btn disabled" >Page <div id="pdf-current-page" class="p-0 mb-0"></div> of <div id="pdf-total-pages"></div></div>
-              {{-- <div id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div> --}}
-              <a id="pdf-next-b" class="btn btn-secondary btn-sm">Next <i class="fa fa-step-forward" aria-hidden="true"></i></a>
-              <a id="pdf-last-b" class="btn btn-secondary btn-sm">Last</a>
-            </div>
-          </div>
-          <div class="row p-3">
-            <button type="submite" class="btn btn-primary btn-sm">Save</button>
-          </div>
-        </form>
+            <div class="row" id="template-stemp" style="display: none;">
+                <div class="col-md-12">
+                  <button type="button" class="btn btn-primary btn-block btn-sm col-12" id="upload-button">Pilih File PDF</button> 
+                  <div class="row">
+                    <div class="col-md-3">
+                      <font style="font-weight: bold"><strong>Lower Left X</strong></font>
+                      <input type="text" class="form-control" name="lower_left_x" value="" style="width: 100%"/>
+                    </div>
+                    <div class="col-md-3">
+                      <font style="font-weight: bold"><strong>Lower Left Y</strong></font>
+                      <input type="text" class="form-control" name="lower_left_y" value="" style="width: 100%"/>
+                    </div>
+                    <div class="col-md-3">
+                      <font style="font-weight: bold"><strong>Upper Right X</strong></font>
+                      <input type="text" class="form-control" name="upper_right_x" value="" style="width: 100%"/>
+                    </div>
+                    <div class="col-md-3">
+                      <font style="font-weight: bold"><strong>Upper Right Y</strong></font>
+                      <input type="text" class="form-control" name="upper_right_y" value="" style="width: 100%"/>
+                    </div>
+                  </div>
+                  
+                    <input type="hidden" id="template" value="1" required/>
+                    <input type="file" id="file-to-upload" accept="application/pdf" />
+                    <input type="hidden" name="x1" value="" required/>
+                    <input type="hidden" name="x2" value="" required />
+                    <input type="hidden" name="y1" value="" required />
+                    <input type="hidden" name="y2" value="" required />
+                    <input type="hidden" name="dokumen_height" value="" required="required" />
+                    <input type="hidden" name="dokumen_width" value="" required="required" />
+                    <input type="hidden" name="dokumen_page" id="dokumen_page" required>
+                    <input type="hidden" name="digital_signature_path" id="digital_signature_path" width: 100px; height: 100px; value="{{asset('assets/img/meterai.png') }}">
+                    <input type="hidden" name="is_visible_sign" id="is_visible_sign" value="True">
+                    
+                  <div id="pdf-main-container">
+                    <div id="pdf-loader">Loading document ...</div>
+                    <div id="pdf-contents">
+                      <div id="pdf-meta" class="p-0 mb-0"></div>
+                        <div class="row mb-0">
+                          <div id="pdf-buttonss" class="btn-group btn-group-sm mb-0" role="group" aria-label="Page Control">
+                            <a id="pdf-first" class="btn btn-secondary btn-sm">First</a>
+                            <a id="pdf-prev" class="btn btn-secondary btn-sm"><i class="fa fa-step-backward" aria-hidden="true"></i> Prev</a>
+                            <div id="page-count-container" class="btn disabled" >Page <div id="pdf-current-page" class="p-0 mb-0"></div> of <div id="pdf-total-pages"></div></div>
+                            {{-- <div id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div> --}}
+                            <a id="pdf-next" class="btn btn-secondary btn-sm">Next <i class="fa fa-step-forward" aria-hidden="true"></i></a>
+                            <a id="pdf-last" class="btn btn-secondary btn-sm">Last</a>
+                          </div>
+                        </div>
+                      {{-- <canvas id="pdf-canvas" width="1000"></canvas> --}}
+                      <canvas id="pdf-canvas"  width="1000"></canvas>
+                      <div id="page-loader">Loading page ...</div>
+                      <div class="row mb-0">
+                        <div id="pdf-buttonss" class="btn-group btn-group-sm mb-0" role="group" aria-label="Page Control">
+                          <a id="pdf-first-b" class="btn btn-secondary btn-sm">First</a>
+                          <a id="pdf-prev-b" class="btn btn-secondary btn-sm"><i class="fa fa-step-backward" aria-hidden="true"></i> Prev</a>
+                          <div id="page-count-container" class="btn disabled" >Page <div id="pdf-current-page" class="p-0 mb-0"></div> of <div id="pdf-total-pages"></div></div>
+                          {{-- <div id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div> --}}
+                          <a id="pdf-next-b" class="btn btn-secondary btn-sm">Next <i class="fa fa-step-forward" aria-hidden="true"></i></a>
+                          <a id="pdf-last-b" class="btn btn-secondary btn-sm">Last</a>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
         </div>
-      </div>
-    </div>
-  </div>
+        <div class="card-footer text-muted text-end">
+            <div class="row">
+                <div class="col-6 text-start">
+                    {{-- <button type="submit" class="btn btn-primary">Submit</button> --}}
+                </div>
+                <div class="col-6 text-end">
+                    <a class="btn btn-danger" href="{{ route('directory.index') }}">
+                            Close 
+                    </a>
+                    <button type="submit" class="btn btn-primary">Save</button>
+                </div>
+            </div>
+        </div>
+    </form>
 </div>
+
+
+
+
 <!-- jQuery 3 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{-- <script src="https://e-form.peruri.co.id/pdfviewer/bower_components/jquery/dist/jquery.min.js"></script> --}}
@@ -389,5 +433,17 @@ a.btn-sm{
   $("#pdf-last-b").on('click', function() {
     if(__CURRENT_PAGE != __TOTAL_PAGES)
       showPage(__TOTAL_PAGES);
+  });
+  
+  $("#template").change(function(e) {
+    console.log($(this).is(':checked'));
+    if ($(this).is(':checked')) {
+        $(this).val(1);
+        $('#template-stemp').show();
+    };
+    if ($(this).is(':checked') == false) {
+        $(this).val(0);
+        $('#template-stemp').hide();
+    };
   });
   </script>

@@ -7,20 +7,21 @@
             <div class="card-body">
             <h4 class="card-title">Create Directory</h4>
             {{-- <p class="card-text">Text</p> --}}
-            <div class="col-md-12">
-                <label for="company" class="form-label">Company</label>
-                <select class="form-select form-select-lg" name="company" id="company" required>
-                    @foreach ($datas as $d)
-                        <option value="{{ $d->id }}"> {{ $d->name }}</option>
-                    @endforeach
-                </select>
-                <span></span>
-            </div>
-            <div class="col-md-12">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" autocomplete="off" name="name" id="name" value="{{ $directory->name ?? '' }}" required>
-                <span></span>
-                
+            <div class="row">
+                <div class="col-md-6">
+                    <label for="company" class="form-label">Company</label>
+                    <select class="form-select form-select" name="company" id="company" required>
+                        @foreach ($datas as $d)
+                            <option value="{{ $d->id }}"> {{ $d->name }}</option>
+                        @endforeach
+                    </select>
+                    <span></span>
+                </div>
+                <div class="col-md-6">
+                    <label for="name" class="form-label">Name</label>
+                    <input type="text" class="form-control" autocomplete="off" name="name" id="name" value="{{ $directory->name ?? '' }}" required>
+                    <span></span>
+                </div>
             </div>
         </div>
         <div class="card-footer text-muted text-end">
