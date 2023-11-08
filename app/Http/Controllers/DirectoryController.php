@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\Company;
 use App\Models\Directory;
+use App\Models\Document;
 use App\Models\User;
 use Illuminate\Contracts\Pagination\Paginator;
 use Illuminate\Http\Request;
@@ -88,13 +89,48 @@ class DirectoryController extends Controller
         // Session::flash('message', 'Image are uploaded successfully');
         return redirect()->route('directory.index')->with('success','User created successfully');
     }
+    public function upload(Request $request)
+    {
+        $input = $request->all();
+        $file = $request->file('file');
+        $fileName = $file->getClientOriginalName();
+        $path = 'docs/'.$input['company_name'].'/'.$input['directory_name'].'/in';
+        $file->move(public_path($path),$fileName);
+        $companyId = $input['company'];
+        $user = Auth::user()->id;
+        $uniq = [
+           
+           
+            // 'active'=> 1,
+        ];
+        $data = [ 
+            'user_id'=>  $user,
+            'company_id'=>  $companyId,
+            'directory_id'=> $input['directory'],
+            'active'=> 1,
+            'source'=> '/docs/'.$input['company_name'].'/'.$input['directory_name'].'/in/'.$fileName ?? '0',
+            'x1'=> $input['x1'] ?? '0',
+            'x2'=> $input['x2'] ?? '0',
+            'y1'=> $input['y1'] ?? '0',
+            'y2'=> $input['y2'] ?? '0',
+            'height' => $input['dokumen_height'] ?? '0',
+            'width' => $input['dokumen_width'] ?? '0',
+            'page' => $input['dokumen_page'] ?? '0',
+            'filename' => $input['filename'] ?? '0',
+            
+        ];
+        $fileUpload =  Document::Create($data);
+        $fileUpload->filename = $fileName;
+        $fileUpload->save();
+        return response()->json(['success'=>$fileName]);
+    }
 
     /**
      * Display the specified resource.
      */
     public function show(Directory $directory)
     {
-        $datas = Directory::with('company')->find($directory->id);
+        $datas = Directory::with('company')->find($directory->id)->where('id',$directory->id)->get();
         // Company::with('directory')->find($directory->id);
         return view("client.configure.directory.index", compact("datas"));
     }

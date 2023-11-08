@@ -70,6 +70,8 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::post('/configure/store', [ConfigureConttroller::class, 'store'])->middleware('auth')->name('configure-store');
     Route::resource('/configure/company', CompanyController::class);
     Route::resource('/configure/directory', DirectoryController::class);
+    Route::post('/configure/directory/upload', [DirectoryController::class, 'upload'])->middleware('auth')->name('doc-upload');
+
     Route::resource('/stemp', StempController::class);
     /**
      * GLOBAL

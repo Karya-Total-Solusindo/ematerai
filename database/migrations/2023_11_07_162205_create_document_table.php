@@ -15,6 +15,7 @@ return new class extends Migration
         Schema::create('document', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('user_id');
+            $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('directory_id');
             $table->double('x1');
             $table->double('x2');
@@ -23,6 +24,9 @@ return new class extends Migration
             $table->double('height');
             $table->double('width');
             $table->integer('page');
+            $table->string('source');
+            $table->string('filename');
+            
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             // $table->timestamps();
