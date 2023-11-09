@@ -29,6 +29,8 @@ use Illuminate\Support\Facades\Route;
 // Route::resource('/test', TestController::class);
 Route::get('/test', [TestController::class, 'index'])->name('test');
 Route::get('/test/api', [TestController::class, 'api'])->name('test-api');
+Route::get('/test/login', [TestController::class, 'login']);
+Route::get('/test/sn', [TestController::class, 'sn']);
 
 Route::get('/', function () {
     return redirect('/dashboard');

@@ -2,10 +2,12 @@
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Configure'])
     <div class="container-fluid py-4">
-        {{-- @if (Route::currentRouteName() == 'configurecreate') --}}
+        @if (Route::currentRouteName() == 'stemp.index')
+            @include('client.stemp.list')
+        @elseif (Route::currentRouteName() == 'stemp.create')
             @include('client.stemp.create')
-        {{-- @elseif (Route::currentRouteName() == 'configure') --}}
-            {{-- @include('client.configure.list')     --}}
-        {{-- @endif --}}
+        @elseif (Route::currentRouteName() == 'stemp.show')
+            @include('client.stemp.show')         
+        @endif
     </div>
 @endsection

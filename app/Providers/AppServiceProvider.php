@@ -22,10 +22,10 @@ class AppServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        //
-        Blade::directive('datetime', function (string $expression) {
-            return ($expression)->format('m/d/Y H:i');
-        });
+        // //
+        // Blade::directive('datetime', function (string $expression) {
+        //     return ($expression)->format('m/d/Y H:i');
+        // });
         #TODO - urlRoot
         /**
          * example '{host}/users/123'

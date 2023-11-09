@@ -100,7 +100,7 @@ class DirectoryController extends Controller
     {
         $input = $request->all();
         $file = $request->file('file');
-        $fileName = $file->getClientOriginalName();
+        $fileName = str_replace('','_',$file->getClientOriginalName());
         $path = 'docs/'.$input['company_name'].'/'.$input['directory_name'].'/in';
         $file->move(public_path($path),$fileName);
         $companyId = $input['company'];

@@ -7,7 +7,12 @@
         @elseif (Route::currentRouteName() == 'directory.edit')
             @include('client.configure.directory.edit')
         @elseif (Route::currentRouteName() == 'directory.show')
-            @include('client.configure.directory.show')       
+            @if ($datas[0]->template==0)
+                @include('client.stemp.create')       
+            @else
+                @include('client.configure.directory.show')    
+            @endif
+                  
         @else
             @include('client.configure.directory.list')    
         @endif

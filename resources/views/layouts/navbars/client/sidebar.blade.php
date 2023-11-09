@@ -23,7 +23,7 @@
             <ul class="submenu collapse rounded  {{ request()->segment(1) == 'configure' ? 'show' : '' }}">
                 <li><a class="nav-link rounded {{ request()->segment(2) == 'company' ? 'active' : '' }}" href="{{ route('company.index') }}">Company </a></li>
                 <li><a class="nav-link rounded {{ request()->segment(2) == 'directory' ? 'active' : '' }}" href="{{ route('directory.index') }}">Directory </a></li>
-                <li><a class="nav-link rounded {{ request()->segment(2) == 'other' ? 'active' : '' }}" href="{{ route('company.index') }}">Submenu item 3 </a> </li>
+                {{-- <li><a class="nav-link rounded {{ request()->segment(2) == 'other' ? 'active' : '' }}" href="{{ route('company.index') }}">Submenu item 3 </a> </li> --}}
             </ul>
         </li>
         <li class="nav-item has-submenu">
@@ -33,15 +33,16 @@
                 </div> 
                 <span class="text-uppercase text-xs font-weight-bolder opacity-6">Stemp Process</span> 
             </a>
-            <ul class="submenu collapse rounded">
-                <li><a class="nav-link rounded" href="#">New </a></li>
+            <ul class="submenu collapse rounded {{ request()->segment(1) == 'stemp' ? 'show' : '' }}">
+                <li><a class="nav-link rounded {{ request()->segment(2) == '' ? 'active' : '' }}" href="{{route('stemp.index')}}">New </a></li>
                 <li><a class="nav-link rounded" href="#">On Process </a></li>
-                <li><a class="nav-link rounded" href="#">Submenu item 3 </a> </li>
+                <li><a class="nav-link rounded" href="#">Failure </a></li>
+                {{-- <li><a class="nav-link rounded" href="#">Submenu item 3 </a> </li> --}}
             </ul>
         </li>
         
-        <li class="nav-item">
+        {{-- <li class="nav-item">
             <a class="nav-link" href="#"> Other link </a>
-        </li>
+        </li> --}}
     </ul>
 </nav>  

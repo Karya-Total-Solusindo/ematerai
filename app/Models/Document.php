@@ -26,4 +26,15 @@ class Document extends Model
         'source',
         'filename',
     ];
+
+    public function company()
+    {
+        // return $this->belongsTo(Company::class,'directories','id','company_id');
+        return $this->belongsTo(Company::class);
+    }
+    public function directory()
+    {
+        // return $this->belongsTo(Company::class,'directories','id','company_id');
+        return $this->belongsTo(Directory::class);
+    }
 }

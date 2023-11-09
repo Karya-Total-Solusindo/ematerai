@@ -17,11 +17,11 @@ class TestController extends Controller
         //return view('pages.dashboard');
         $url = "https://appays.ap1.co.id/webapi/getdocument/barang-dan-jasa/po";
         $response = Http::withHeaders([
-            'protocol'=>'2.1',
-            'Accept'=>'*/*',
-            'User-Agent'=> 'PostmanRuntime/7.33.0',
-            'Accept-Encoding' => 'gzip, deflate, br',
-            'Connection'=>'keep-alive',
+            // 'protocol'=>'2.1',
+            // 'Accept'=>'*/*',
+            // 'User-Agent'=> 'PostmanRuntime/7.33.0',
+            // 'Accept-Encoding' => 'gzip, deflate, br',
+            // 'Connection'=>'keep-alive',
             'Content-Type'=>'application/json',
         ])->get($url);
         $obj = $response->object();
@@ -38,14 +38,43 @@ class TestController extends Controller
         //$apiURLs = Http::acceptJson()->dd()->get('https://appays.ap1.co.id/webapi/getdocument/barang-dan-jasa/po');
         $apiURL = 'https://appays.ap1.co.id/webapi/getdocument/barang-dan-jasa/po';
         //$parameters = ['page' => 2];
-
         $response = Http::get($apiURL);
-
         $statusCode = $response->status();
         $responseBody = json_decode($response->getBody(), true);
         return response()->json($responseBody);
+        // dd($responseBody,$statusCode);
 
+    }
+    public function login(){
+        return 
+        //$apiURLs = Http::acceptJson()->dd()->get('https://appays.ap1.co.id/webapi/getdocument/barang-dan-jasa/po');
+        $apiURL = 'https://backendservicestg.e-meterai.co.id/api/users/login';
+        //$parameters = ['page' => 2];
+        $data =[
+            'user'=> env('EMATRERAI_USER'),
+            'password'=>env('EMATRERAI_PASSWORD'),
+        ];
+        $response = Http::withHeaders(['Content-Type'=>'application/json',])->post($apiURL, $data);
+        $statusCode = $response->status();
+        $responseBody = json_decode($response->getBody(), true);
         dd($responseBody,$statusCode);
+        return response()->json($responseBody);
+
+    }
+    public function sn(){
+        return 
+        //$apiURLs = Http::acceptJson()->dd()->get('https://appays.ap1.co.id/webapi/getdocument/barang-dan-jasa/po');
+        $apiURL = 'https://backendservicestg.e-meterai.co.id/api/users/login';
+        //$parameters = ['page' => 2];
+        $data =[
+            'user'=> env('EMATRERAI_USER'),
+            'password'=>env('EMATRERAI_PASSWORD'),
+        ];
+        $response = Http::withHeaders(['Content-Type'=>'application/json',])->post($apiURL, $data);
+        $statusCode = $response->status();
+        $responseBody = json_decode($response->getBody(), true);
+        dd($responseBody,$statusCode);
+        return response()->json($responseBody);
 
     }
 }

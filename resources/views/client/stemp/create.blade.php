@@ -81,6 +81,8 @@ a.btn-sm{
 <div class="card p-2">
   <div class="card-head">
       <h6>Stamp Position Placement</h6>
+      {{$datas[0]->company->name}}
+      {{$datas[0]->name}}
   </div>
   <div class="row">
     <div class="col-md-12">
@@ -103,9 +105,14 @@ a.btn-sm{
           <input type="text" class="form-control" name="upper_right_y" value="" style="width: 100%"/>
         </div>
       </div>
-      <form action="{{route('stemp.store')}}" method="POST">
+      <form action="{{route('stemp.store')}}" method="POST" enctype="multipart/form-data" >
         @csrf
-        <input type="file" id="file-to-upload" accept="application/pdf" />
+        <input type="file" name="file" id="file-to-upload"  accept="application/pdf"/>
+
+        <input type="hidden" name="company_name" value="{{$datas[0]->company->name}}" required/>
+        <input type="hidden" name="company" value="{{$datas[0]->company->id}}" required/>
+        <input type="hidden" name="directory_name" value="{{$datas[0]->name}}" required/>
+        <input type="hidden" name="directory" value="{{$datas[0]->id}}" required/>
         <input type="hidden" name="x1" value="" required/>
         <input type="hidden" name="x2" value="" required />
         <input type="hidden" name="y1" value="" required />

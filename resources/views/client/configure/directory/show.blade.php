@@ -92,7 +92,7 @@
           maxFilesize: 12,
           renameFile: function(file) {
               var dt = new Date();
-              var time = dt.getTime();
+              var time = Math.ceil(dt.getTime()/1000);
              return time+'_'+file.name;
           },
           acceptedFiles: ".pdf",

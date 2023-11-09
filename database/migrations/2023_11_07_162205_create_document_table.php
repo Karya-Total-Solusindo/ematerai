@@ -26,7 +26,10 @@ return new class extends Migration
             $table->integer('page');
             $table->string('source');
             $table->string('filename');
-            
+            $table->string('certificatelevel')->nullable();
+            $table->string('sn')->nullable();
+            $table->string('qr')->nullable();
+            $table->string('spesimenPath')->nullable(); //qr path
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
             // $table->timestamps();

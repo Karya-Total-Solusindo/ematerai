@@ -38,13 +38,16 @@
                                             alt="user1">
                                     </div> --}}
                                     <div class="d-flex px-2 py-1">
-                                        <h6 class="mb-0 text-sm">{{ $data->name }}</h6>
+                                        <h6 class="mb-0 text-sm"><a href="{{ route('directory.show',$data->id) }}">{{ $data->name }}</a></h6>
                                         {{-- <p class="text-xs text-secondary mb-0">john@creative-tim.com</p> --}}
                                     </div>
                                 </div>
                             </td>
                             <td class="align-middle text-sm">
                                 {{ $data->detail }}
+                                @foreach (App\Models\Directory::where('company_id',$data->id) as $dir)
+                                    {{$dir->name}}
+                                @endforeach
                                 {{-- <span class="badge badge-sm bg-gradient-success"> Online</span> --}}
                             </td>
                             <td class="align-middle text-center">
