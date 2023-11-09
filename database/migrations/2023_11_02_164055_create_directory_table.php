@@ -17,6 +17,7 @@ return new class extends Migration
         Schema::create('directories', function (Blueprint $table) {
             $table->bigIncrements('id');
             $table->unsignedBigInteger('company_id');
+            $table->unsignedBigInteger('user_id');
             $table->string('name');
             $table->text('detail')->nullable();
             $table->set('template',[1,0])->default(0);

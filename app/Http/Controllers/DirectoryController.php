@@ -22,14 +22,20 @@ class DirectoryController extends Controller
     public function index(Request $request)
     {
         // $datas =  Directory::with('user')->find(1)->get('company_id');
-        $datas =  Directory::where([
-            [function ($query) use ($request) {
-                if (($s = $request->s)) {
-                    $query->orWhere('name', 'LIKE', '%' . $s . '%')
-                        ->get();
-                }
-            }]
-        ])->with('company')->paginate(5);
+        $user = Auth::user()->id;
+        if (($s = $request->s)) {
+            $datas =  Directory::where([
+                [function ($query) use ($request) {
+                    if (($s = $request->s)) {
+                        $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        ->Where('user_id','=',Auth::user()->id)
+                            ->get();
+                    }
+                }]
+            ])->with('company')->paginate(5);
+        }else{
+            $datas =  Directory::with('company')->where('user_id','=',Auth::user()->id)->paginate(5);
+        }
         return view("client.configure.directory.index", compact("datas"));
     }
 
@@ -67,6 +73,7 @@ class DirectoryController extends Controller
             'active'=> 1,
         ];
         $data = [
+            'user_id'=> Auth::user()->id,
             'active'=> 1,
             'template'=> $input['template'] ?? '0',
             'x1'=> $input['x1'] ?? '0',

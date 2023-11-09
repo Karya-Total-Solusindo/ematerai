@@ -39,7 +39,8 @@
                         </tr>
                     </thead>
                     <tbody>
-                        
+                       
+                    @if ($datas->count()) 
                         @foreach ($datas as $data)
                         <tr>
                             <td>
@@ -50,7 +51,7 @@
                                 {{ $data->detail }}
                             </td>
                             <td class="align-middle text-center">
-                                102
+                                {{ App\Models\Document::where('directory_id',$data->id)->count() ?? 0 }}
                             </td>
                             <td class="align-middle text-center">
                                 <span class="text-secondary text-xs font-weight-bold">{{ $data->created_at->format('d/m/Y') }}</span>
@@ -64,6 +65,7 @@
                         </tr>
                         @endforeach
                         </tbody>
+                    @endif    
                 </table>
             </div>
         </div>

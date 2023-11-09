@@ -16,14 +16,19 @@ class CompanyController extends Controller
      */
     public function index(Request $request)
     {
+        if (($s = $request->s)) {
         $datas = Company::where([
             [function ($query) use ($request) {
                 if (($s = $request->s)) {
                     $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                    ->Where('user_id', '=',Auth::user()->id)
                         ->get();
                 }
             }]
         ])->orderBy('id','DESC')->paginate(5);
+        }else{
+            $datas = Company::where(['user_id'=>Auth::user()->id ])->orderBy('id','DESC')->paginate(5);
+        }
         return view('client.configure.company.index',compact('datas'))
             ->with('i', ($request->input('page', 1) - 1) * 5);
         // return view("client.configure.company.index");

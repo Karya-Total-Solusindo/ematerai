@@ -43,10 +43,15 @@
 <div class="card text-start">
     {{-- <img class="card-img-top" src="holder.js/100px180/" alt="Title"> --}}
     <div class="card-body">
-        <h4 class="card-title">Document</h4>
+      <div class="row">
+        <div class="col-md-6">
+          <h4 class="card-title">Document Upload</h4>
+        </div>
+        <div class="text-end col-md-6">
+          {{ $datas[0]->company->name }} / <b>{{ $datas[0]->name }}</b>
+        </div>
+      </div>
         <div class="row justify-content-center align-items-center g-2">
-
-
           <form method="post" action="{{route('doc-upload')}}" enctype="multipart/form-data" 
                   class="dropzone" id="dropzone">
               @csrf
@@ -66,6 +71,18 @@
               @endforeach
           </form>   
         </div>
+        <div class="card-footer text-muted text-end p-0 mb-0">
+          <div class="row">
+              <div class="col-6 text-start mb-0">
+                  {{-- <button type="submit" class="btn btn-primary">Submit</button> --}}
+              </div>
+              <div class="col-6 text-end mb-0">
+                  <a class="btn btn-danger" href="{{ route('directory.index') }}">
+                          Close 
+                  </a>
+              </div>
+          </div>
+      </div>
     </div>
  
 
@@ -76,7 +93,7 @@
           renameFile: function(file) {
               var dt = new Date();
               var time = dt.getTime();
-             return time+file.name;
+             return time+'_'+file.name;
           },
           acceptedFiles: ".pdf",
           addRemoveLinks: true,
