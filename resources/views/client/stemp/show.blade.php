@@ -4,7 +4,7 @@
         <div class="row justify-content-center align-items-center g-2">
             <div class="col-md-6"> <h4 class="card-title">{{ substr($datas[0]->filename,11)}}</h4></div>
             <div class="col-md-6 text-end">
-                <a href="{{ route('stemp.index')}}" class="btn btn-s bg-danger text-white">Close</a>
+                <a href="{{ url()->previous()}}" class="btn btn-s bg-danger text-white">Close</a>
             </div>
         </div>
         {{-- <p class="card-text">{{ substr($datas[0]->filename,11)}}</p> --}}
@@ -39,17 +39,22 @@
                                 "visLLY": {{$data->x2}},<br>
                                 "visURX": {{$data->y1}},<br>
                                 "visURY": {{$data->y2}},<br>
-                                "Page": {{$data->page}},</td>
+                                "Page":  {{$data->page}},</td>
                         </tr>
                         <tr class="">
                             <td>Status Stemp</td>
                             <td>:</td>
-                            <td>(( status ))</td>
+                            <td>{{ $data->certificatelevel ?? '{certificatelevel}' }}</td>
                         </tr>
                         <tr class="">
-                            <td>Status Stemp</td>
+                            <td>Stemp Serial Number</td>
                             <td>:</td>
-                            <td>(( status ))</td>
+                            <td>{{ $data->sn ?? '{Serial Number}'  }}</td>
+                        </tr>
+                        <tr class="">
+                            <td>Stemp spesimenPath</td>
+                            <td>:</td>
+                            <td>{{ $data->spesimenPath ?? '{spesimenPath}'  }}</td>
                         </tr>
                     @endforeach
                 </tbody>
@@ -58,7 +63,7 @@
         <div class="row justify-content-center align-items-center g-2">
             <div class="col-md-6"></div>
             <div class="col-md-6 text-end">
-                <a href="{{ route('stemp.index')}}" class="btn btn-s bg-danger text-white">Close</a>
+                <a href="{{ url()->previous() }}" class="btn btn-s bg-danger text-white">Close</a>
             </div>
         </div>
         

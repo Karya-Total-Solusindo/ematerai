@@ -19,9 +19,9 @@
                                 Name</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                 Detail</th>
-                            {{-- <th
+                            <th
                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                Status</th> --}}
+                                Directory</th>
                             <th
                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Create</th>
@@ -38,7 +38,8 @@
                                             alt="user1">
                                     </div> --}}
                                     <div class="d-flex px-2 py-1">
-                                        <h6 class="mb-0 text-sm"><a href="{{ route('directory.show',$data->id) }}">{{ $data->name }}</a></h6>
+                                        {{ $data->name }}
+                                        {{-- <h6 class="mb-0 text-sm"><a href="{{ route('directory.show',$data->id) }}">{{ $data->name }}</a></h6> --}}
                                         {{-- <p class="text-xs text-secondary mb-0">john@creative-tim.com</p> --}}
                                     </div>
                                 </div>
@@ -48,6 +49,13 @@
                                 @foreach (App\Models\Directory::where('company_id',$data->id) as $dir)
                                     {{$dir->name}}
                                 @endforeach
+                                {{-- <span class="badge badge-sm bg-gradient-success"> Online</span> --}}
+                            </td>
+                            <td class="align-middle text-center text-sm">
+                                {{ App\Models\Directory::where('company_id',$data->id)->count() }}
+                                {{-- @foreach (App\Models\Directory::where('company_id',$data->id) as $dir)
+                                    {{$dir->name}}
+                                @endforeach --}}
                                 {{-- <span class="badge badge-sm bg-gradient-success"> Online</span> --}}
                             </td>
                             <td class="align-middle text-center">

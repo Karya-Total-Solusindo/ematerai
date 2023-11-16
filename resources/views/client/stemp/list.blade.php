@@ -58,7 +58,7 @@
                             <td class="align-middle text-center">
                                 <span class="text-secondary text-xs font-weight-bold">{{ $data->created_at->format('d/m/Y') }}</span>
                             </td>
-                            <td class="align-middle">
+                            <td class="align-middle text-end">
                                 <a href="{{ route('stemp.show',$data->id) }}" class="text-secondary font-weight-bold text-xs"
                                     data-toggle="tooltip" data-original-title="Edit Company">
                                     Detail

@@ -11,8 +11,7 @@
                 @include('client.stemp.create')       
             @else
                 @include('client.configure.directory.show')    
-            @endif
-                  
+            @endif 
         @else
             @include('client.configure.directory.list')    
         @endif

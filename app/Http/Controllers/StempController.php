@@ -2,11 +2,13 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Company;
 use App\Models\Directory;
 use App\Models\Document;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
+use Symfony\Component\Console\Input\Input;
 
 class StempController extends Controller
 {
@@ -32,6 +34,71 @@ class StempController extends Controller
         return view("client.stemp.index", compact("datas"));
     }
 
+    public function company(Request $request)
+    {
+        $user = Auth::user()->id;
+        $datas = Company::where(['user_id'=>$user])->paginate(5);
+        if (($s = $request->s)) {
+            $datas = Company::where([
+                [function ($query) use ($request) {
+                    if (($s = $request->s)) {
+                        $user = Auth::user()->id;
+                        $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        ->Where('user_id', $user)
+                        ->get();
+                    }
+                }]
+                ])->paginate(5);
+        }
+        return view("client.stemp.index", compact("datas"));
+    }
+    public function directory($company_id, Request $request)
+    {
+        $user = Auth::user()->id;
+        $request['company'] = $company_id;
+        $datas = Directory::where(['user_id'=>$user,'company_id'=> $company_id])->paginate(5);
+        if (($s = $request->s)) {
+            $datas = Directory::where([
+                [function ($query) use ($request) {
+                    if (($s = $request->s)) {
+                        $user = Auth::user()->id;
+                        $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        ->Where('user_id', $user)
+                        ->Where('company_id', $request->company)
+                        ->get();
+                    }
+                }]
+                ])->paginate(5);
+        }
+        $company = Directory::with('company_id',$company_id);
+        return view("client.stemp.index", compact(["datas","company"]));
+    }
+    public function document($directory_id, Request $request)
+    {
+        $user = Auth::user()->id;
+        $request['company'] = $directory_id;
+        $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])->paginate(5);
+        if (($s = $request->s)) {
+            $datas = Document::where([
+                [function ($query) use ($request) {
+                    if (($s = $request->s)) {
+                        $user = Auth::user()->id;
+                        $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        ->Where('user_id', $user)
+                        ->Where('directory_id', $request->company)
+                        ->get();
+                    }
+                }]
+                ])->paginate(5);
+        }
+        return view("client.stemp.index", compact("datas"));
+    }
+
+    public function addfile(Directory $directory){
+        $datas = Directory::with('company')->find($directory->id)->where('id',$directory->id)->get();
+        // Company::with('directory')->find($directory->id);
+        return view("client.stemp.index", compact("datas"));
+    }
     /**
      * Show the form for creating a new resource.
      */
@@ -93,11 +160,11 @@ class StempController extends Controller
      */
     public function show(string $id)
     {
-        //
-        $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->get();
-        if(!is_array($datas)){
+        $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id]);
+        if($datas->count() == 0){
             return redirect()->route('stemp.index')->with('success','No data');
         } 
+        $datas = $datas->get(); 
         return view('client.stemp.index', compact('datas'));
     }
 

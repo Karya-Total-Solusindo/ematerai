@@ -34,8 +34,9 @@
                 <span class="text-uppercase text-xs font-weight-bolder opacity-6">Stemp Process</span> 
             </a>
             <ul class="submenu collapse rounded {{ request()->segment(1) == 'stemp' ? 'show' : '' }}">
-                <li><a class="nav-link rounded {{ request()->segment(2) == '' ? 'active' : '' }}" href="{{route('stemp.index')}}">New </a></li>
+                <li><a class="nav-link rounded {{ request()->segment(2) == 'company' ? 'active' : '' }}" href="{{route('company')}}">New </a></li>
                 <li><a class="nav-link rounded" href="#">On Process </a></li>
+                <li><a class="nav-link rounded" href="#">Success </a></li>
                 <li><a class="nav-link rounded" href="#">Failure </a></li>
                 {{-- <li><a class="nav-link rounded" href="#">Submenu item 3 </a> </li> --}}
             </ul>

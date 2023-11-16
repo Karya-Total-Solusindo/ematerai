@@ -25,10 +25,10 @@
                 <table class="table align-items-center mb-0">
                     <thead>
                         <tr>
+                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Company</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Name</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                Detail</th>
                             <th
                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Document</th>
@@ -43,12 +43,12 @@
                     @if ($datas->count()) 
                         @foreach ($datas as $data)
                         <tr>
+                            <td class="align-middle text-sm">
+                                <p class="text-xs text-secondary mb-0">{{ $data->company->name }}</p>
+                                {{-- {{ $data->detail }} --}}
+                            </td>
                             <td>
                                 <h6 class="mb-0 text-sm"><a href="{{ route('directory.show',$data->id) }}">{{ $data->name }}</a></h6>
-                                <p class="text-xs text-secondary mb-0">{{ $data->company->name }}</p>
-                            </td>
-                            <td class="align-middle text-sm">
-                                {{ $data->detail }}
                             </td>
                             <td class="align-middle text-center">
                                 {{ App\Models\Document::where('directory_id',$data->id)->count() ?? 0 }}
@@ -56,8 +56,8 @@
                             <td class="align-middle text-center">
                                 <span class="text-secondary text-xs font-weight-bold">{{ $data->created_at->format('d/m/Y') }}</span>
                             </td>
-                            <td class="align-middle">
-                                <a href="{{ route('directory.edit',$data->id) }}" class="text-secondary font-weight-bold text-xs"
+                            <td class="text-end">
+                                <a href="{{ route('directory.edit',$data->id) }}" class="btn btn-s btn-warning text-white font-weight-bold text-xs"
                                     data-toggle="tooltip" data-original-title="Edit Company">
                                     Edit
                                 </a>

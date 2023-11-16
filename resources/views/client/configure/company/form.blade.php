@@ -9,7 +9,7 @@
             {{-- <p class="card-text">Text</p> --}}
             <div class="col-md-12">
                 <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" name="name" id="name" value="{{ old('name', $data->name??'') }}" required>
+                <input type="text" class="form-control" name="name" id="name"  style="text-transform:uppercase" value="{{ old('name', $data->name??'') }}" required>
                 <span></span>
             </div>
             <div class="col-md-12">
