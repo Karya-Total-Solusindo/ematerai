@@ -13,19 +13,28 @@
         @endif
         <div class="card mb-4">
             <div class="card-header pb-0">
-                <div class="d-flex align-items-center">
-                <h6>Rules</h6>
-                {{-- <a class="btn btn-success" href="{{ route('roles.create') }}"> Create New Role </a> --}}
-                    @can('role-create')
-                        <a class="btn btn-success btn-sm ms-auto" href="{{ route('roles.create') }}"> Create New Role </a>
-                    @endcan
+                
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h6>Rules</h6>
+                                @role('Superadmin', 'web')
+                                I am a super-admin!
+                            @else
+                                I am not a super-admin...
+                            @endrole
+                            </div>
+                            <div class="col-md-6 text-end">
+                                @can('role-create')
+                                    <a class="btn btn-warning btn-sm" href="{{ route('permissions-create') }}"> Add Permission </a>
+                                    <a class="btn btn-success btn-sm" href="{{ route('roles.create') }}"> Create New Role </a>
+                                @endcan
+                            </div>
+                        </div>
+                    </div>  
                 </div>
-                @role('Superadmin', 'web')
-                    I am a super-admin!
-                @else
-                    I am not a super-admin...
-                @endrole
-            </div>
+               
+                <div class="d-flex align-items-center"> </div>
             <div class="card-body px-0 pt-0 pb-2">
                 <div class="table-responsive p-0">
                     <table class="table align-items-center mb-0">

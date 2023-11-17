@@ -29,13 +29,13 @@
                         </div>
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
-                            <strong>Permission:</strong>
+                        <strong>Permission:</strong>
+                        <div class="row">
                             <br/>
                             @foreach($permission as $value)
                                 {{-- <input type="checkbox" name="permission[]" id="{{ $value->id }}" value="{{ in_array($value->id, $rolePermissions) ? true : false }}"> --}}
                                 {{-- <label for="{{ $value->id }}">{{ $value->name }}</label> --}}
-                                <label>{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
+                                <label class="col-2" style="float: left;">{{ Form::checkbox('permission[]', $value->id, in_array($value->id, $rolePermissions) ? true : false, array('class' => 'name')) }}
                                 {{ $value->name }}</label>
                             <br/>
                             @endforeach

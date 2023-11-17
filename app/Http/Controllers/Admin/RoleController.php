@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Controller;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
@@ -11,6 +12,7 @@ use DB;
 
 class RoleController extends Controller
 {
+    protected $namespace = 'App\Http\Controllers';
     /**
      * Display a listing of the resource.
      *
@@ -134,4 +136,31 @@ class RoleController extends Controller
         return redirect()->route('roles.index')
                         ->with('success','Role deleted successfully');
     }
+    /** permissions */ 
+    public function permissions_create()
+    {
+        $permissions_array = [];
+        $routes = Route::getRoutes();
+        $permissions = Permission::get('name');
+        foreach ($permissions as $perm){
+            array_push($permissions_array, $perm['name']);
+        }
+        return view('admin.permissions.create',compact('routes','permissions_array'));
+    }
+    public function permissions_store(Request $request)
+    {
+        //$routes = Route::getRoutes();
+        $this->validate($request, [
+            'name' => 'required|unique:permissions,name',
+            // 'permission' => 'required',
+        ]);
+
+        $role = Permission::create(['name' => $request->input('name')]);
+        // $role->syncPermissions($request->input('name'));
+
+        return redirect()->route('permissions-create')
+                        ->with('success','permissions created successfully');
+        
+    }
+
 }

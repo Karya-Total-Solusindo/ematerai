@@ -60,9 +60,14 @@ Route::group(['middleware' => ['auth'],], function () {
      */
     // Route::get('/users', [UserManagementController::class, 'index'])->name('users');
     // Route::get('/users/create', [UserManagementController::class, 'create'])->name('users.create');
-    // Route::resource('/test', TestController::class);
+    // Route::resource('/test', TestController::class);\
+    
+    Route::get('/roles/permissions', [App\Http\Controllers\Admin\RoleController::class,'permissions_create'])->middleware('auth')->name('permissions-create');
+    Route::post('/roles/permissions', [App\Http\Controllers\Admin\RoleController::class,'permissions_store'])->middleware('auth')->name('permissions-store');
     Route::resource('/roles', RoleController::class);
+
     Route::resource('/users', UserManagementController::class);
+    Route::get('/server/php', [App\Http\Controllers\Admin\ServerController::class,'phpinfo'])->middleware('auth')->name('phpinfo');
 
     /**
     * Configure

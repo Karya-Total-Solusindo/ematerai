@@ -17,8 +17,9 @@
                         <strong>Name:</strong> {{ $role->name }}
                     </div>
                     <div class="col-xs-12 col-sm-12 col-md-12">
-                        <div class="form-group">
-                            <strong>Permissions:</strong> @if(!empty($rolePermissions)) @foreach($rolePermissions as $v) <label class="label label-success">{{ $v->name }},</label> @endforeach @endif
+                        <strong>Permissions:</strong> 
+                        <div class="form-group" style="display:inline;">
+                            @if(!empty($rolePermissions)) @foreach($rolePermissions as $v) <label class="label label-success">{{ $v->name }},</label> @endforeach @endif
                         </div>
                     </div>
                 </div>
