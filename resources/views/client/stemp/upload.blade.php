@@ -80,15 +80,15 @@ a.btn-sm{
 </style>
 <div class="card p-2">
   <div class="card-head">
-      <h6>Stamp Position Placement</h6>
+      <h6>Upload Documents</h6>
       {{$datas[0]->company->name}}
       {{$datas[0]->name}}
   </div>
   <div class="row">
     <div class="col-md-12">
-      <a  class="btn btn-primary btn-block btn-sm col-12" id="upload-button">Pilih File PDF</a> 
-      <div class="row">
-        <div class="col-md-3">
+      <a  class="btn btn-primary btn-block btn-sm col-12" id="upload-button">Select PDF File</a> 
+      <div class="row" style="display: none" title="view koordinat">
+        <div class="col-md-3" >
           <font style="font-weight: bold"><strong>Lower Left X</strong></font>
           <input type="text" class="form-control" name="lower_left_x" value="" style="width: 100%"/>
         </div>
@@ -107,10 +107,22 @@ a.btn-sm{
       </div>
       <form action="{{route('stemp.store')}}" method="POST" enctype="multipart/form-data" >
         @csrf
-        <div id="docnumberDiv" class="mb-3" style="display: none;">
-          <label for="docnumber" class="form-label">Document Number :</label>
-          <input type="text" required class="form-control" name="docnumber" id="docnumber" aria-describedby="helpId" placeholder="">
-          <small id="helpdocnumber" class="form-text text-muted">Help text</small>
+        <div class="class row">
+          <div class="col-md-12 mb-0">
+            <div id="docnumberDiv1" class="mb-3">
+              <label for="docnumber" class="form-label">Number :</label>
+              <input type="text" required class="form-control" name="docnumber" id="docnumber" aria-describedby="helpId" placeholder="">
+              <small></small>
+            </div>
+          </div>
+          <div class="col-md-12 mb-0">
+            <div id="docnumberDiv2" class="mb-3" style=";">
+              <label for="docnumber" class="form-label"> Description :</label>
+              <textarea type="text" required class="form-control" name="description" id="description" aria-describedby="helpId" placeholder="">
+              </textarea>
+              <small></small>
+            </div>
+          </div>
         </div>
         <input type="file" name="file" id="file-to-upload"  accept="application/pdf"/>
 
@@ -125,12 +137,13 @@ a.btn-sm{
         <input type="hidden" name="dokumen_height" value="" required="required" />
         <input type="hidden" name="dokumen_width" value="" required="required" />
         <input type="hidden" name="dokumen_page" id="dokumen_page" required>
-        <input type="hidden" name="digital_signature_path" id="digital_signature_path" width: 100px; height: 100px; value="{{asset('assets/img/meterai.png') }}">
+        <input type="hidden" name="digital_signature_path" id="digital_signature_path" width: 100px; height: 100px; value="{{asset('assets/img/meterai.png_hiden') }}">
         <input type="hidden" name="is_visible_sign" id="is_visible_sign" value="True">
         
-      <div id="pdf-main-container">
+      <div id="pdf-main-container"  title ="canvar file pdf">
         <div id="pdf-loader">Loading document ...</div>
         <div id="pdf-contents">
+          <h6>Document Preview</h6>
           <div id="pdf-meta" class="p-0 mb-0"></div>
             <div class="row mb-0">
               <div id="pdf-buttonss" class="btn-group btn-group-sm mb-0" role="group" aria-label="Page Control">

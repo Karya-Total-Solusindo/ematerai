@@ -32,6 +32,7 @@
     <link href="{{ asset('assets/css/nucleo-svg.css" rel="stylesheet') }}" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
+    <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.2.0.0.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('assets/css/validity.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('assets/css/sidebar-nav.css') }}" rel="stylesheet" />

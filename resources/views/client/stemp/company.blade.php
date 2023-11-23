@@ -17,13 +17,11 @@
                         <tr>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Name</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Detail</th>
-                            {{-- <th
-                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                Status</th> --}}
-                            <th
-                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            <th class="text-uppercase text-center text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Directory</th>
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Create</th>
                             <th class="text-secondary opacity-7"></th>
                         </tr>
@@ -43,13 +41,13 @@
                                     </div>
                                 </div>
                             </td>
-                            <td class="align-middle  text-sm">
+                            <td class="align-middle text-center">
                                 {{ $data->detail }}
-                                @foreach (App\Models\Directory::where('company_id',$data->id) as $dir)
-                                    {{$dir->name}}
-                                @endforeach
-                                {{-- <span class="badge badge-sm bg-gradient-success"> Online</span> --}}
                             </td>
+                            <td class="align-middle text-center text-sm">
+                                {{ App\Models\Directory::where('company_id',$data->id)->count() }}
+                            </td>
+                            
                             <td class="align-middle text-center">
                                 <span class="text-secondary text-xs font-weight-bold">{{ $data->created_at->format('d/m/Y') }}</span>
                             </td>

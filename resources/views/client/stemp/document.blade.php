@@ -14,7 +14,7 @@
         <div class="row p-0">
             <div class="col">
                 <h4 class=" card-title">My Document </h4>
-                <span class="">{{ $datas[0]->company->name ?? '' }} / {{ $datas[0]->directory->name ?? '' }}</span>
+                <span class="">{{ $datas[0]->company->name ?? '' }} {{ (!empty($datas[0]->directory))?'/':'' }} {{ $datas[0]->directory->name ?? '' }}</span>
                 {{ ($datas[0]->directory->template ?? '')}}
             </div>
             <div class="col text-end">
@@ -31,7 +31,7 @@
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Name</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                Detail</th>
+                                Materai Serial Number</th>
                             {{-- <th
                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Status</th> --}}

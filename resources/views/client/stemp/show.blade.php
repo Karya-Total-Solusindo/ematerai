@@ -17,11 +17,11 @@
                             <td width="1px">:</td>
                             <td>{{ $data->filename }}</td>
                         </tr>
-                        <tr class="">
+                        {{-- <tr class="">
                             <td>Source</td>
                             <td>:</td>
-                            <td><a href="{{$data->source}}" >{{$data->source}}</a></td>
-                        </tr>
+                            <td><a href="{{asset('storage'.$data->source ) }}" >{{$data->source}}</a></td>
+                        </tr> --}}
                         <tr class="">
                             <td>Company</td>
                             <td>:</td>
@@ -35,16 +35,20 @@
                         <tr class="">
                             <td>Stemp</td>
                             <td>:</td>
-                            <td>"visLLX": {{$data->x1}},<br>
-                                "visLLY": {{$data->x2}},<br>
-                                "visURX": {{$data->y1}},<br>
-                                "visURY": {{$data->y2}},<br>
-                                "Page":  {{$data->page}},</td>
-                        </tr>
+                            <td> Page:  {{$data->page}},<br>
+                                <span>visULX:</span> {{$data->x1}},visURX: {{$data->y1}},
+                                visLLY: {{$data->x2}},visURY: {{$data->y2}},  
+                            </tr>
                         <tr class="">
                             <td>Status Stemp</td>
                             <td>:</td>
-                            <td>{{ $data->certificatelevel ?? '{certificatelevel}' }}</td>
+                            <td>
+                                @if(!$data->certificatelevel)
+                                    <span class="badge btn-warning badge-warning">NOT CERTIFIED</span>
+                                @else
+                                    {{$data->certificatelevel}}
+                                @endif
+                            </td>
                         </tr>
                         <tr class="">
                             <td>Stemp Serial Number</td>
@@ -52,9 +56,9 @@
                             <td>{{ $data->sn ?? '{Serial Number}'  }}</td>
                         </tr>
                         <tr class="">
-                            <td>Stemp spesimenPath</td>
+                            <td>Materai</td>
                             <td>:</td>
-                            <td>{{ $data->spesimenPath ?? '{spesimenPath}'  }}</td>
+                            <td><img src="{{ asset('storage/'.$data->spesimenPath) ?? '#'  }}" alt="Stemp spesimenPath"></td>
                         </tr>
                     @endforeach
                 </tbody>
