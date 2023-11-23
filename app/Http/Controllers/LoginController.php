@@ -49,6 +49,30 @@ class LoginController extends Controller
         if (Auth::attempt(['email' => $user->email, 'password' => $request->password],$remember)
         || Auth::attempt(['username'=> $user->username,'password' => $request->password],$remember)) {
             $request->session()->regenerate(); 
+
+                    // URL API Login Peruri
+                        if(env('APP_ENV')=='production'){
+                            // PRD
+                            $API_LOGIN = 'https://backendservice.e-meterai.co.id/api/users/login';
+                        }else{
+                            // DEV
+                            $API_LOGIN = 'https://backendservicestg.e-meterai.co.id/api/users/login';
+                        }  
+                    $response_api = Http::withHeaders([
+                            'Content-Type' => 'application/json; charset=utf-8',
+                        ])->withBody(json_encode([
+                            'user' => env('EMATRERAI_USER'),
+                            'password' => env('EMATRERAI_PASSWORD'),
+                        ]))->post($API_LOGIN);
+                        // set token peruri as cookie  
+                        Cookie::make('_token_ematerai',$response_api['token'], 120,'/');
+                        Cookie::make('_profile_ematerai',$response_api, 120,'/');  
+                        if($response_api['message']=='success'){ 
+
+                        }
+
+
+
             return redirect()->intended('dashboard');
         }
         if(!Auth::validate($credentials)):
