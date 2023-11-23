@@ -27,7 +27,7 @@ class HomeController extends Controller
     public function index()
     {
          // URL API Login Peruri
-         if(env('APP_ENV')=='production'){
+        if(env('APP_ENV')=='production'){
             // PRD
             $API_LOGIN = 'https://backendservice.e-meterai.co.id/api/users/login';
         }else{
@@ -35,20 +35,16 @@ class HomeController extends Controller
             $API_LOGIN = 'https://backendservicestg.e-meterai.co.id/api/users/login';
         }  
         $response_api = Http::withHeaders([
-            'Content-Type' => 'application/json'
+            'Content-Type' => 'application/json; charset=utf-8',
+            'Access-Control-Allow-Origin' => '*',
         ])->withBody(json_encode([
             'user' => env('EMATRERAI_USER'),
             'password' => env('EMATRERAI_PASSWORD'),
         ]))->post($API_LOGIN);
         // set token peruri as cookie    
         if($response_api['message']=='success'){
-            Cookie::queue('_token_ematerai',$response_api['token'], 120);
-            Cookie::queue('m_ematerai',$response_api, 120);
-            $TokenLoginPeruri = [
-                // '_token_ematerai' => $response_api['token'],
-                // '_profile_ematerai' => $response_api
-            ];
-            
+            Cookie::make('_token_ematerai',$response_api['token'], 120);
+            Cookie::make('_profile_ematerai',$response_api, 120);
             // $request->session()->regenerate(); 
             // return redirect()->intended('dashboard')->withCookies($cookie);
         }
