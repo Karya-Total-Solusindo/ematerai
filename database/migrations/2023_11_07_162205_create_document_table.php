@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
+    protected $table = "document";
     /**
      * Run the migrations.
      */
@@ -17,10 +18,11 @@ return new class extends Migration
             $table->unsignedBigInteger('user_id');
             $table->unsignedBigInteger('company_id');
             $table->unsignedBigInteger('directory_id');
-            $table->double('x1');
-            $table->double('x2');
-            $table->double('y1');
-            $table->double('y2');
+            $table->string('docnumber');
+            $table->double('x1')->comment('Lower Left X');
+            $table->double('x2')->comment('Lower Left Y');
+            $table->double('y1')->comment('Upper Right X');
+            $table->double('y2')->comment('Upper Right Y');
             $table->double('height');
             $table->double('width');
             $table->integer('page');

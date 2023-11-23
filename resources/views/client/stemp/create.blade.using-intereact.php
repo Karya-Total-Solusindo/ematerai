@@ -459,7 +459,7 @@ const handleForm = async (event) => {
     </div>
   <div class="card-body">
     <div class="row">
-      <div style="col-6">
+      <div class="col-6">
         <span id="dotLX" class="dot" style="position:absolute; color:red; z-index:9999999;">LX</span>
         <span id="dotLY" class="dot" style="position:absolute; color:red; z-index:9999999;">LY</span>
         <span id="dotUX" class="dot" style="position:absolute; color:red; z-index:9999999;">UX</span>

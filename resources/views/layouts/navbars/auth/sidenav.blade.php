@@ -39,6 +39,7 @@
                 </a>
             </li> --}}
             @include('layouts.navbars.client.sidebar')
+           @env('staging')
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'tables') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'tables']) }}">
                     <div
@@ -48,6 +49,7 @@
                     <span class="nav-link-text ms-1">Tables</span>
                 </a>
             </li>
+            @endenv
         </ul>
     </div>
     {{-- <div class="sidenav-footer mx-3 "> --}}

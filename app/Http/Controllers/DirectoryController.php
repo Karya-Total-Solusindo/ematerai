@@ -87,14 +87,20 @@ class DirectoryController extends Controller
         $Company = Directory::updateOrCreate($uniq,$data);
 
         $name =  strtolower($input['name']);
-        $path = public_path().'/docs/'.$company.'/'.$name.'/in';
-        File::makeDirectory($path, $mode = 0777, true, true);
-        $path = public_path().'/docs/'.$company.'/'.$name.'/out';
-        File::makeDirectory($path, $mode = 0777, true, true);
-        $path = public_path().'/docs/'.$company.'/'.$name.'/backup';
-        File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.$company.'/'.$name.'/in';
+        Storage::disk('public')->makeDirectory($path);
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.$company.'/'.$name.'/out';
+        Storage::disk('public')->makeDirectory($path);
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.$company.'/'.$name.'/backup';
+        Storage::disk('public')->makeDirectory($path);
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.$company.'/'.$name.'/spesimen';
+        Storage::disk('public')->makeDirectory($path);
+        // File::makeDirectory($path, $mode = 0777, true, true);
         // Session::flash('message', 'Image are uploaded successfully');
-        return redirect()->route('directory.index')->with('success','User created successfully');
+        return redirect()->route('directory.index')->with('success','created successfully');
     }
     public function upload(Request $request)
     {

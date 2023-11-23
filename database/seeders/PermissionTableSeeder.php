@@ -25,7 +25,9 @@ class PermissionTableSeeder extends Seeder
             'configure-list',
             'configure-create',
             'configure-edit',
-            'configure-delete'
+            'configure-delete',
+            'phpinfo',
+            'roles.store',
          ];
 
          foreach ($permissions as $permission) {

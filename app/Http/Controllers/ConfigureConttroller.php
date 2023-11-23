@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Storage;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use DB;
@@ -32,6 +33,7 @@ class ConfigureConttroller extends Controller
     public function create()
     {
         return view("client.configure.index");
+        
     }
 
     /**
@@ -46,14 +48,20 @@ class ConfigureConttroller extends Controller
         $input = $request->all();
         $name = $input['name'];
         $category =  strtolower($input['category']);
-        $path = public_path().'/docs/'.$name.'/'.$category.'/in';
-        File::makeDirectory($path, $mode = 0777, true, true);
-        $path = public_path().'/docs/'.$name.'/'.$category.'/out';
-        File::makeDirectory($path, $mode = 0777, true, true);
-        $path = public_path().'/docs/'.$name.'/'.$category.'/backup';
-        File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.$name.'/'.$category.'/in';
+        Storage::disk('public')->makeDirectory($path);
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.$name.'/'.$category.'/out';
+        Storage::disk('public')->makeDirectory($path);
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.$name.'/'.$category.'/backup';
+        Storage::disk('public')->makeDirectory($path);
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.$name.'/'.$category.'/spesimen';
+        Storage::disk('public')->makeDirectory($path);
+        // File::makeDirectory($path, $mode = 0777, true, true);
         // Session::flash('message', 'Image are uploaded successfully');
-        return redirect()->route('configure')->with('success','User created successfully');
+        return redirect()->route('configure')->with('success','Created successfully');
     }
 
     /**

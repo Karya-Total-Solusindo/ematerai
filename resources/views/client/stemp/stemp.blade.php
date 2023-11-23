@@ -1,6 +1,37 @@
+<link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
+<!-- Nucleo Icons -->
+<link href="{{ asset('./assets/css/nucleo-icons.css') }}" rel="stylesheet" />
+<link href="{{ asset('./assets/css/nucleo-svg.css') }}" rel="stylesheet" />
+<!-- Font Awesome Icons -->
+{{-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> --}}
+<script src="{{ asset('assets/js/plugins/fontawesome_42d5adcbca.js') }}" crossorigin="anonymous"></script>
+<script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script>
+{{-- <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script> --}}
+{{-- <script src="{{ asset("assets/js/plugins/pdf/pdf.js") }}" type="module"></script> --}}
+
+<link href="{{ asset('assets/css/nucleo-svg.css" rel="stylesheet') }}" />
+<!-- CSS Files -->
+<link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
+<link id="pagestyle" href="{{ asset('assets/css/validity.css') }}" rel="stylesheet" />
+<link id="pagestyle" href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" />
+<link id="pagestyle" href="{{ asset('assets/css/sidebar-nav.css') }}" rel="stylesheet" />
 <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Source+Sans+Pro:300,400,600,700,300italic,400italic,600italic">
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/css/imgareaselect-animated.css" integrity="sha512-VOWGVItJ5anAaHwRzNFPo8YGbAGDl34AkUq0/Dkn4UJxK0ag95IZQWoitH6xM7Bq6C3i2VW5oFzkL1+wYkLdmQ==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
 <style>
+body{
+    overflow-x: visible !important;
+}  
+.sf-js-enabled{
+    overflow-x: hidden !important;
+}  
+.form-control,.input-sm {
+    height: 30px !important;
+    padding: 5px 10px !important;
+    font-size: 12px !important;
+    line-height: 1.5 !important;
+    border-radius: 3px;
+}      
 #upload-button {
   margin: 20px auto;
 }
@@ -44,8 +75,8 @@ a.btn-sm{
 }
 
 #page-count-container {
-  float: right;
-  font-size: 15pt;
+  /* float: right;
+  font-size: 15pt; */
 }
 @media (max-width:768px){
   #page-count-container {
@@ -76,126 +107,117 @@ a.btn-sm{
   color: #999999;
   font-size: 13px;
 }
+fixed-top{
+    position: fixed;
+    z-index: 999;
+    background: #fff;
+    top:0px;
+}
+fixed-bottom{
+    position: fixed;
+    z-index: 999;
+    bottom: 0px;
+}
 </style>
-<div class="card mb-4">
-    {{-- <div class="card-header">
-        Configure
-    </div> --}}
-    <form action="{{ Route('directory.store') }}" method="post">
-        @csrf
-            <div class="card-body">
-            <h4 class="card-title">Create Directory</h4>
-            {{-- <p class="card-text">Text</p> --}}
-            <div class="row">
-                <div class="col-md-6">
-                    <label for="company" class="form-label">Company</label>
-                    <select class="form-select form-select" name="company" id="company" required>
-                        @foreach ($datas as $d)
-                            <option value="{{ $d->id }}"> {{ $d->name }}</option>
-                        @endforeach
-                    </select>
-                    <span></span>
+<body>
+  
+<div class="row">
+    <div class="fixed-top bg-white" style="padding: 10px; 
+        box-shadow: 5px 5px 5px 1px #706e6e;">
+      <h6>Stamp Position {{$datas->company->name}} {{$datas->name}}</h6>
+        <div class="row mb-0">
+            <div class="col-lg-6 h-20 mb-0" style="height: max-content;">
+                {{-- <a  class="btn btn-primary btn-block btn-sm col-12" id="upload-button">Pilih File PDF {{$datas->source}}</a>  --}}
+                    <div class="input-group mb-3 mb-0">
+                        <span class="input-group-text input-sm">Lower Left X :</span>
+                        <input type="text" placeholder="Lower Left X" class="form-control input-sm" name="lower_left_x" value="" />
+                        <span class="input-group-text input-sm" style="top:0px;">Lower Left Y :</span>
+                        <input type="text" placeholder="Lower Left Y" class="form-control input-sm" name="lower_left_y" value="" />
+                        <span class="input-group-text input-sm" style="top:0px;">Upper Right X :</span>
+                        <input type="text" placeholder="Upper Right X" class="form-control input-sm" name="upper_right_x" value="" />
+                        <span class="input-group-text input-sm" style="top:0px;">Upper Right Y :</span>
+                        <input type="text" placeholder="Upper Right Y" class="form-control input-sm" name="upper_right_y" value="" />
+                    </div>
+            </div>  
+            <div class="col-lg-6 mb-0" style="height: max-content;">
+                <div class="row mb-0">
+                    <div class="btn-group btn-group-sm mb-0">
+                        <span id="pdf-first" class="btn btn-sm btn-secondary mb-0" type="button">First</span>
+                        <span id="pdf-prev" class="btn btn-sm btn-secondary mb-0" type="button"><i class="fa fa-step-backward" aria-hidden="true"></i> Prev</span>
+                        <div id="page-count-container" class="btn btn-sm disabled mb-0" >Page <div id="pdf-current-page" class="p-0 mb-0"></div> of <div id="pdf-total-pages"></div></div>
+                        <span id="pdf-next" class="btn btn-sm btn-secondary mb-0" type="button">Next <i class="fa fa-step-forward" aria-hidden="true"></i></span>
+                        <span id="pdf-last" class="btn btn-sm btn-secondary mb-0" type="button">Last</span>
+                    </div>
                 </div>
-                <div class="col-md-6">
-                    <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" autocomplete="off" name="name" id="name" value="{{ $directory->name ?? '' }}" required>
-                    <span></span>
-                </div>
-                <div class="col-md-6">
-                  <div class="form-check">
-                    <input class="form-check-input" type="checkbox" name="template" value="" id="template">
-                    <label class="form-check-label" for="template">
-                      With Template.
-                    </label>
-                  </div>
-                    <span></span>
-              </div>
             </div>
-            <div class="row" id="template-stemp" style="display: none;">
-                <div class="col-md-12">
-                  <button type="button" class="btn btn-primary btn-block btn-sm col-12" id="upload-button">Pilih File PDF</button> 
-                  <div class="row">
-                    <div class="col-md-3">
-                      <font style="font-weight: bold"><strong>Lower Left X</strong></font>
-                      <input type="text" class="form-control" name="lower_left_x" value="" style="width: 100%"/>
-                    </div>
-                    <div class="col-md-3">
-                      <font style="font-weight: bold"><strong>Lower Left Y</strong></font>
-                      <input type="text" class="form-control" name="lower_left_y" value="" style="width: 100%"/>
-                    </div>
-                    <div class="col-md-3">
-                      <font style="font-weight: bold"><strong>Upper Right X</strong></font>
-                      <input type="text" class="form-control" name="upper_right_x" value="" style="width: 100%"/>
-                    </div>
-                    <div class="col-md-3">
-                      <font style="font-weight: bold"><strong>Upper Right Y</strong></font>
-                      <input type="text" class="form-control" name="upper_right_y" value="" style="width: 100%"/>
-                    </div>
-                  </div>
-                  
-                    <input type="hidden" id="template" value="1" required/>
-                    <input type="file" id="file-to-upload" accept="application/pdf" />
-                    <input type="hidden" name="x1" value="" required/>
-                    <input type="hidden" name="x2" value="" required />
-                    <input type="hidden" name="y1" value="" required />
-                    <input type="hidden" name="y2" value="" required />
-                    <input type="hidden" name="dokumen_height" value="" required="required" />
-                    <input type="hidden" name="dokumen_width" value="" required="required" />
-                    <input type="hidden" name="dokumen_page" id="dokumen_page" required>
-                    <input type="hidden" name="digital_signature_path" id="digital_signature_path" width: 100px; height: 100px; value="{{asset('assets/img/meterai.png') }}">
-                    <input type="hidden" name="is_visible_sign" id="is_visible_sign" value="True">
-                    
-                  <div id="pdf-main-container">
-                    <div id="pdf-loader">Loading document ...</div>
-                    <div id="pdf-contents">
+        </div>
+    </div> 
+</div>
+@if($datas->sn != null)
+  <div class="row">   
+      {{-- <form action="{{route('stemp.store')}}" class="m-0 p-0" method="POST" enctype="multipart/form-data" > --}}
+      <form id="submit_form" action="#" class="m-0 p-0">
+          @csrf
+
+          <div id="docnumberDiv" class="mb-3" style="display: none;">
+            <label for="docnumber" class="form-label">Document Number :</label>
+            <input type="text" required class="form-control" name="docnumber" value="{{$datas->docnumber}}" id="docnumber" aria-describedby="helpId" placeholder="">
+            <small id="helpdocnumber" class="form-text text-muted"></small>
+          </div>
+          <input type="file" name="file" id="file-to-upload"  accept="application/pdf"/>
+
+          <input type="hidden" name="id" value="{{$datas->id}}" required/>
+          <input type="hidden" name="source" value="{{ $datas->source }}" required/>
+          <input type="hidden" name="company" value="{{$datas->company->id}}" required/>
+          <input type="hidden" name="directory_name" value="{{$datas->directory->name}}" required/>
+          <input type="hidden" name="directory" value="{{$datas->id}}" required/>
+          <input type="hidden" name="x1" value="" required/>
+          <input type="hidden" name="x2" value="" required />
+          <input type="hidden" name="y1" value="" required />
+          <input type="hidden" name="y2" value="" required />
+          <input type="hidden" name="dokumen_height" value="" required="required" />
+          <input type="hidden" name="dokumen_width" value="" required="required" />
+          <input type="hidden" name="dokumen_page" id="dokumen_page" required>
+          <input type="hidden" name="digital_signature_path" id="digital_signature_path" width: 100px; height: 100px; value="{{ asset('storage'.$datas->spesimenPath) }}">
+          <input type="hidden" name="is_visible_sign" id="is_visible_sign" value="True">
+          
+          <div id="pdf-main-container">
+              <div id="pdf-loader">Loading document ...</div>
+                  <div id="pdf-contents">
                       <div id="pdf-meta" class="p-0 mb-0"></div>
-                        <div class="row mb-0">
-                          <div id="pdf-buttonss" class="btn-group btn-group-sm mb-0" role="group" aria-label="Page Control">
-                            <a id="pdf-first" class="btn btn-secondary btn-sm">First</a>
-                            <a id="pdf-prev" class="btn btn-secondary btn-sm"><i class="fa fa-step-backward" aria-hidden="true"></i> Prev</a>
-                            <div id="page-count-container" class="btn disabled" >Page <div id="pdf-current-page" class="p-0 mb-0"></div> of <div id="pdf-total-pages"></div></div>
-                            {{-- <div id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div> --}}
-                            <a id="pdf-next" class="btn btn-secondary btn-sm">Next <i class="fa fa-step-forward" aria-hidden="true"></i></a>
-                            <a id="pdf-last" class="btn btn-secondary btn-sm">Last</a>
+                          <div class="row mb-0">
+                              <div id="pdf-buttonss" class="btn-group btn-group-sm mb-0" role="group" aria-label="Page Control">
+                                  <a id="pdf-first" class="btn btn-secondary btn-sm">First</a>
+                                  <a id="pdf-prev" class="btn btn-secondary btn-sm"><i class="fa fa-step-backward" aria-hidden="true"></i> Prev</a>
+                                  <div id="page-count-container" class="btn disabled" >Page <div id="pdf-current-page" class="p-0 mb-0"></div> of <div id="pdf-total-pages"></div></div>
+                                  {{-- <div id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div> --}}
+                                  <a id="pdf-next" class="btn btn-secondary btn-sm">Next <i class="fa fa-step-forward" aria-hidden="true"></i></a>
+                                  <a id="pdf-last" class="btn btn-secondary btn-sm">Last</a>
+                              </div>
                           </div>
-                        </div>
-                      {{-- <canvas id="pdf-canvas" width="1000"></canvas> --}}
-                      <canvas id="pdf-canvas"  width="1000"></canvas>
-                      <div id="page-loader">Loading page ...</div>
-                      <div class="row mb-0">
-                        <div id="pdf-buttonss" class="btn-group btn-group-sm mb-0" role="group" aria-label="Page Control">
+                          {{-- <canvas id="pdf-canvas" width="1000"></canvas> --}}
+                          <canvas id="pdf-canvas"  width="1000" style="margin-top: 27px;"></canvas>
+                          <div id="page-loader">Loading page ...</div>
+                          <div class="row mb-0" style="display: none;">
+                          <div id="pdf-buttonss" class="btn-group btn-group-sm mb-0" role="group" aria-label="Page Control">
                           <a id="pdf-first-b" class="btn btn-secondary btn-sm">First</a>
                           <a id="pdf-prev-b" class="btn btn-secondary btn-sm"><i class="fa fa-step-backward" aria-hidden="true"></i> Prev</a>
                           <div id="page-count-container" class="btn disabled" >Page <div id="pdf-current-page" class="p-0 mb-0"></div> of <div id="pdf-total-pages"></div></div>
                           {{-- <div id="page-count-container">Page <div id="pdf-current-page"></div> of <div id="pdf-total-pages"></div></div> --}}
                           <a id="pdf-next-b" class="btn btn-secondary btn-sm">Next <i class="fa fa-step-forward" aria-hidden="true"></i></a>
                           <a id="pdf-last-b" class="btn btn-secondary btn-sm">Last</a>
-                        </div>
-                      </div>
-                    </div>
+                          </div>
                   </div>
-                </div>
+                  <div class="row p-0 mb-0 fixed-bottom" >
+                      {{-- <button type="submite" class="btn btn-primary btn-sm mb-0">Stemp</button> --}}
+                      <span id="doStemp" type="submite" class="btn btn-primary btn-sm mb-0">S T E M P</span>
+                  </div>
               </div>
-        </div>
-        <div class="card-footer text-muted text-end">
-            <div class="row">
-                <div class="col-6 text-start">
-                    {{-- <button type="submit" class="btn btn-primary">Submit</button> --}}
-                </div>
-                <div class="col-6 text-end">
-                    <a class="btn btn-danger" href="{{ route('directory.index') }}">
-                            Close 
-                    </a>
-                    <button type="submit" class="btn btn-primary">Save</button>
-                </div>
-            </div>
-        </div>
-    </form>
-</div>
-
-
-
-
+          </div>
+      </form>
+      <div id="response"></div>
+  </div>    
+@endif
 <!-- jQuery 3 -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 {{-- <script src="https://e-form.peruri.co.id/pdfviewer/bower_components/jquery/dist/jquery.min.js"></script> --}}
@@ -204,7 +226,8 @@ a.btn-sm{
 <script src="{{ asset("assets/js/plugins/pdf/pdf.worker.19.js") }}"></script>
 {{-- <script src="https://e-form.peruri.co.id/pdfviewer/dist/js/new/pdf.worker.js"></script> --}}
 <script src="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/js/jquery.imgareaselect.min.js" integrity="sha512-59swnhUs+9AinrKlTPqsoO5ukNPPFbPXFyaf41MAgiTG/fv3LBZwWQWiZNYeksneLhiUo4xjh/leTZ53sZzQ4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-
+<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+@if($datas->sn != null)
 <script>
   var __PDF_DOC,
     __CURRENT_PAGE,
@@ -214,7 +237,7 @@ a.btn-sm{
     __CANVAS_CTX = __CANVAS.getContext('2d');
     
   pdfjsLib.GlobalWorkerOptions.workerSrc = '{{ asset("assets/js/plugins/pdf/pdf.worker.19.js") }}';
-  
+  $("#pdf-loader").show();
   function showPDF(pdf_url) {
     $("#pdf-loader").show();
   
@@ -232,6 +255,9 @@ a.btn-sm{
       showPage(1);
     });
   }
+
+  showPDF("{{ asset('storage'.$datas->source) }}");
+  // showPDF("{{(base64_encode(file_get_contents(storage_path('app/public'.$datas->source)))) }}");
   
   function showPage(page_no) {
     __PAGE_RENDERING_IN_PROGRESS = 1;
@@ -320,6 +346,7 @@ a.btn-sm{
                 $('input[name="lower_left_y"]').val(parseInt(lower_left_y));
                 $('input[name="upper_right_x"]').val(parseInt(upper_right_x));
                 $('input[name="upper_right_y"]').val(parseInt(upper_right_y));
+                $('input[name="dokumen_page"]').val(parseInt(__CURRENT_PAGE));
               }
             },
             zIndex: -2,
@@ -364,7 +391,7 @@ a.btn-sm{
           }
           
           var url = imgsign.src;
-  
+        //   var url = "{{ url($datas->spesimenPath) }}";
           $('.imgareaselect-selection').css({'background':'url(' + url + ') center/100% 100% no-repeat'})
         }
   
@@ -434,16 +461,61 @@ a.btn-sm{
     if(__CURRENT_PAGE != __TOTAL_PAGES)
       showPage(__TOTAL_PAGES);
   });
-  
-  $("#template").change(function(e) {
-    console.log($(this).is(':checked'));
-    if ($(this).is(':checked')) {
-        $(this).val(1);
-        $('#template-stemp').show();
-    };
-    if ($(this).is(':checked') == false) {
-        $(this).val(0);
-        $('#template-stemp').hide();
-    };
-  });
+
+
+  toastr.options = {
+    "closeButton": false,
+    "debug": false,
+    "newestOnTop": false,
+    "progressBar": false,
+    "positionClass": "toast-bottom-full-width",
+    "preventDuplicates": false,
+    "onclick": null,
+    "showDuration": "300",
+    "hideDuration": "1000",
+    "timeOut": "5000",
+    "extendedTimeOut": "1000",
+    "showEasing": "swing",
+    "hideEasing": "linear",
+    "showMethod": "fadeIn",
+    "hideMethod": "fadeOut"
+  }
+
+  $('#doStemp').on('click',(e)=>{
+    var name = $('#name').val();  
+           var message = $('#message').val();  
+           if(name == '' || message == '')  
+           {  
+                $('#response').html('<span class="text-danger">All Fields are required</span>');  
+           }  
+           else  
+           {  
+                $.ajax({  
+                     url:"{{ route('stemp.stemp') }}",  
+                     method:"POST",  
+                     data:$('#submit_form').serialize(),  
+                     beforeSend:function(){  
+                          $('#response').html('<span class="text-info">Loading response...</span>');  
+                     },  
+                     success:function(data){  
+                          $('form').trigger("reset");  
+                          $('#response').fadeIn().html(data);  
+                          if(data.status=='True'){
+                            toastr["success"]("Stamp Process Successful ", "Success");
+                          }
+                          if(data.errorMessage!='00'){
+                            toastr["error"]("Stamp Process Failed", "Failed");
+                          }
+                          setTimeout(function(){  
+                               $('#response').fadeOut("slow");  
+                          }, 5000);  
+                     },
+                     error: function(XMLHttpRequest, textStatus, errorThrown) { 
+                      toastr["error"]("Stamp Process Failed", "Failed");
+                     }  
+                });  
+           }  
+  }); 
   </script>
+  @endif
+</body>  

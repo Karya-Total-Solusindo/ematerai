@@ -4,7 +4,7 @@
         <div class="row p-0">
             <div class="col">
                 <h4 class="card-title">My Directory </h4> 
-                {{ $datas[0]->company->name }} 
+                {{ $datas[0]->company->name ?? '' }} 
             </div>
             <div class="col text-end">
                 <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ route('company') }}"> Back</a>

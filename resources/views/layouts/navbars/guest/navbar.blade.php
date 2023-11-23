@@ -41,7 +41,8 @@
                         </ul>
                         <ul class="navbar-nav d-lg-block d-none">
                             <li class="nav-item">
-                                <img class="ms-3" src="https://farpoint.co.id/wp-content/themes/farpoint/img/fp-logo.png" height="30px" alt="logo-farpoint" srcset="https://farpoint.co.id/wp-content/themes/farpoint/img/fp-logo.png">
+                                <img class="ms-3" src="https://farpoint.co.id/wp-content/themes/farpoint/img/fp-logo.png" style="background: #fff;
+                                margin-right: 12px;" height="30px" alt="logo-farpoint" srcset="https://farpoint.co.id/wp-content/themes/farpoint/img/fp-logo.png">
                             </li>
                         </ul>
                         <ul class="navbar-nav d-lg-block d-none">

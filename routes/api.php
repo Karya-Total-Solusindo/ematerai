@@ -15,23 +15,20 @@ use Illuminate\Support\Facades\Route;
 |
 */
 use App\Http\Controllers\Api\EmateraiController;
-// Route::resource('/ematerai', EmateraiController::class)->middleware('auth');
-// Route::resource('/ematerai', EmateraiController::class)->middleware('auth');
 
-// Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-//     return $request->user();
-// });
+/**SECTION API ematerai */
+Route::group(['prefix'=> 'v1', 'middleware' => 'throttle:100,30'],function(){
+    Route::get('getSmsCode', [EmateraiController::class, 'index']);
+    Route::get('login', [EmateraiController::class, 'login']);
+});
+/**!SECTION */
 
-// Route::middleware('auth')->get('/', function (Request $request) {
-//     Route::resource('/ematerai', EmateraiController::class)->middleware('auth');
-// });
-Route::resource('/ematerai', EmateraiController::class)->middleware('auth');
-Route::middleware('auth')->group(function () {
-    Route::resource('/ematerai', EmateraiController::class)->middleware('auth');
-    // Route::get('/ematerai', function (Request $request) {});
- 
-    Route::get('/user/profile', function () {
-        // Uses first & second middleware...
-    });
+Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
+    return $request->user();
 });
 
+// Route::middleware('auth:api')->group(function () {
+//     Route::get('/user/profile', function () {
+//         // Uses first & second middleware...
+//     });
+// });

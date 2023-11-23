@@ -15,6 +15,7 @@ class Document extends Model
         'user_id',
         'company_id',
         'directory_id',
+        'docnumber',
         'template',
         'x1',
         'x2',

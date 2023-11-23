@@ -107,6 +107,11 @@ a.btn-sm{
       </div>
       <form action="{{route('stemp.store')}}" method="POST" enctype="multipart/form-data" >
         @csrf
+        <div id="docnumberDiv" class="mb-3" style="display: none;">
+          <label for="docnumber" class="form-label">Document Number :</label>
+          <input type="text" required class="form-control" name="docnumber" id="docnumber" aria-describedby="helpId" placeholder="">
+          <small id="helpdocnumber" class="form-text text-muted">Help text</small>
+        </div>
         <input type="file" name="file" id="file-to-upload"  accept="application/pdf"/>
 
         <input type="hidden" name="company_name" value="{{$datas[0]->company->name}}" required/>
@@ -206,6 +211,8 @@ a.btn-sm{
     // While page is being rendered hide the canvas and show a loading message
     $("#pdf-canvas").hide();
     $("#page-loader").show();
+    $("#docnumberDiv").show();
+    
   
     // Update current page in HTML
     $("#pdf-current-page").text(page_no);
@@ -275,10 +282,10 @@ a.btn-sm{
                   y2 : $('input[name="y2"]').val()
                 });
               } else {						
-                $('input[name="x1"]').val(parseInt(selection.x1));
-                $('input[name="x2"]').val(parseInt(selection.x2));
-                $('input[name="y1"]').val(parseInt(selection.y1));
-                $('input[name="y2"]').val(parseInt(selection.y2));
+                $('input[name="x1"]').val(parseInt(lower_left_x));
+                $('input[name="x2"]').val(parseInt(upper_right_x));
+                $('input[name="y1"]').val(parseInt(lower_left_y));
+                $('input[name="y2"]').val(parseInt(upper_right_y));
                 $('input[name="lower_left_x"]').val(parseInt(lower_left_x));
                 $('input[name="lower_left_y"]').val(parseInt(lower_left_y));
                 $('input[name="upper_right_x"]').val(parseInt(upper_right_x));
@@ -307,10 +314,10 @@ a.btn-sm{
               lower_left_y = height - (y2 * scale),
               upper_right_x = x2 * scale,
               upper_right_y = height - (y1 * scale);
-            $('input[name="x1"]').val(parseInt(x1));
-            $('input[name="x2"]').val(parseInt(x2));
-            $('input[name="y1"]').val(parseInt(y1));
-            $('input[name="y2"]').val(parseInt(y2));
+            $('input[name="x1"]').val(parseInt(lower_left_x));
+            $('input[name="x2"]').val(parseInt(upper_right_x));
+            $('input[name="y1"]').val(parseInt(lower_left_y));
+            $('input[name="y2"]').val(parseInt(upper_right_y));
             $('input[name="lower_left_x"]').val(parseInt(lower_left_x));
             $('input[name="lower_left_y"]').val(parseInt(lower_left_y));
             $('input[name="upper_right_x"]').val(parseInt(upper_right_x));
@@ -330,7 +337,6 @@ a.btn-sm{
   
           $('.imgareaselect-selection').css({'background':'url(' + url + ') center/100% 100% no-repeat'})
         }
-  
         imgsign.src = $('#digital_signature_path').val();
       });
     });

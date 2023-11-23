@@ -6,6 +6,7 @@ use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\ConfigureConttroller;
 use App\Http\Controllers\DirectoryController;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -25,12 +26,13 @@ use App\Http\Controllers\StempController;
 use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\Api\EmateraiController;
 
 // Route::resource('/test', TestController::class);
-Route::get('/test', [TestController::class, 'index'])->name('test');
-Route::get('/test/api', [TestController::class, 'api'])->name('test-api');
-Route::get('/test/login', [TestController::class, 'login']);
-Route::get('/test/sn', [TestController::class, 'sn']);
+// Route::get('/test', [TestController::class, 'index'])->name('test');
+// Route::get('/test/api', [TestController::class, 'api'])->name('test-api');
+// Route::get('/test/login', [TestController::class, 'login']);
+// Route::get('/test/sn', [TestController::class, 'sn']);
 
 Route::get('/', function () {
     return redirect('/dashboard');
@@ -47,14 +49,14 @@ Route::get('/reset-password', [ResetPassword::class, 'show'])->middleware('guest
 Route::post('/reset-password', [ResetPassword::class, 'send'])->middleware('guest')->name('reset.perform');
 Route::get('/change-password', [ChangePassword::class, 'show'])->middleware('guest')->name('change-password');
 Route::post('/change-password', [ChangePassword::class, 'update'])->middleware('guest')->name('change.perform');
-/** 
- * Auth 
- */
-Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
 
 
 
 Route::group(['middleware' => ['auth'],], function () {
+    /** 
+     * Auth 
+     */
+    Route::get('/dashboard', [HomeController::class, 'index'])->name('home')->middleware('auth');
     /**
      * ADMIN CONTROLLER
      */
@@ -83,16 +85,23 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::get('/stemp/company/{company}', [StempController::class, 'directory'])->middleware('auth')->name('directory');
     Route::get('/stemp/company/directory/{directory}', [StempController::class, 'document'])->middleware('auth')->name('document');
     Route::get('/stemp/company/directory/add/{directory}', [StempController::class, 'addfile'])->middleware('auth')->name('add.file');
+    Route::get('/stemp/process/{document}', [StempController::class, 'process'])->middleware('auth')->name('process');
+    Route::post('/stemp/stemp', [StempController::class, 'stemp'])->middleware('auth')->name('stemp.stemp');
     
     
     // Route::get('/stemp/{stemp}', [StempController::class, 'show'])->middleware('auth')->name('stemp.show');
     Route::resource('/stemp', StempController::class);
+    Route::group([ 'prefix' => 'adapter', 'namespace' => 'EmateraiController' ], function () {
+        Route::get('login', [EmateraiController::class, 'login']);
+        Route::get('serialNumber', [EmateraiController::class, 'getSN']);
+    });
+
 
     /**
      * GLOBAL
      */
-    Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
-    Route::get('/rtl', [PageController::class, 'rtl'])->name('rtl');
+    // Route::get('/virtual-reality', [PageController::class, 'vr'])->name('virtual-reality');
+    // Route::get('/rtl', [PageController::class, 'rtl'])->name('rtl');
     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
     Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
     Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');

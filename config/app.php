@@ -187,6 +187,7 @@ return [
 
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
+        'SignAdapter' => App\Adapter\SignAdapter::class,
     ])->toArray(),
 
 ];

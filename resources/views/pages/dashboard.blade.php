@@ -12,7 +12,9 @@
                                 <div class="numbers mb-0">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Files</p>
                                     <h5 class="font-weight-bolder mb-0">
-                                        {{rand(200000,900000)}} <span style="font-size:3vh;">sheet</span>
+                                        {{ App\Models\Document::where('user_id',Auth::user()->id )->count() }}
+                                        {{-- {{rand(200,900)}}  --}}
+                                        <span style="font-size:3vh;">sheet</span>
                                     </h5>
                                     <p class="mb-0">
                                         {{-- <span class="text-success text-sm font-weight-bolder">+55%</span> --}}
@@ -37,7 +39,9 @@
                                 <div class="numbers mb-0">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Failed</p>
                                     <h5 class="font-weight-bolder mb-0">
-                                        {{rand(200000,900000)}} <span style="font-size:3vh;">sheet</span>
+                                        {{-- {{ App\Models\Document::where('user_id',Auth::user()->id )->count() }} --}}
+                                        {{rand(20,90)}} 
+                                        <span style="font-size:3vh;">sheet</span>
                                     </h5>
                                     <p class="mb-0">
                                         {{-- <span class="text-success text-sm font-weight-bolder">+3%</span> --}}
@@ -87,7 +91,9 @@
                                 <div class="numbers mb-0">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Process</p>
                                     <h5 class="font-weight-bolder mb-0">
-                                        {{rand(200000,900000)}} <span style="font-size:3vh;">sheet</span>
+                                        {{ App\Models\Document::where(['user_id'=>Auth::user()->id,'certificatelevel'=> 'NOT_CERTIFIED' ])->count() }}
+                                        {{-- {{rand(200000,900000)}}  --}}
+                                        <span style="font-size:3vh;">sheet</span>
                                     </h5>
                                     <p class="mb-0">
                                         {{-- <span class="text-success text-sm font-weight-bolder">+5%</span> than last month --}}

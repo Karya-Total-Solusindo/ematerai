@@ -60,6 +60,7 @@
                 </div>
             </li>
             {{-- End Toggle Menu Super Admin --}}
+            @env('staging')
             
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'user-management') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'user-management']) }}">
@@ -131,6 +132,7 @@
                     <span class="nav-link-text ms-1">Sign Up</span>
                 </a>
             </li>
+            @endenv
         </ul>
     </div>
     

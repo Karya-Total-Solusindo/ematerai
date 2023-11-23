@@ -17,7 +17,8 @@
                 @include('client.stemp.upload_multiple')    
                 {{-- @include('client.configure.directory.show')     --}}
             @endif
-            
+        @elseif (Route::currentRouteName() == 'process')  
+            @include('client.stemp.stemp')
         @elseif (Route::currentRouteName() == 'stemp.create')
             @include('client.stemp.create')
         @elseif (Route::currentRouteName() == 'stemp.show')

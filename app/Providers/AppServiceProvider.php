@@ -39,6 +39,7 @@ class AppServiceProvider extends ServiceProvider
             //return "'home'";
         });
         Paginator::useBootstrapFive();
+        // Blade::component('alert', Alert::class);
         // Paginator::useBootstrapFour();
     }
 }

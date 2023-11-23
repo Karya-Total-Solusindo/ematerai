@@ -26,13 +26,12 @@ var defaultState = {
 }
 
 // GET OUR PDF FILE
-pdfjsLib.getDocument('{{ asset('/docs/file.pdf') }}').then((pdf) => {
+//pdfjsLib.getDocument('{{ asset('/docs/file.pdf') }}').then((pdf) => {
 
-    defaultState.pdf = pdf;
-    render();
+//    defaultState.pdf = pdf;
+//    render();
 
-});
-
+//});
 // RENDER PDF DOCUMENT
 function render() {
     defaultState.pdf.getPage(defaultState.currentPage).then((page) => {
