@@ -73,7 +73,7 @@ class LoginController extends Controller
                     // '_profile_ematerai' => $response_api
                 ];
                 
-                $request->session()->regenerate(); 
+                // $request->session()->regenerate(); 
                 // return redirect()->intended('dashboard')->withCookies($cookie);
             }
             $request->session()->regenerate(); 
@@ -90,14 +90,16 @@ class LoginController extends Controller
 
     public function logout(Request $request)
     {
+        Cookie::make('_token_ematerai','',-120,'/');
+        Cookie::make('m_ematerai','', -120,'/');
         if (Auth::check()) {
             Auth::logout();
             $request->session()->invalidate();
             $request->session()->regenerateToken();
             $response = ['message' => 'You have been successfully logged out!'];
             response($response, 200);
-            $cookie = Cookie::make('_token_ematerai', null,-100);
-            return redirect('/login')->withCookies([$cookie]);
+           
+            return redirect('/login');
         }
         return redirect('/login');    
     }
