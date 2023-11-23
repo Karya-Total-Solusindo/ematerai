@@ -71,8 +71,9 @@ class LoginController extends Controller
                     Cookie::make('_profile_ematerai',$response_api, 120),
                 ];
                 $request->session()->regenerate(); 
-                return redirect()->intended('dashboard')->withCookies($cookie);
+                // return redirect()->intended('dashboard')->withCookies($cookie);
             }
+            $request->session()->regenerate(); 
             return redirect()->intended('dashboard');
         }
         if(!Auth::validate($credentials)):

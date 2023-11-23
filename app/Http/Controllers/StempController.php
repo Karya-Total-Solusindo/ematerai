@@ -128,7 +128,7 @@ class StempController extends Controller
         $fileName = $file->getClientOriginalName();  // str_replace(' ','_',time().'_'.$file->getClientOriginalName());
         $filePath = 'docs/'.$input['company_name'].'/'.$input['directory_name'].'/in/'.$fileName;
         $path = Storage::disk('public')->put($filePath,file_get_contents($request->file));
-        $path = Storage::disk('public')->url($path);
+        // $path = Storage::disk('public')->url($path);
         // $file->move(public_path($path),$fileName);
         $companyId = $input['company'];
         $user = Auth::user()->id;
