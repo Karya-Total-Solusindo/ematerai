@@ -66,8 +66,8 @@ class LoginController extends Controller
             ]))->post($API_LOGIN);
             // set token peruri as cookie    
             if($response_api['message']=='success'){
-                Cookie::queue('_token_ematerai',$response_api['token'], 120);
-                Cookie::queue('m_ematerai',$response_api, 120);
+                // Cookie::queue('_token_ematerai',$response_api['token'], 120);
+                // Cookie::queue('m_ematerai',$response_api, 120);
                 $TokenLoginPeruri = [
                     // '_token_ematerai' => $response_api['token'],
                     // '_profile_ematerai' => $response_api
