@@ -502,11 +502,12 @@ fixed-bottom{
                       console.log(data);
                           $('form').trigger("reset");  
                           $('#response').fadeIn().html(data);  
-                          if(data.status=='True'){
+                          obj = JSON.parse(data);
+                          if(obj.status=='True'){
                             toastr["success"]("Stamp Process Successful ", "Success");
                           }
-                          if(data.status != 'True'){
-                            toastr["error"]("Stamp Process Failed <br> Code : "+ data.errorCode +" Message : "+ data.errorMessage, "Failed");
+                          if(obj.status != 'True'){
+                            toastr["error"]("Stamp Process Failed <br> Code : "+ obj.errorCode +" Message : "+ obj.errorMessage, "Failed");
                           }
                           setTimeout(function(){  
                                $('#response').fadeOut("slow");  
