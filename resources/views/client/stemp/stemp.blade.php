@@ -512,7 +512,16 @@ fixed-bottom{
                           }, 5000);  
                      },
                      error: function(XMLHttpRequest, textStatus, errorThrown) { 
-                      toastr["error"]("Stamp Process Failed", "Failed");
+                      var errM = '';
+                      var errN = '';
+                      if(XMLHttpRequest.responseJSON.errorMessage){
+                        errM = XMLHttpRequest.responseJSON.errorMessage +"<br>";
+                        errN = XMLHttpRequest.responseJSON.errorMessage +"<br>";
+                      }
+                      toastr["error"]("Stamp Process Failed <br>"+ 
+                                  errN + errM +
+                                  XMLHttpRequest.responseJSON.message,
+                                   "Failed");
                      }  
                 });  
            }  
