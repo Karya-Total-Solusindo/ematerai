@@ -27,6 +27,7 @@ return new class extends Migration
             $table->string('phone')->nullable();
             $table->string('postal')->nullable();
             $table->text('about')->nullable();
+            $table->text('ematerai_token')->nullable();
             $table->rememberToken();
             $table->timestamps();
         });

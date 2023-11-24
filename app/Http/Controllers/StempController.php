@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Input\Input;
 use Illuminate\Support\Facades\Http;
 use App\Adapter\SignAdapter;
+use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -175,7 +176,7 @@ class StempController extends Controller
         // dd($Url);
         $getSerialNumber = Http::withHeaders([
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . Cookie::get('_token_ematerai'),
+            'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
         ])->withBody(json_encode([
             "isUpload" => false,
             "namadoc"=> "4b",
@@ -317,7 +318,7 @@ class StempController extends Controller
         // return response()->json($Url, 200, $headers);
       return  $stemting = Http::withHeaders([
             'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . Cookie::get('_token_ematerai'),
+            'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
         ])->withBody(json_encode([
             "certificatelevel"=> "NOT_CERTIFIED",
             'dest'=>  '/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 

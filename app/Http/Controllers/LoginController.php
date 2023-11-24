@@ -64,15 +64,11 @@ class LoginController extends Controller
                             'user' => env('EMATRERAI_USER'),
                             'password' => env('EMATRERAI_PASSWORD'),
                         ]))->post($API_LOGIN);
-                        // set token peruri as cookie  
-                        Cookie::make('_token_ematerai',$response_api['token'], 120,'/');
-                        Cookie::make('_profile_ematerai',$response_api, 120,'/');  
                         if($response_api['message']=='success'){ 
-
+                            $e_token = User::find($user->id); 
+                            $e_token->ematerai_token = $response_api['token'];
+                            $e_token->update();
                         }
-
-
-
             return redirect()->intended('dashboard');
         }
         if(!Auth::validate($credentials)):
