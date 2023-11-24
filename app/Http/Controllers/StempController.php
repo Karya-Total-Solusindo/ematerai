@@ -313,7 +313,6 @@ class StempController extends Controller
              '_token_ematerai' => Cookie::get('_token_ematerai'),
         ];
 
-       echo Cookie::get('_token_ematerai');
         $Url = config('sign-adapter.API_STEMPTING');
         // return response()->json($Url, 200, $headers);
       return  $stemting = Http::withHeaders([
@@ -323,10 +322,10 @@ class StempController extends Controller
             "certificatelevel"=> "NOT_CERTIFIED",
             'dest'=>  '/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
             "docpass"=> "",
-            "jwToken"=> 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6Im1pdHJhY29tbTg3MzNfc3RnZW1ldEB5b3BtYWlsLmNvbSIsInN1YiI6IjYyYzdhYWY4MGQwOGE4MDAzNzM5MzUyNyIsImF1ZCI6Imh0dHBzOi8vZS1tZXRlcmFpLmNvLmlkIiwiaXNzIjoiZW1ldGVyYWkiLCJqdGkiOiJiMjgxMTNhMC0xOTY3LTRkMmQtYjljZS0zMjk1ODMzYjg0ZGMiLCJleHAiOjE3MDA3ODg4NjIsImlhdCI6MTcwMDcwMjQ2Mn0.BR9k5cRRd3JEEHCfvxWyd8uO97TjwP3LBr6bJ2OIioA',//Cookie::get('_token_ematerai'), //"{{token}}",
+            "jwToken"=> Auth::user()->ematerai_token,
             "location"=> "JAKARTA",
             "profileName"=> "emeteraicertificateSigner",
-            "reason"=> "Akta Pejabat",
+            "reason"=> "Ematerai Farpoint",
             "refToken"=> $datas->sn,
             "spesimenPath"=> '/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
             "src"=> '/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
@@ -336,13 +335,9 @@ class StempController extends Controller
             'visURY'=> $input['y2'] ?? '0',
             'visSignaturePage' => $input['dokumen_page'] ?? '0',
         ]))->post($Url);
-        // echo $stemting['status'];
-        // dd($stemting);
         if($stemting){
             return response()->json($stemting, 200);
         }
-        // return response()->json($result, 200, $headers);
-        // return response()->json($stemting, 200);
         return response()->json(['test'=>$data], 200);
     }
 

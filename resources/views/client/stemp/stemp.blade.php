@@ -164,6 +164,7 @@ fixed-bottom{
             <input type="text" required class="form-control" name="docnumber" value="{{$datas->docnumber}}" id="docnumber" aria-describedby="helpId" placeholder="">
             <small id="helpdocnumber" class="form-text text-muted"></small>
           </div>
+          <input type="text" name="sign"  value="{{ config('sign-adapter.API_STEMPTING') }}">
           <input type="file" name="file" id="file-to-upload"  accept="application/pdf"/>
 
           <input type="hidden" name="id" value="{{$datas->id}}" required/>
