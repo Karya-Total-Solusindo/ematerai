@@ -19,6 +19,8 @@
             @endif
         @elseif (Route::currentRouteName() == 'process')  
             @include('client.stemp.stemp')
+        @elseif (Route::currentRouteName() == 'success')  
+            @include('client.stemp.success')
         @elseif (Route::currentRouteName() == 'stemp.create')
             @include('client.stemp.create')
         @elseif (Route::currentRouteName() == 'stemp.show')

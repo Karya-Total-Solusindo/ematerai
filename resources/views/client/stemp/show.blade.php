@@ -2,7 +2,7 @@
     <div class="card-body">
        
         <div class="row justify-content-center align-items-center g-2">
-            <div class="col-md-6"> <h4 class="card-title">{{ substr($datas[0]->filename,11)}}</h4></div>
+            <div class="col-md-6"> <h4 class="card-title">{{ $datas[0]->filename }}</h4></div>
             <div class="col-md-6 text-end">
                 <a href="{{ url()->previous()}}" class="btn btn-s bg-danger text-white">Close</a>
             </div>
@@ -32,13 +32,13 @@
                             <td>:</td>
                             <td>{{$data->directory->name}}</td>
                         </tr>
-                        <tr class="">
+                        {{-- <tr class="">
                             <td>Stemp</td>
                             <td>:</td>
                             <td> Page:  {{$data->page}},<br>
                                 <span>visULX:</span> {{$data->x1}},visURX: {{$data->y1}},
                                 visLLY: {{$data->x2}},visURY: {{$data->y2}},  
-                            </tr>
+                            </tr> --}}
                         <tr class="">
                             <td>Status Stemp</td>
                             <td>:</td>

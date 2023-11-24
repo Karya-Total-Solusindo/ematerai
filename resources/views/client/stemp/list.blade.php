@@ -27,13 +27,9 @@
                         <tr>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Name</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                Detail</th>
-                            <th
-                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                Document</th>
-                            <th
-                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                Satatus</th>
+                            <th  class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Create</th>
                             <th class="text-secondary opacity-7"></th>
                         </tr>
@@ -47,21 +43,29 @@
                                 <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}</a></h6>
                                 <p class="text-xs text-secondary mb-0">{{ $data->company->name }} / {{ $data->directory->name }}</p>
                             </td>
-                            <td class="align-middle text-sm">
-                                {{ 'x1:'.$data->x1.' x2:'.$data->x2.' y1:'.$data->y1. ' y2:'.$data->y2 }}
-  
+                            <td class="align-middle text-center text-sm">
+                                @if ($data->certificatelevel == 'CERTIFIED')
+                                    <span class="badge badge-sm bg-gradient-success">{{$data->certificatelevel}}</span>
+                                @else
+                                    <span class="badge badge-sm bg-gradient-secondary">{{ $data->certificatelevel ?? 'NOT_CERTIFIED' }}</span>
+                                @endif
+                                
                             </td>
+
                             <td class="align-middle text-center">
-                                {{ $data->certificatelevel ?? 'NOT_CERTIFIED' }}
-                                {{-- {{ App\Models\Document::where('directory_id',$data->id)->count() ?? 0 }} --}}
+                                <span class="text-secondary text-xs font-weight-bold">{{ $data->created_at->format('d/m/Y - H:i:s') }}</span>
                             </td>
-                            <td class="align-middle text-center">
-                                <span class="text-secondary text-xs font-weight-bold">{{ $data->created_at->format('d/m/Y') }}</span>
-                            </td>
+
                             <td class="align-middle text-end">
+                                @if ($data->certificatelevel == 'CERTIFIED')
+                                    <a href="{{ route('stemp.show',$data->id) }}" class="text-secondary font-weight-bold text-xs"
+                                        data-toggle="tooltip" data-original-title="Edit Company">
+                                        <span class="badge badge-sm bg-gradient-success"> Download </span>
+                                    </a>
+                                @endif
                                 <a href="{{ route('stemp.show',$data->id) }}" class="text-secondary font-weight-bold text-xs"
                                     data-toggle="tooltip" data-original-title="Edit Company">
-                                    Detail
+                                    <span class="badge badge-sm bg-gradient-info">Detail</span>
                                 </a>
                             </td>
                         </tr>

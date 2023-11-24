@@ -3,7 +3,7 @@
     <div class="card-body">
         <div class="row p-0">
             <div class="col">
-                <h4 class="card-title">My Company</h4> 
+                <h4 class="card-title"> <i class="ni ni-building"></i>  My Company</h4> 
             </div>
             <div class="col text-end">
                 <a @class(['btn btn-primary', 'font-bold' => true]) href="{{ route('company.create') }}"> Create</a>

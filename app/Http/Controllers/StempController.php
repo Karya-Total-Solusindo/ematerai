@@ -103,6 +103,12 @@ class StempController extends Controller
     }
 
     public function addfile(Directory $directory){
+        if(Auth::user()->ematerai_token){
+            if(env('APP_DEBUG')=='true'){
+                //echo Auth::user()->ematerai_token;
+                session(['success' => env('APP_DEBUG')." ".Auth::user()->ematerai_token]);
+            }
+        } 
         $datas = Directory::with('company')->find($directory->id)->where('id',$directory->id)->get();
         // Company::with('directory')->find($directory->id);
         return view("client.stemp.index", compact("datas"));
@@ -128,9 +134,8 @@ class StempController extends Controller
         $file = $request->file('file');
         $fileName = $file->getClientOriginalName();  // str_replace(' ','_',time().'_'.$file->getClientOriginalName());
         $filePath = 'docs/'.$input['company_name'].'/'.$input['directory_name'].'/in/'.$fileName;
+        Storage::disk('public')->makeDirectory('docs/'.$input['company_name'].'/'.$input['directory_name'].'/in/');
         $path = Storage::disk('public')->put($filePath,file_get_contents($request->file));
-        // $path = Storage::disk('public')->url($path);
-        // $file->move(public_path($path),$fileName);
         $companyId = $input['company'];
         $user = Auth::user()->id;
         $uniq = [
@@ -153,6 +158,7 @@ class StempController extends Controller
         //do Upload Files
         $desPath = '/docs/'.$input['company_name'].'/'.$input['directory_name'];
         $data = [ 
+            'certificatelevel'=>'NOT_CERTIFIED',
             'user_id'=>  $user,
             'company_id'=>  $companyId,
             'directory_id'=> $input['directory'],
@@ -246,15 +252,8 @@ class StempController extends Controller
 
     public function stemp(Request $request)
     {
-        // $datas = Document::where(['id'=> $id, 'user_id'=> Auth::user()->id])->first();
-        // if($datas){
-        //     return view('client.stemp.stemp', compact('datas'));
-        // }
-        // return redirect()->to('/')->withErrors(['error', 'Data Not Found!'])->with('error', 'Data Not Found!');
         $input = $request->all();
-        $headers =[
-            
-        ];
+        $headers =[];
         $user = Auth::user()->id;
         $id = $input['id'];
         $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->first();
@@ -262,7 +261,7 @@ class StempController extends Controller
         /*
          {
             "certificatelevel": "NOT_CERTIFIED",
-            "dest": "{{fileStamp}}",  //sumber file
+            "dest": "{{fileStamp}}",  // simpan disini setelah distemting
             "docpass": "",
             "jwToken": "{{token}}",
             "location": "JAKARTA",
@@ -270,7 +269,7 @@ class StempController extends Controller
             "reason": "Akta Pejabat",
             "refToken": "{{serialNumber}}",
             "spesimenPath": "{{fileQr}}",
-            "src": "{{file}}", // simpan disini setelah distemting
+            "src": "{{file}}", //sumber file 
             "visLLX": 237,
             "visLLY": 559,
             "visURX": 337,
@@ -279,25 +278,7 @@ class StempController extends Controller
         } 
          */
         //harusnya ambil dari database
-        $data = [ 
-            //data stempting
-            "certificatelevel"=> "NOT_CERTIFIED",
-            'dest'=> $datas->source ?? '',
-            "docpass"=> "",
-            "jwToken"=> Cookie::get('_token_ematerai'), //"{{token}}",
-            "location"=> "JAKARTA",
-            "profileName"=> "emeteraicertificateSigner",
-            "reason"=> "Akta Pejabat",
-            "refToken"=> $datas->sn,
-            "spesimenPath"=>  '/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
-            "src"=> '/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename ?? '0',
-            'visLLX'=> $input['x1'] ?? '0',
-            'visURX'=> $input['x2'] ?? '0',
-            'visLLY'=> $input['y1'] ?? '0',
-            'visURY'=> $input['y2'] ?? '0',
-            'visSignaturePage' => $input['dokumen_page'] ?? '0',
-        ];
-        
+
         $dataApp=[
              // data app 
              'id' => $id,
@@ -314,8 +295,10 @@ class StempController extends Controller
         ];
 
         $Url = config('sign-adapter.API_STEMPTING');
+        // echo $Url; 
+        // echo Auth::user()->ematerai_token;
         // return response()->json($Url, 200, $headers);
-      return  $stemting = Http::withHeaders([
+        $stemting = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
         ])->withBody(json_encode([
@@ -335,10 +318,50 @@ class StempController extends Controller
             'visURY'=> $input['y2'] ?? '0',
             'visSignaturePage' => $input['dokumen_page'] ?? '0',
         ]))->post($Url);
+
+        if($stemting['statusCode']=='00'){
+            //Update status document jika stemting berhasil berhasil
+            $status = Document::find($id);
+            $status->certificatelevel = 'CERTIFIED';
+            $status->update();
+        }else{
+            $status = Document::find($id);
+            $status->certificatelevel = 'FAILUR';
+            $status->update();
+        }
+
+        return $stemting; 
+
         if($stemting){
             return response()->json($stemting, 200);
         }
         return response()->json(['test'=>$data], 200);
+    }
+
+    /**
+     * List Success Stemp.
+     */
+    public function success(Request $request)
+    {
+        $user = Auth::user()->id;
+        if (($s = $request->s)) {
+            $datas =  Document::where([
+                [function ($query) use ($request) {
+                    if (($s = $request->s)) {
+                        $query->orWhere('filename', 'LIKE', '%' . $s . '%')
+                        ->Where('certificatelevel','=','CERTIFIED')
+                        ->Where('user_id','=',Auth::user()->id)
+                            ->get();
+                    }
+                }]
+            ])->with('company')->paginate(5);
+        }else{
+            $datas =  Document::with('company')
+            ->where('user_id','=',Auth::user()->id)
+            ->where('certificatelevel','=','CERTIFIED')
+            ->paginate(5);
+        }
+        return view("client.stemp.index", compact("datas"));
     }
 
     /**

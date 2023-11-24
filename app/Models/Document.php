@@ -26,6 +26,7 @@ class Document extends Model
         'page',
         'source',
         'filename',
+        'certificatelevel'
     ];
 
     public function company()

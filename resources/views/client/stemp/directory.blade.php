@@ -3,7 +3,7 @@
     <div class="card-body">
         <div class="row p-0">
             <div class="col">
-                <h4 class="card-title">My Directory </h4> 
+                <h4 class="card-title"><i class="fas fa-folder-open"></i> My Directory </h4> 
                 {{ $datas[0]->company->name ?? '' }} 
             </div>
             <div class="col text-end">
@@ -39,7 +39,7 @@
                                             alt="user1">
                                     </div> --}}
                                     <div class="">
-                                        <h6 class="p-0"><a href="{{ route('document',$data->id) }}">{{ $data->name }}</a></h6>
+                                        <h6 class="p-0"><a href="{{ route('document',$data->id) }}"><i class="fa fa-folder"></i> {{ $data->name }}</a></h6>
                                         {{-- <p class="text-xs text-secondary mb-0">john@creative-tim.com</p> --}}
                                     </div>
                                 </div>

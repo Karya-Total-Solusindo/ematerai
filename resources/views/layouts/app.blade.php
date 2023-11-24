@@ -102,7 +102,8 @@
 </head>
 <body onload="loader()" class="{{ $class ?? '' }}" style="margin:0; background-color: '#6c757d !important">
     @if ($message = Session::get('success'))
-    <div class="alert alert-success alert-dismissible text-white">
+    <div class="alert alert-success alert-dismissible text-white" style="position: fixed;
+    width: 100%;">
         <p>{{ $message }}</p>
         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close">
             <span aria-hidden="true">&times;</span>

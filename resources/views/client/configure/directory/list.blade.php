@@ -3,7 +3,7 @@
     <div class="card-body">
         <div class="row p-0">
             <div class="col">
-                <h4 class="card-title">My Directory</h4> 
+                <h4 class="card-title"><i class="fas fa-folder-open"></i> My Directory</h4> 
             </div>
             <div class="col text-end">
                 <a @class(['btn btn-primary', 'font-bold' => true]) href="{{ route('directory.create') }}"> Create</a>
@@ -28,7 +28,7 @@
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                 Company</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                Name</th>
+                                Directory</th>
                             <th
                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Document</th>

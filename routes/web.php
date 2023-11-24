@@ -81,12 +81,15 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::resource('/configure/directory', DirectoryController::class);
     Route::post('/configure/directory/upload', [DirectoryController::class, 'upload'])->middleware('auth')->name('doc-upload');
 
+
+    // STEMP 
     Route::get('/stemp/company', [StempController::class, 'company'])->middleware('auth')->name('company');
     Route::get('/stemp/company/{company}', [StempController::class, 'directory'])->middleware('auth')->name('directory');
     Route::get('/stemp/company/directory/{directory}', [StempController::class, 'document'])->middleware('auth')->name('document');
     Route::get('/stemp/company/directory/add/{directory}', [StempController::class, 'addfile'])->middleware('auth')->name('add.file');
     Route::get('/stemp/process/{document}', [StempController::class, 'process'])->middleware('auth')->name('process');
     Route::post('/stemp/stemp', [StempController::class, 'stemp'])->middleware('auth')->name('stemp.stemp');
+    Route::get('/stemp/success', [StempController::class, 'success'])->middleware('auth')->name('success');
     
     
     // Route::get('/stemp/{stemp}', [StempController::class, 'show'])->middleware('auth')->name('stemp.show');

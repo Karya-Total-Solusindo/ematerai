@@ -3,7 +3,7 @@
     <div class="card-body">
         <div class="row p-0">
             <div class="col">
-                <h4 class="card-title">My Company</h4> 
+                <h4 class="card-title"><i class="ni ni-building"></i> My Company</h4> 
             </div>
             <div class="col text-end">
                 {{-- <a @class(['btn btn-primary', 'font-bold' => true]) href="{{ route('company.create') }}"> Create</a> --}}
@@ -36,7 +36,7 @@
                                             alt="user1">
                                     </div> --}}
                                     <div class="">
-                                        <h6 class="p-0"><a href="{{ route('directory',$data->id) }}">{{ $data->name }}</a></h6>
+                                        <h6 class="p-0"><i class="ni ni-building"></i> <a href="{{ route('directory',$data->id) }}">{{ $data->name }}</a></h6>
                                         {{-- <p class="text-xs text-secondary mb-0">john@creative-tim.com</p> --}}
                                     </div>
                                 </div>
