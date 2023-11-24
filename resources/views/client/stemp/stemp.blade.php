@@ -505,7 +505,7 @@ fixed-bottom{
                             toastr["success"]("Stamp Process Successful ", "Success");
                           }
                           if(data.errorMessage!='00'){
-                            toastr["error"]("Stamp Process Failed", "Failed");
+                            toastr["error"]("Stamp Process Failed <br>"+ data.errorMessage, "Failed");
                           }
                           setTimeout(function(){  
                                $('#response').fadeOut("slow");  
