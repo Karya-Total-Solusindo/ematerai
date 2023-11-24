@@ -298,7 +298,7 @@ class StempController extends Controller
         // echo $Url; 
         // echo Auth::user()->ematerai_token;
         // return response()->json($Url, 200, $headers);
-        $stemting = Http::withHeaders([
+    return  $stemting = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
         ])->withBody(json_encode([
@@ -335,7 +335,6 @@ class StempController extends Controller
         if($stemting){
             return response()->json($stemting, 200);
         }
-        return response()->json(['test'=>$data], 200);
     }
 
     /**
