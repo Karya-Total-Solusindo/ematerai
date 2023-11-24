@@ -499,6 +499,7 @@ fixed-bottom{
                           $('#response').html('<span class="text-info">Loading response...</span>');  
                      },  
                      success:function(data){  
+                      console.log(data);
                           $('form').trigger("reset");  
                           $('#response').fadeIn().html(data);  
                           if(data.status=='True'){
