@@ -89,26 +89,26 @@ class DirectoryController extends Controller
         $name =  strtolower($input['name']);
         $path = '/docs/'.$company.'/'.$name.'/in';
         Storage::disk('public')->makeDirectory($path);
-        if (!File::exists($path)) {
-            File::makeDirectory($path, 0777, true);
+        if (!File::exists(storage_path($path))) {
+            File::makeDirectory(storage_path($path), 0777, true);
         }
         // File::makeDirectory($path, $mode = 0777, true, true);
         $path = '/docs/'.$company.'/'.$name.'/out';
         Storage::disk('public')->makeDirectory($path);
-        if (!File::exists($path)) {
-            File::makeDirectory($path, 0777, true);
+        if (!File::exists(storage_path($path))) {
+            File::makeDirectory(storage_path($path), 0777, true);
         }
         // File::makeDirectory($path, $mode = 0777, true, true);
         $path = '/docs/'.$company.'/'.$name.'/backup';
         Storage::disk('public')->makeDirectory($path);
-        if (!File::exists($path)) {
-            File::makeDirectory($path, 0777, true);
+        if (!File::exists(storage_path($path))) {
+            File::makeDirectory(storage_path($path), 0777, true);
         }
         // File::makeDirectory($path, $mode = 0777, true, true);
         $path = '/docs/'.$company.'/'.$name.'/spesimen';
         Storage::disk('public')->makeDirectory($path);
-        if (!File::exists($path)) {
-            File::makeDirectory($path, 0777, true);
+        if (!File::exists(storage_path($path))) {
+            File::makeDirectory(storage_path($path), 0777, true);
         }
         // File::makeDirectory($path, $mode = 0777, true, true);
         // Session::flash('message', 'Image are uploaded successfully');
