@@ -328,24 +328,23 @@ class StempController extends Controller
                 ]))->post($Url);
                 if ($stemting->getStatusCode() == 200) {
                     $response = json_decode($stemting->getBody(),true);
-                    //perform  action with $response 
-                    //dd($stemting);
-                    if($response['status']=='True'){
-                        //Update status document jika stemting berhasil berhasil
-                        if($response['statusCode']=='00'){
+                        //perform  action with $response 
+                        //dd($stemting);
+                        if($response['status']=='True'){
+                            //Update status document jika stemting berhasil berhasil
+                            if($response['statusCode']=='00'){
+                                $status = Document::find($id);
+                                $status->certificatelevel = 'CERTIFIED';
+                                $status->update();
+                            }
+                        }else{
                             $status = Document::find($id);
-                            $status->certificatelevel = 'CERTIFIED';
+                            $status->certificatelevel = 'FAILUR';
                             $status->update();
+                            $type = 'application/json';
+                            $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
                         }
-                    }else{
-                        $status = Document::find($id);
-                        $status->certificatelevel = 'FAILUR';
-                        $status->update();
-                        $type = 'application/json';
-                        $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
                         return $response;
-                        return response();
-                    }
                 }
             }catch(\GuzzleHttp\Exception\RequestException $e){
             // you can catch here 40X response errors and 500 response errors
