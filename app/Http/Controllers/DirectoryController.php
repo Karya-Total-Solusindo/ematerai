@@ -88,27 +88,24 @@ class DirectoryController extends Controller
 
         $name =  strtolower($input['name']);
         $path = '/docs/'.$company.'/'.$name.'/in';
+        Storage::disk('public')->makeDirectory($path);
         if (!File::exists($path)) {
             File::makeDirectory($path, 0777, true);
         }
-        Storage::disk('public')->makeDirectory($path);
         // File::makeDirectory($path, $mode = 0777, true, true);
         $path = '/docs/'.$company.'/'.$name.'/out';
+        Storage::disk('public')->makeDirectory($path);
         if (!File::exists($path)) {
             File::makeDirectory($path, 0777, true);
         }
-        Storage::disk('public')->makeDirectory($path);
         // File::makeDirectory($path, $mode = 0777, true, true);
         $path = '/docs/'.$company.'/'.$name.'/backup';
+        Storage::disk('public')->makeDirectory($path);
         if (!File::exists($path)) {
             File::makeDirectory($path, 0777, true);
         }
-        Storage::disk('public')->makeDirectory($path);
         // File::makeDirectory($path, $mode = 0777, true, true);
         $path = '/docs/'.$company.'/'.$name.'/spesimen';
-        if (!File::exists($path)) {
-            File::makeDirectory($path, 0777, true);
-        }
         Storage::disk('public')->makeDirectory($path);
         if (!File::exists($path)) {
             File::makeDirectory($path, 0777, true);
