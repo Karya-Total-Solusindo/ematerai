@@ -98,6 +98,7 @@ class StempController extends Controller
                         $query->orWhere('filename', 'LIKE', '%' . $s . '%')
                         ->orWhere('sn', 'LIKE', '%' . $s . '%')
                         ->Where('user_id', $user)
+                        ->Where('certificatelevel','<>', 'CERTIFIED')
                         ->Where('directory_id', $request->company)
                         ->orderBy('updated_at', 'desc')
                         ->get();
