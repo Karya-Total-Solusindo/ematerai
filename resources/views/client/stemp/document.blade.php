@@ -51,7 +51,7 @@
                                             alt="user1">
                                     </div> --}}
                                     <div class="">
-                                        <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->id }}{{ $data->filename }}</a></h6>
+                                        <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}</a></h6>
                                         {{-- <p class="text-xs text-secondary mb-0">john@creative-tim.com</p> --}}
                                     </div>
                                 </div>
