@@ -110,6 +110,9 @@ class DirectoryController extends Controller
             File::makeDirectory($path, 0755, true);
         }
         Storage::disk('public')->makeDirectory($path);
+        if (!File::exists($path)) {
+            File::makeDirectory($path, 0755, true);
+        }
         // File::makeDirectory($path, $mode = 0777, true, true);
         // Session::flash('message', 'Image are uploaded successfully');
         return redirect()->route('directory.index')->with('success','created successfully');
