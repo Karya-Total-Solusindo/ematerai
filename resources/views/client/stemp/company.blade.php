@@ -36,8 +36,10 @@
                                             alt="user1">
                                     </div> --}}
                                     <div class="">
-                                        <h6 class="p-0"><i class="ni ni-building"></i> <a href="{{ route('directory',$data->id) }}">{{ $data->name }}</a></h6>
-                                        {{-- <p class="text-xs text-secondary mb-0">john@creative-tim.com</p> --}}
+                                        <h6 class="p-0">
+                                            {{-- <i class="ni ni-building"></i>  --}}
+                                            <a href="{{ route('directory',$data->id) }}">{{ $data->name }}</a></h6>
+
                                     </div>
                                 </div>
                             </td>

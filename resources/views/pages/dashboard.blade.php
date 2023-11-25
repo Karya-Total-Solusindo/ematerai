@@ -197,8 +197,9 @@
                                                                 <span class="badge badge-sm min-vw-20 bg-gradient-default">{{ $stemp->certificatelevel }}</span>
                                                             @default
                                                         @endswitch
-                                                        <span class="float-end">
-                                                            Request date: {{ $stemp->updated_at->format('d/m/Y') }} 
+                                                        <span class="float-end" style="font-size: smaller !important; bottom: -9px;">
+                                                            {{ $stemp->updated_at->format('d/m/Y H:i:s') }} 
+                                                            <i class="fas fa-clock"></i>
                                                         </span>
                                                     </div>
                                                 </div>
@@ -211,7 +212,7 @@
                             </table>
                         </div>
                     </div>
-                    <div class="card-footer pb-0 pt-3 bg-transparent">
+                    <div class="card-footer row">
                         {{ $datas['NOT_STAMPTING']->links()}}    
                     </div>
                 </div>
@@ -220,7 +221,7 @@
         
         </div>
 
-        <div class="row mt-4">
+        {{-- <div class="row mt-4">
             <div class="col-lg-7 mb-lg-0 mb-4">
                 <div class="card ">
                     <div class="card-header pb-0 p-3">
@@ -438,12 +439,12 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         {{-- @include('layouts.footers.auth.footer') --}}
     </div>
 @endsection
 
-@push('js')
+{{-- @push('js')
     <script src="./assets/js/plugins/chartjs.min.js"></script>
     <script>
         var ctx1 = document.getElementById("chart-line").getContext("2d");
@@ -528,4 +529,4 @@
             },
         });
     </script>
-@endpush
+@endpush --}}

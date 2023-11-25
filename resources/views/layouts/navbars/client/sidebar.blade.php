@@ -1,3 +1,4 @@
+<!-- Navbar -->
 <nav class="sidebar  py-0 mb-0"> 
     <ul class="nav flex-column" id="nav_accordion">
         <li class="nav-item has-submenu">
@@ -41,9 +42,9 @@
                 {{-- <li><a class="nav-link rounded" href="#">Submenu item 3 </a> </li> --}}
             </ul>
         </li>
-        
         {{-- <li class="nav-item">
             <a class="nav-link" href="#"> Other link </a>
         </li> --}}
     </ul>
 </nav>  
+<!-- Navbar -->

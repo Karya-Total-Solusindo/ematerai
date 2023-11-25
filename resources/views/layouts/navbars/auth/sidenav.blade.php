@@ -52,6 +52,13 @@
             @endenv
         </ul>
     </div>
+    <div class="sidenav-footer mx-3 ">
+        <form role="form" method="post" action="{{ route('logout') }}" id="logout-form">
+            @csrf
+            <a class="btn btn-primary btn-sm mb-0 w-100"
+        href="#" target="_blank" type="button" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();"><i class="fas fa-power-off text-lg opacity-10" aria-hidden="true"></i></a>
+        </form>
+    </div> 
     {{-- <div class="sidenav-footer mx-3 "> --}}
         {{-- <div class="card card-plain shadow-none" id="sidenavCard">
             <img class="w-50 mx-auto" src="/img/illustrations/icon-documentation-warning.svg"

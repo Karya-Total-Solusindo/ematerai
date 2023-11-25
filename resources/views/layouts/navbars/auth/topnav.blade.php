@@ -12,48 +12,56 @@
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <form action="" method="get">
-                <div class="input-group">
+            <form action="" method="get" class="mb-0 mt-2">
+                {{-- <div class="input-group mb-0">
                     <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                    <input type="text" name="s" class="form-control" placeholder="Type here...">
-                </div>
+                    <input type="text" name="s" class="form-control" placeholder="Type here..." required>
+                    <button class="btn btn-sm bg-gradient-primary my-1 me-1">Search</button>
+                </div> --}}
+                <div class="col-auto">
+                    <div class="bg-white border-radius-lg d-flex me-2">
+                      {{-- <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span> --}}
+                      <input type="text" name="s" class="form-control border-0 ps-3" placeholder="Search here..." >
+                        @if (request()->has('s'))
+                            <a class="btn bg-gradient-danger my-1 me-1" href="{{Request::url()}}">Reset</a>
+                        @else
+                            <button class="btn bg-gradient-primary my-1 me-1">Search</button>
+                        @endif
+                    </div>
+                  </div>
             </form>
             </div>
-            <ul class="navbar-nav  justify-content-end">
-                <li class="nav-item d-flex align-items-center">
-                    <h6 class="font-weight-bolder text-white mb-0 me-sm-2"><i class="fa fa-user me-sm-1"></i> {{ Auth::user()->username }}</h6>
-                    <form role="form" method="post" action="{{ route('logout') }}" id="logout-form">
-                        @csrf
-                        <a href="{{ route('logout') }}"
-                            onclick="event.preventDefault(); document.getElementById('logout-form').submit();"
-                            class="nav-link text-white font-weight-bold px-0">
-                            <i class="fa fa-power-off me-sm-1"></i>
-                            <span class="d-sm-inline d-none">Log out</span>
-                        </a>
-                    </form>
-                </li>
-                <li class="nav-item d-xl-none ps-3 d-flex align-items-center">
-                    <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
-                        <div class="sidenav-toggler-inner">
-                            <i class="sidenav-toggler-line bg-white"></i>
-                            <i class="sidenav-toggler-line bg-white"></i>
-                            <i class="sidenav-toggler-line bg-white"></i>
-                        </div>
-                    </a>
-                </li>
-                <li class="nav-item px-3 d-flex align-items-center">
+            <ul class="navbar-nav dropdown justify-content-end">
+                {{-- <li class="nav-item px-3 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-white p-0">
                         <i class="fa fa-cog fixed-plugin-button-nav cursor-pointer"></i>
                     </a>
-                </li>
+                </li> --}}
                 <li class="nav-item dropdown pe-2 d-flex align-items-center">
                     <a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton"
-                        data-bs-toggle="dropdown" aria-expanded="false" style="display:none;">
-                        <i class="fa fa-bell cursor-pointer"></i>
+                        data-bs-toggle="dropdown" aria-expanded="false">
+                        <h6 class="font-weight-bolder text-white mb-0 me-sm-2"><i class="fa fa-user me-sm-1"></i> {{ Auth::user()->username }}</h6>
                     </a>
                     <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4"
                         aria-labelledby="dropdownMenuButton">
                         <li class="mb-2">
+                            <form role="form" method="post" action="{{ route('logout') }}" id="logout-form">
+                                @csrf
+                                <a class="dropdown-item border-radius-md" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
+                                    <div class="d-flex py-1 mb-0">
+                                            <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle me-3">
+                                                <i class="fas fa-power-off text-lg opacity-10" aria-hidden="true"></i>
+                                            </div>
+                                        <div class="d-flex flex-column justify-content-center mb-0">
+                                            <h6 class="text-sm font-weight-normal mb-1">
+                                                <span class="font-weight-bold">Log Out</span> 
+                                            </h6>
+                                        </div>
+                                    </div>
+                                </a>
+                            </form>
+                        </li>
+                        {{-- <li class="mb-2">
                             <a class="dropdown-item border-radius-md" href="javascript:;">
                                 <div class="d-flex py-1">
                                     <div class="my-auto">
@@ -126,8 +134,17 @@
                                     </div>
                                 </div>
                             </a>
-                        </li>
+                        </li> --}}
                     </ul>
+                </li>
+                <li class="nav-item d-xl-none ps-0 d-flex align-items-center" style="    padding: 17px !important;">
+                    <a href="javascript:;" class="nav-link text-white p-0" id="iconNavbarSidenav">
+                        <div class="sidenav-toggler-inner">
+                            <i class="sidenav-toggler-line bg-white" style="7px !important"></i>
+                            <i class="sidenav-toggler-line bg-white" style="7px !important"></i>
+                            <i class="sidenav-toggler-line bg-white" style="7px !important"></i>
+                        </div>
+                    </a>
                 </li>
             </ul>
         </div>

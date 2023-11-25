@@ -25,7 +25,9 @@
         <script src="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/js/jquery.imgareaselect.min.js" integrity="sha512-59swnhUs+9AinrKlTPqsoO5ukNPPFbPXFyaf41MAgiTG/fv3LBZwWQWiZNYeksneLhiUo4xjh/leTZ53sZzQ4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
         <!-- toastr js -->
          <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-        
+        {{-- PDF Librarys --}}
+        <script src="{{ asset("assets/js/plugins/pdf/pdf.19.js") }}"></script>
+        <script src="{{ asset("assets/js/plugins/pdf/pdf.worker.19.js") }}"></script>
 
 
     
@@ -40,6 +42,15 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     
     <style>
+        
+        @media screen and (max-width: 360px){
+            html{
+                min-width:360px !important;   
+            }
+            .card-footer{
+                min-width:100% !important;   
+            }
+        }
         /* HTML: <div class="loader"></div> */
         .alert{
             z-index: 99764 !important;

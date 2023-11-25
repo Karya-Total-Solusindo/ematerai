@@ -119,7 +119,7 @@ fixed-bottom{
     bottom: 0px;
 }
 </style>
-<body>
+
   
 <div class="row">
     <div class="fixed-top bg-white" style="padding: 10px; 
@@ -164,7 +164,7 @@ fixed-bottom{
             <input type="text" required class="form-control" name="docnumber" value="{{$datas->docnumber}}" id="docnumber" aria-describedby="helpId" placeholder="">
             <small id="helpdocnumber" class="form-text text-muted"></small>
           </div>
-          <input type="text" name="sign"  value="{{ config('sign-adapter.API_STEMPTING') }}">
+          <input type="hidden" name="sign"  value="{{ config('sign-adapter.API_STEMPTING') }}">
           <input type="file" name="file" id="file-to-upload"  accept="application/pdf"/>
 
           <input type="hidden" name="id" value="{{$datas->id}}" required/>
@@ -354,42 +354,7 @@ fixed-bottom{
             borderWidth: 4
           });
           
-          var is_visible_sign = $('#is_visible_sign').val();
-          if(is_visible_sign == 'True'){
-            var wdth = 100; //default 50
-            var hgth = (signheight * wdth) / signwidth;
-            
-            var height = parseInt($('input[name="dokumen_height"]').val());
-            var width = parseInt($('input[name="dokumen_width"]').val());
-            var scale = width / (canvasWidth - 1);
-  
-            var x1 = 10;
-            var x2 = 10 + wdth;
-            var y1 = canvasHeight - hgth - 10;
-            var y2 = canvasHeight - 10;
-            
-            var lower_left_x = x1 * scale,
-              lower_left_y = height - (y2 * scale),
-              upper_right_x = x2 * scale,
-              upper_right_y = height - (y1 * scale);
-            $('input[name="x1"]').val(parseInt(lower_left_x));
-            $('input[name="x2"]').val(parseInt(upper_right_x));
-            $('input[name="y1"]').val(parseInt(lower_left_y));
-            $('input[name="y2"]').val(parseInt(upper_right_y));
-            $('input[name="lower_left_x"]').val(parseInt(lower_left_x));
-            $('input[name="lower_left_y"]').val(parseInt(lower_left_y));
-            $('input[name="upper_right_x"]').val(parseInt(upper_right_x));
-            $('input[name="upper_right_y"]').val(parseInt(upper_right_y));
-            $('input[name="dokumen_page"]').val(parseInt(__CURRENT_PAGE));
-            
-            
-            $( canvaspdf ).imgAreaSelect({ 
-              x1 : x1, 
-              y1 : y1,
-              x2 : x2,
-              y2 : y2
-            });
-          }
+          
           
           var url = imgsign.src;
         //   var url = "{{ url($datas->spesimenPath) }}";
@@ -530,4 +495,3 @@ fixed-bottom{
   }); 
   </script>
   @endif
-</body>  

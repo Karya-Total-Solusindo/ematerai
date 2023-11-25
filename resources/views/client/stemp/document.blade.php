@@ -51,22 +51,16 @@
                                             alt="user1">
                                     </div> --}}
                                     <div class="">
-                                        <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}</a></h6>
+                                        <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->id }}{{ $data->filename }}</a></h6>
                                         {{-- <p class="text-xs text-secondary mb-0">john@creative-tim.com</p> --}}
                                     </div>
                                 </div>
                             </td>
                             <td class="align-middle text-sm">
-                                {{-- {{ $data->certificatelevel ?? 'NOT_CERTIFIED' }} --}}
                                 {{ $data->sn ?? 'NOT_CERTIFIED' }}
-                                {{-- {{ $data->filename }} --}}
-                                {{-- @foreach (App\Models\Directory::where('id', $data->directory_id)->get() as $dir)
-                                    {{ $dir['name'] }}
-                                @endforeach --}}
-                                {{-- <span class="badge badge-sm bg-gradient-success"> Online</span> --}}
                             </td>
                             <td class="align-middle text-center">
-                                <span class="text-secondary text-xs font-weight-bold">{{ $data->created_at->format('d/m/Y') }}</span>
+                                <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y H:i:s') }}</span>
                             </td>
                             <td class="align-middle text-end ">
                                 {{-- <pre>

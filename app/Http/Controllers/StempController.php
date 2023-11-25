@@ -2,17 +2,18 @@
 
 namespace App\Http\Controllers;
 
+use App\Adapter\SignAdapter;
 use App\Models\Company;
 use App\Models\Directory;
 use App\Models\Document;
+use App\Models\User;
 use GuzzleHttp\Psr7\Uri;
 use Illuminate\Http\Request;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Symfony\Component\Console\Input\Input;
 use Illuminate\Support\Facades\Http;
-use App\Adapter\SignAdapter;
-use App\Models\User;
 use Illuminate\Support\Facades\Cookie;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
@@ -32,10 +33,11 @@ class StempController extends Controller
                     if (($s = $request->s)) {
                         $query->orWhere('filename', 'LIKE', '%' . $s . '%')
                         ->Where('user_id','=',Auth::user()->id)
+                        ->orderBy('created_at', 'desc')
                             ->get();
                     }
                 }]
-            ])->with('company')->paginate(5);
+            ])->with('company')->orderBy('created_at', 'desc')->paginate(5);
         }else{
             $datas =  Document::with('company')->where('user_id','=',Auth::user()->id)->paginate(5);
         }
@@ -53,10 +55,11 @@ class StempController extends Controller
                         $user = Auth::user()->id;
                         $query->orWhere('name', 'LIKE', '%' . $s . '%')
                         ->Where('user_id', $user)
+                        ->orderBy('created_at', 'desc')
                         ->get();
                     }
                 }]
-                ])->paginate(5);
+                ])->orderBy('created_at', 'desc')->paginate(5);
         }
         return view("client.stemp.index", compact("datas"));
     }
@@ -73,10 +76,11 @@ class StempController extends Controller
                         $query->orWhere('name', 'LIKE', '%' . $s . '%')
                         ->Where('user_id', $user)
                         ->Where('company_id', $request->company)
+                        ->orderBy('update_at', 'desc')
                         ->get();
                     }
                 }]
-                ])->paginate(5);
+                ])->orderBy('update_at', 'desc')->paginate(5);
         }
         $company = Directory::with('company_id',$company_id);
         return view("client.stemp.index", compact(["datas","company"]));
@@ -85,19 +89,21 @@ class StempController extends Controller
     {
         $user = Auth::user()->id;
         $request['company'] = $directory_id;
-        $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])->paginate(5);
+        $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])->orderBy('updated_at', 'desc')->paginate(5);
         if (($s = $request->s)) {
             $datas = Document::where([
                 [function ($query) use ($request) {
                     if (($s = $request->s)) {
                         $user = Auth::user()->id;
-                        $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        $query->orWhere('filename', 'LIKE', '%' . $s . '%')
+                        ->orWhere('sn', 'LIKE', '%' . $s . '%')
                         ->Where('user_id', $user)
                         ->Where('directory_id', $request->company)
+                        ->orderBy('updated_at', 'desc')
                         ->get();
                     }
                 }]
-                ])->paginate(5);
+                ])->orderBy('updated_at', 'desc')->paginate(5);
         }
         return view("client.stemp.index", compact("datas"));
     }
@@ -113,6 +119,7 @@ class StempController extends Controller
         // Company::with('directory')->find($directory->id);
         return view("client.stemp.index", compact("datas"));
     }
+
     /**
      * Show the form for creating a new resource.
      */
@@ -298,7 +305,7 @@ class StempController extends Controller
         // echo $Url; 
         // echo Auth::user()->ematerai_token;
         // return response()->json($Url, 200, $headers);
-    return  $stemting = Http::withHeaders([
+      $stemting = Http::withHeaders([
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
         ])->withBody(json_encode([
@@ -317,17 +324,27 @@ class StempController extends Controller
             'visLLY'=> $input['y1'] ?? '0',
             'visURY'=> $input['y2'] ?? '0',
             'visSignaturePage' => $input['dokumen_page'] ?? '0',
-        ]))->post($Url);
-
-        if($stemting['statusCode']=='00'){
+        ]))->post($Url)->json();
+    //    dd($stemting);
+        if($stemting['status']=='True'){
             //Update status document jika stemting berhasil berhasil
-            $status = Document::find($id);
-            $status->certificatelevel = 'CERTIFIED';
-            $status->update();
+            if($stemting['statusCode']=='00'){
+                $status = Document::find($id);
+                $status->certificatelevel = 'CERTIFIED';
+                $status->update();
+            }
         }else{
             $status = Document::find($id);
             $status->certificatelevel = 'FAILUR';
             $status->update();
+            $type = 'application/json';
+            $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
+            return response()
+            ->view('client.stemp.list', compact('datas'), 200)
+            ->header('Content-Type', 'text/html; charset=UTF-8');
+            return response()
+            ->view('client.stemp.list', compact("datas"), 200)
+            ->header('Content-Type', $type);
         }
 
         return $stemting; 
@@ -350,33 +367,29 @@ class StempController extends Controller
                         $query->orWhere('filename', 'LIKE', '%' . $s . '%')
                         ->Where('certificatelevel','=','CERTIFIED')
                         ->Where('user_id','=',Auth::user()->id)
+                        ->orderBy('updated_at', 'desc')
                             ->get();
                     }
                 }]
-            ])->with('company')->paginate(5);
+            ])->with('company')->orderBy('updated_at', 'desc')->paginate(5);
         }else{
             $datas =  Document::with('company')
             ->where('user_id','=',Auth::user()->id)
             ->where('certificatelevel','=','CERTIFIED')
+            ->orderBy('updated_at', 'desc')
             ->paginate(5);
         }
         return view("client.stemp.index", compact("datas"));
     }
 
-    /**
-     * Update the specified resource in storage.
-     */
-    public function update(Request $request, string $id)
+    // ditampilkan ke modal view
+    public function _modalProcess(Request $request)
     {
-        //
-    }
-
-    /**
-     * Remove the specified resource from storage.
-     */
-    public function destroy(string $id)
-    {
-        //
+        $id =1;
+        $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->first();
+        return response()
+            ->view('client.stemp.stemp', compact('datas'), 200)
+            ->header('Content-Type', 'text/html; charset=UTF-8');
     }
    
 
