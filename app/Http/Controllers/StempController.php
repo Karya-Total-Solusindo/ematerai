@@ -305,55 +305,53 @@ class StempController extends Controller
         // echo $Url; 
         // echo Auth::user()->ematerai_token;
         // return response()->json($Url, 200, $headers);
-      $stemting = Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
-        ])->withBody(json_encode([
-            "certificatelevel"=> "NOT_CERTIFIED",
-            'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
-            "docpass"=> "",
-            "jwToken"=> Auth::user()->ematerai_token,
-            "location"=> "JAKARTA",
-            "profileName"=> "emeteraicertificateSigner",
-            "reason"=> "Ematerai Farpoint",
-            "refToken"=> $datas->sn,
-            "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
-            "src"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
-            'visLLX'=> $input['x1'] ?? '0',
-            'visURX'=> $input['x2'] ?? '0',
-            'visLLY'=> $input['y1'] ?? '0',
-            'visURY'=> $input['y2'] ?? '0',
-            'visSignaturePage' => $input['dokumen_page'] ?? '0',
-        ]))->post($Url)->json();
-    //    dd($stemting);
-        if($stemting['status']=='True'){
-            //Update status document jika stemting berhasil berhasil
-            if($stemting['statusCode']=='00'){
-                $status = Document::find($id);
-                $status->certificatelevel = 'CERTIFIED';
-                $status->update();
-            }
-        }else{
-            $status = Document::find($id);
-            $status->certificatelevel = 'FAILUR';
-            $status->update();
-            $type = 'application/json';
-            $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
-            return response()
-            ->view('client.stemp.list', compact('datas'), 200)
-            ->header('Content-Type', 'text/html; charset=UTF-8');
-            return response()
-            ->view('client.stemp.list', compact("datas"), 200)
-            ->header('Content-Type', $type);
-        }
-
-        return $stemting; 
-
-        if($stemting){
-            return response()->json($stemting, 200);
-        }
+        try{
+            $stemting = Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
+                ])->withBody(json_encode([
+                    "certificatelevel"=> "NOT_CERTIFIED",
+                    'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
+                    "docpass"=> "",
+                    "jwToken"=> Auth::user()->ematerai_token,
+                    "location"=> "JAKARTA",
+                    "profileName"=> "emeteraicertificateSigner",
+                    "reason"=> "Ematerai Farpoint",
+                    "refToken"=> $datas->sn,
+                    "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
+                    "src"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
+                    'visLLX'=> $input['x1'] ?? '0',
+                    'visURX'=> $input['x2'] ?? '0',
+                    'visLLY'=> $input['y1'] ?? '0',
+                    'visURY'=> $input['y2'] ?? '0',
+                    'visSignaturePage' => $input['dokumen_page'] ?? '0',
+                ]))->post($Url);
+                if ($stemting->getStatusCode() == 200) {
+                    $response = json_decode($stemting->getBody(),true);
+                    //perform  action with $response 
+                    //dd($stemting);
+                    if($response['status']=='True'){
+                        //Update status document jika stemting berhasil berhasil
+                        if($response['statusCode']=='00'){
+                            $status = Document::find($id);
+                            $status->certificatelevel = 'CERTIFIED';
+                            $status->update();
+                        }
+                    }else{
+                        $status = Document::find($id);
+                        $status->certificatelevel = 'FAILUR';
+                        $status->update();
+                        $type = 'application/json';
+                        $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
+                        return $response;
+                        return response();
+                    }
+                }
+            }catch(\GuzzleHttp\Exception\RequestException $e){
+            // you can catch here 40X response errors and 500 response errors
+             
+            }      
     }
-
     /**
      * List Success Stemp.
      */
