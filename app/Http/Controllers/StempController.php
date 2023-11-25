@@ -306,7 +306,7 @@ class StempController extends Controller
         // echo Auth::user()->ematerai_token;
         // return response()->json($Url, 200, $headers);
         try{
-            $stemting = Http::withHeaders([
+            $stemting = (string) Http::withHeaders([
                     'Content-Type' => 'application/json',
                     'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
                 ])->withBody(json_encode([
@@ -325,18 +325,13 @@ class StempController extends Controller
                     'visLLY'=> $input['y1'] ?? '0',
                     'visURY'=> $input['y2'] ?? '0',
                     'visSignaturePage' => $input['dokumen_page'] ?? '0',
-                ]))->post($Url);
-                if ($stemting->getStatusCode() == 200) {
-                    $response = json_decode($stemting->getBody(),true);
-                        //perform  action with $response 
-                        //dd($stemting);
+                ]))->post($Url)->getBody();
+                $response = json_decode($stemting,true);
+                    //Update status document jika stemting berhasil berhasil
                         if($response['status']=='True'){
-                            //Update status document jika stemting berhasil berhasil
-                            if($response['statusCode']=='00'){
-                                $status = Document::find($id);
-                                $status->certificatelevel = 'CERTIFIED';
-                                $status->update();
-                            }
+                            $status = Document::find($id);
+                            $status->certificatelevel = 'CERTIFIED';
+                            $status->update();
                         }else{
                             $status = Document::find($id);
                             $status->certificatelevel = 'FAILUR';
@@ -344,8 +339,7 @@ class StempController extends Controller
                             $type = 'application/json';
                             $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
                         }
-                        return $response;
-                }
+                    return json_encode($response);
             }catch(\GuzzleHttp\Exception\RequestException $e){
             // you can catch here 40X response errors and 500 response errors
              
