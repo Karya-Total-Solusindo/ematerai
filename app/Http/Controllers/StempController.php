@@ -89,7 +89,7 @@ class StempController extends Controller
     {
         $user = Auth::user()->id;
         $request['company'] = $directory_id;
-        $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])->orderBy('updated_at', 'desc')->paginate(5);
+        $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])->Where('certificatelevel','<>', 'CERTIFIED')->orderBy('updated_at', 'desc')->paginate(5);
         if (($s = $request->s)) {
             $datas = Document::where([
                 [function ($query) use ($request) {
