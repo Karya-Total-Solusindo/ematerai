@@ -16,7 +16,9 @@
     <link href="{{ asset('./assets/css/nucleo-svg.css') }}" rel="stylesheet" />
     <!-- Font Awesome Icons -->
     {{-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> --}}
-    <script src="{{ asset('assets/js/plugins/fontawesome_42d5adcbca.js') }}" crossorigin="anonymous"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" integrity="sha512-uKQ39gEGiyUJl4AI6L+ekBdGKpGw4xJ55+xyJG7YFlJokPNYegn9KwQ3P8A7aFQAUtUsAQHep+d/lrGqrbPIDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{-- <script src="{{ asset('assets/js/plugins/fontawesome_42d5adcbca.js') }}" crossorigin="anonymous"></script> --}}
     <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script>
     {{-- <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script> --}}
     {{-- <script src="{{ asset("assets/js/plugins/pdf/pdf.js") }}" type="module"></script> --}}
@@ -34,13 +36,13 @@
     <link href="{{ asset('assets/css/nucleo-svg.css" rel="stylesheet') }}" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
-    <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.2.0.0.css') }}" rel="stylesheet" />
+    {{-- <link id="pagestyle" data="bule" href="{{ asset('assets/css/argon-dashboard.2.0.0.min.css') }}" rel="stylesheet" /> --}}
     <link id="pagestyle" href="{{ asset('assets/css/validity.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" />
     <link id="pagestyle" href="{{ asset('assets/css/sidebar-nav.css') }}" rel="stylesheet" />
     <!-- toastr css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    
+
     <style>
         
         @media screen and (max-width: 360px){
@@ -94,6 +96,14 @@
             font-size: 12px;
             line-height: 1.5;
             border-radius: 3px;
+        }
+        .form-control-sm + span{
+            content: "✓";
+            top:-29px;
+        }
+
+        .btn:disabled{
+            background: lightgray;
         }
     </style>
     <script>
@@ -160,6 +170,7 @@
     <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>
     <script src="{{ asset("assets/js/plugins/perfect-scrollbar.min.js") }}"></script>
     <script src="{{ asset('assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
+
     <script>
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {

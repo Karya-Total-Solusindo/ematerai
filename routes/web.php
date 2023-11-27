@@ -27,6 +27,8 @@ use App\Http\Controllers\TestController;
 use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\EmateraiController;
+use App\Http\Controllers\DocumentController;
+
 
 // Route::resource('/test', TestController::class);
 // Route::get('/test', [TestController::class, 'index'])->name('test');
@@ -81,6 +83,12 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::resource('/configure/directory', DirectoryController::class);
     Route::post('/configure/directory/upload', [DirectoryController::class, 'upload'])->middleware('auth')->name('doc-upload');
 
+    //Document 
+    Route::resource('/document', DocumentController::class)->middleware('auth');
+    Route::group(['/doicument'], function(){
+        Route::get('/document/directory/{company}', [DocumentController::class, 'getDirectory'])->middleware('auth')->name('getDirectory');
+        
+    });
 
     // STEMP 
     Route::get('/stemp/company', [StempController::class, 'company'])->middleware('auth')->name('company');
