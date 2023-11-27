@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use App\Adapter\SignAdapter;
 
 class DocumentController extends Controller
 {
@@ -42,13 +43,6 @@ class DocumentController extends Controller
             echo "<option value='".$value['id']."'>".$value['name']."</option>";
         }
         exit;
-        $format =  $request->getQueryString();
-        if($format=='option='){
-           
-        }
-        echo http_build_query($request->query()); 
-        dd($format);
-        return response()->json($directorys);
     }
     /**
      * Store a newly created resource in storage.
@@ -91,7 +85,7 @@ class DocumentController extends Controller
             'width' => $input['dokumen_width'] ?? '0',
             'page' => $input['dokumen_page'] ?? '0',
             'filename' => $fileName ?? '0',
-            'source'=> $path
+            'source'=> $filePath.$fileName
         ];
         $inset = Document::create($document);
         $insertId = $inset->id;
@@ -120,6 +114,14 @@ class DocumentController extends Controller
         //     'Content-Type' => 'application/json',
         //     'Content-Disposition' => 'attachment; filename="myfile.txt"',
         // ]);
+    }
+
+    public function getSerialNumberBatch(Request $request){
+        //$test  = SignAdapter::getBatchSerial('sds');
+        $input = $request->all();
+        // dd($request->all());
+        return SignAdapter::getBatchSerial($input['doc']);
+
     }
 
     /**

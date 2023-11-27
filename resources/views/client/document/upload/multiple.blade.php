@@ -9,7 +9,8 @@
     <div class="col-md-12">
         {{-- RESULT --}}
         <div class="card">
-            <form action="/genereted/bulk/sn" method="post">
+            <form action="{{ route('getSerialNumberBatch') }}" method="post">
+                @csrf
             <div class="card-body mb-0">
                 <div class="row">
                     <div class="col-md-6">

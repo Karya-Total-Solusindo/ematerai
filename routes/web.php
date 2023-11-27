@@ -87,7 +87,10 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::resource('/document', DocumentController::class)->middleware('auth');
     Route::group(['/doicument'], function(){
         Route::get('/document/directory/{company}', [DocumentController::class, 'getDirectory'])->middleware('auth')->name('getDirectory');
-        
+    });
+    Route::group([ 'prefix' => 'serialnumber'], function(){
+        // Route::get('/getOne', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
+        Route::post('/getBatch', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
     });
 
     // STEMP 

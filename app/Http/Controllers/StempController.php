@@ -7,7 +7,7 @@ use App\Models\Company;
 use App\Models\Directory;
 use App\Models\Document;
 use App\Models\User;
-use GuzzleHttp\Psr7\Uri;
+// use GuzzleHttp\Psr7\Uri;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Auth;
@@ -39,7 +39,7 @@ class StempController extends Controller
                 }]
             ])->with('company')->orderBy('created_at', 'desc')->paginate(5);
         }else{
-            $datas =  Document::with('company')->where('user_id','=',Auth::user()->id)->paginate(5);
+            $datas =  Document::with('company')->where('user_id','=',Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
         }
         return view("client.stemp.index", compact("datas"));
     }
