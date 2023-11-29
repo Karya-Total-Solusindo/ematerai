@@ -110,7 +110,7 @@
                 <div class="ps-0 mb-0">
                     <i class="fa fa-folder pe-3" style="color: #f4645f;"></i>
                 </div> 
-                <span class="text-uppercase text-xs font-weight-bolder opacity-6">Stemp Process</span> 
+                <span class="text-uppercase text-xs font-weight-bolder opacity-6">Stamp Process</span> 
             </a>
             <ul class="submenu collapse rounded {{ request()->segment(1) == 'stemp' ? 'show' : '' }}">
                 <li><a class="nav-link rounded {{ request()->segment(2) == 'company' ? 'active' : '' }}" href="{{route('company')}}">New </a></li>
