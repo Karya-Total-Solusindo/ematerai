@@ -160,7 +160,7 @@
         <div class="row ms-5 me-5 mb-0">
         <hr class="horizontal dark">
         <div class="col-8 mb-0">
-          <h6 class="mb-1">Stamp Position <br>{{$datas->company->name}} / {{$datas->directory->name}}</h6>
+          <h6 class="mb-1">Stamp Document <br>{{$datas->company->name}} / {{$datas->directory->name}}</h6>
         </div>
         <div class="col-4 text-end">
           <a href={{ URL::previous() }} class="btn btn-dark mb-0 me-2">Cancel</a>
@@ -222,7 +222,7 @@
                                   </div>
                                 @endif
                                 <div class="text-center">
-                                  {{$datas->filename}}
+                                  Stamp Positioning : {{$datas->filename}}
                                 </div>
                                 <hr class="horizontal dark">
                                   <div id="pdf-buttonss" class="btn-group btn-group-sm mb-0" role="group" aria-label="Page Control">
