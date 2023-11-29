@@ -89,7 +89,7 @@
                                         Detail 
                                     </a>
                                     @if($data->sn != '')
-                                        <a href="{{ route('process',$data->id)}}" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" ><i class="fas fa-stamp"></i> Stemp Materai</a>
+                                        <a href="{{ route('process',$data->id)}}" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" ><i class="fas fa-stamp"></i> Stamp Materai</a>
                                     @else
                                         <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
                                         {{-- <button href="#" disabled class="btn btn-s btn-disable text-white font-weight-bold text-xs view" >Stemp Document</button> --}}
