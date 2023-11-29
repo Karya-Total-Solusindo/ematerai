@@ -40,6 +40,7 @@ return new class extends Migration
      */
     public function down()
     {
+        Schema::dropIfExists('companies');
         Schema::dropIfExists('users');
     }
 };

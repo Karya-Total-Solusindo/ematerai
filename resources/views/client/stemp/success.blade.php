@@ -29,8 +29,11 @@
                                 Document</th>
                             {{-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
                                 Detail</th> --}}
-                            <th
-                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            <th class="text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                Company</th>
+                            <th class="text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                Directory</th>            
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Sataus</th>
                             <th
                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -50,16 +53,18 @@
                                     </div>
                                     <div class="ms-4">
                                         <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6>
-                                        <p class="text-xs text-secondary mb-0"><i class="ni ni-building"></i> {{ $data->company->name }} <i class="fas fa-folder-open"></i> {{ $data->directory->name }}</p>
+                                        {{-- <p class="text-xs text-secondary mb-0"><i class="ni ni-building"></i> {{ $data->company->name }} <i class="fas fa-folder-open"></i> {{ $data->directory->name }}</p> --}}
                                     </div>
                                 </div>
                             </td>
-                            {{-- <td class="align-middle text-sm">
-                                {{ 'x1:'.$data->x1.' x2:'.$data->x2.' y1:'.$data->y1. ' y2:'.$data->y2 }}
-  
-                            </td> --}}
+                            <td class="align-middle text-sm text-left">
+                               {{ $data->company->name }}
+                            </td>
+                            <td class="align-middle text-sm text-left">
+                                {{ $data->directory->name }}
+                             </td>
                             <td class="align-middle text-center">
-                                <span class="badge badge-sm bg-gradient-success">{{ $data->certificatelevel ?? 'NOT_CERTIFIED' }}</span>
+                                <span class="badge badge-sm  bg-gradient-success">{{ $data->certificatelevel ?? 'NOT_CERTIFIED' }}</span>
                                 {{-- {{ App\Models\Document::where('directory_id',$data->id)->count() ?? 0 }} --}}
                             </td>
                             <td class="align-middle text-center">

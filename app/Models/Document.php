@@ -32,11 +32,11 @@ class Document extends Model
     public function company()
     {
         // return $this->belongsTo(Company::class,'directories','id','company_id');
-        return $this->belongsTo(Company::class);
+        return $this->belongsTo(Company::class)->withDefault();
     }
     public function directory()
     {
         // return $this->belongsTo(Company::class,'directories','id','company_id');
-        return $this->belongsTo(Directory::class);
+        return $this->belongsTo(Directory::class)->withDefault();
     }
 }

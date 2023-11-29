@@ -14,10 +14,10 @@ class Company extends Model
     protected $fillable = [
         'name', 'detail','user_id'
     ];
-    public function user()
-    {
-        return $this->belongsTo(User::class,'user_id');
-    }
+    // public function user()
+    // {
+    //     return $this->hasMany(User::class,'user_id');
+    // }
     public function directory()
     {
         return $this->hasMany(Directory::class,'company_id','id');

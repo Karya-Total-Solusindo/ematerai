@@ -41,7 +41,7 @@
                             </div>
                         </div>
                         <div class="col-xs-12 col-sm-12 col-md-12 text-center">
-                            <a href="{{URL::to('/users');}}" class="btn btn-danger">Back</a>
+                            <a href="{{URL::to('/users')}}" class="btn btn-danger">Back</a>
                             <button type="submit" class="btn btn-primary">Submit</button>
                         </div>
                     </div>

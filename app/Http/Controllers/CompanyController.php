@@ -56,7 +56,7 @@ class CompanyController extends Controller
         // $Company = Company::where('name', request('name'))->first();
         $uniq = [
             'user_id'=>  Auth::user()->id,
-            'name'=> $input['name'] 
+            'name'=> strtoupper($input['name']) 
         ];
         $data =[
         'detail' => $input['detail'],

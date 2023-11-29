@@ -15,7 +15,7 @@
                         <tr class="">
                             <td width="10px">File Name</td>
                             <td width="1px">:</td>
-                            <td>{{ $data->filename }}</td>
+                            <td><a href="{{ url('storage'.$data->source) }}" class="m-0 btn btn-sm btn-primary">{{ $data->filename }} </a></td>
                         </tr>
                         {{-- <tr class="">
                             <td>Source</td>

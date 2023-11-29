@@ -35,7 +35,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                       
                     @if ($datas->count()) 
                         @foreach ($datas as $data)
                         <tr>

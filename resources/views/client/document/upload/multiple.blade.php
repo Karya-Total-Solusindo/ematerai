@@ -45,6 +45,7 @@
                 <div class="row">
                     <div class="col-md-6 mb-0" id="footer-left"></div>
                     <div class="col-md-6 mb-0 text-end" id="footer-rigth">
+                        <a class="btn btn-sm btn-danger" href="{{ route('company') }}"> Back</a>
                         <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Generated Serial Number</button>
                         {{-- <button class="btn btn-sm btn-danger" id="fileRemove"><i class="fas fa-trash"></i>  Remove</button> --}}
                     </div>
@@ -198,7 +199,11 @@
                                 // console.log(result);
                                 $("#results").html(result).fadeIn();
                                 $('#modalId').modal('toggle');
-                                toastr["success"](result.message, "Success");
+                                if(result.success){
+                                    toastr["success"](result.message, "Success");
+                                }else{
+                                    toastr["info"](result.message, "File is exists!");
+                                }
                                 $("#body-result").append(result.result);
                                 $('#titleId').val('');
                                 $('#numberId').val('');

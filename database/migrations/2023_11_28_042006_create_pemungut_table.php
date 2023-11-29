@@ -7,33 +7,20 @@ use Illuminate\Support\Facades\DB;
 
 return new class extends Migration
 {
-    protected $table = "serialnumber";
     /**
      * Run the migrations.
      */
     public function up(): void
     {
-        Schema::create('serialnumber', function (Blueprint $table) {
+        Schema::create('pemumgut', function (Blueprint $table) {
             $table->id();
-            $table->string('sn');
-            $table->text('image');
             $table->string('namejidentitas');
             $table->string('noidentitas');
             $table->string('namedipungut');
-            $table->set('use',[1,0])->default(0);
-            $table->unsignedBigInteger('user_id')->nullable();
-            $table->unsignedBigInteger('documet_id')->nullable();
-            $table->string('docid')->nullable();
-            $table->string('nodoc')->nullable();
+            $table->set('active',[1,0])->default(1);
             $table->timestamp('created_at')->default(DB::raw('CURRENT_TIMESTAMP'));
             $table->timestamp('updated_at')->default(DB::raw('CURRENT_TIMESTAMP on update CURRENT_TIMESTAMP'));
-            // $table->timestamps();
         });
-        // add coloumn update
-        // Schema::table('serialnumber', function($table)
-        // {
-        //     $table->string('phone_nr')->after('id');
-        // });
     }
 
     /**
@@ -41,7 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('serialnumber');
+        Schema::dropIfExists('pemumgut');
     }
-    
 };

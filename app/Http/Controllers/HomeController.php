@@ -10,7 +10,11 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\Company;
 use App\Models\Directory;
 use App\Models\Document;
+use App\Models\Serialnumber;
 use App\Models\User;
+use Spatie\Permission\Models\Role;
+use Spatie\Permission\Models\Permission;
+use Spatie\Permission\Traits\HasRoles;
 
 class HomeController extends Controller
 {
@@ -31,6 +35,40 @@ class HomeController extends Controller
      */
     public function index()
     {
+        $saldo = 0;
+        $notstamp = 0;
+        if(Auth::user()->hasRole('Admin')){
+            
+            $Url = config('sign-adapter.API_CHECK_SALDO');
+            $requestAPI = (string) Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
+            ])->post($Url);
+            $response = json_decode($requestAPI,true)['result'];
+            // dd($response);
+            if($response['status']=='00'){
+                $saldo = $response['saldo'];
+                $notstamp = $response['notstamp']; 
+            }
+
+            $datas =[
+                "COUNT_MATERAI" => $saldo,
+                "COUNT_MATERAI_NOSTEMP" => $notstamp,
+                'COUNT_DOCUMENT' => Document::count(),
+                'COUNT_NOT_CERTIFIED' => Document::where(['certificatelevel'=>'NOT_CERTIFIED'] )->count(),
+                'COUNT_SUCCESS' => Document::where(['certificatelevel'=>'CERTIFIED'] )->count(),
+                'COUNT_FAILUR' => Document::where(['certificatelevel'=>'FAILUR'] )->count(),
+                "NOT_STAMPED" => Document::where('certificatelevel','<>','CERTIFIED') ->count(),
+                "STAMPTING" => Document::where('certificatelevel','=','CERTIFIED')->orderBy('updated_at', 'desc')
+                ->paginate(5,['*'],'stemp_page')->setPageName('stemp_page'),
+                "NOT_STAMPTING" => Document::where('certificatelevel','<>','CERTIFIED')->orderBy('updated_at', 'desc')
+                ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
+            ];
+            
+            
+            return view('admin.dashboard', compact('datas'));
+        }
+        // user
         $datas =[
             'COUNT_DOCUMENT' => Document::where(['user_id'=> Auth::user()->id])->count(),
             'COUNT_NOT_CERTIFIED' => Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'NOT_CERTIFIED'] )->count(),
@@ -43,5 +81,6 @@ class HomeController extends Controller
             ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
         ];
         return view('pages.dashboard', compact('datas'));
+        
     }
 }

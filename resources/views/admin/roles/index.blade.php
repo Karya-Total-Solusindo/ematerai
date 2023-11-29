@@ -18,11 +18,11 @@
                         <div class="row">
                             <div class="col-md-6">
                                 <h6>Rules</h6>
-                                @role('Superadmin', 'web')
-                                I am a super-admin!
-                            @else
-                                I am not a super-admin...
-                            @endrole
+                                @role('Superadmin, web')
+                                {{-- I am a super-admin! --}}
+                                 @else
+                                {{-- I am not a super-admin... --}}
+                                @endrole
                             </div>
                             <div class="col-md-6 text-end">
                                 @can('role-create')

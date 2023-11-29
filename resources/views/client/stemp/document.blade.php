@@ -14,20 +14,32 @@
         <div class="row p-0">
             <div class="col">
                 <h4 class=" card-title">My Document </h4>
-                <span class="">{{ $datas[0]->company->name ?? '' }} {{ (!empty($datas[0]->directory))?'/':'' }} {{ $datas[0]->directory->name ?? '' }}</span>
-                {{ ($datas[0]->directory->template ?? '')}}
+                <span class=""> <i class="fas fa-briefcase"></i> {{ $datas[0]->company->name ?? '' }} @if(!empty($datas[0]->directory))  <i class="fas fa-folder-tree"></i>  @endif  {{ $datas[0]->directory->name ?? ''}}</span>
+                {{-- {{ ($datas[0]->directory->template ?? '')}} --}}
             </div>
             <div class="col text-end">
-                <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ route('directory', $datas[0]->company->id ?? '') }}"> Back</a>
-                <a @class(['btn btn-sm btn-primary', 'font-bold' => true]) href="{{ route('add.file', Request::segment(4)) }}"> Create</a>
+                
+                <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ URL::previous() }}"> Back</a>
+                {{-- <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ route('directory', $datas[0]->company->id ?? '') }}"> Back</a> --}}
+                {{-- <a @class(['btn btn-sm btn-primary', 'font-bold' => true]) href="{{ route('add.file', Request::segment(4)) }}"> Create</a> --}}
+                <a @class(['btn btn-sm btn-primary', 'font-bold' => true]) href="{{ route('document.create') }}"> Create</a>
             </div>
             {{-- <p class="card-text">Text</p> --}}
         </div>
         <div class="card-body px-0 pt-0 pb-2">
             <div class="table-responsive p-0">
+                <form action="{{ route('getSerialNumber') }}" method="POST">
+                   
                 <table class="table align-items-center mb-0">
                     <thead>
                         <tr>
+                            @if($datas->count()>0)
+                            @if($datas->directory->template ?? 1)
+                            <td>
+                                <input type="checkbox" id="selectAll">
+                            </td>
+                            @endif
+                            @endif
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Name</th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -38,12 +50,23 @@
                             <th
                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Create</th>
-                            <th class="text-secondary opacity-7" width="10%"></th>
+                            <th class="text-secondary text-end m-0 p-0 opacity-7" width="10%">
+                                @if($datas->count()>0)
+                                {{-- @if($datas[0]->directory->template == 1) --}}
+                                 <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
+                                {{-- @endif --}}
+                                @endif
+                            </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($datas as $data)
                         <tr>
+                            {{-- @if($data->directory->template==1) --}}
+                            <td>
+                                <input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
+                            </td>
+                            {{-- @endif --}}
                             <td>
                                 <div class="align-middle text-sm">
                                     {{-- <div>
@@ -74,14 +97,18 @@
                                     Open
                                 </a> --}}
                                 {{-- <button class="btn btn-s btn-primary text-white font-weight-bold text-xs view" data-title="{{$data->filename}}" data-bs-toggle="modal" data-bs-target="#modalId" data-url="{{ asset('/docs/'.$data->company->name.'/'.$data->directory->name.'/in/'.$data->filename) }}">View</button> --}}
-                                <button class="btn btn-s btn-primary text-white font-weight-bold text-xs view" data-title="{{$data->filename}}" data-bs-toggle="modal" data-bs-target="#modalId" data-url="{{ route('process',$data->id)}}">View</button>
+                                {{-- <span class="btn btn-s btn-primary text-white font-weight-bold text-xs view" data-title="{{$data->filename}}" data-bs-toggle="modal" data-bs-target="#modalId" data-url="{{ route('process',$data->id)}}">View</span> --}}
+                                @if($data->sn != '')
+                                    <a href="{{ route('process',$data->id)}}" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" >Stemp Document</a>
+                                @endif
                                
                             </td>
                         </tr>
                         @endforeach
                         </tbody>
                 </table>
-
+                    @csrf
+                </form>
             </div>
         </div>
         {{ $datas->links() }}
@@ -113,7 +140,6 @@
   </div>
 </div>
   <script>
- 
       var modalTitleId =  document.getElementById('modalTitleId');
       var modalId = document.getElementById('modalId');
       var objpdf = document.getElementById('obj-pdf'); 
@@ -130,3 +156,53 @@
           // Use above variables to manipulate the DOM
       });
   </script>
+
+
+{{-- Javascript --}}
+@once  
+    @pushOnce('js')
+        <script type="text/javascript">
+        //load data
+             $(document).ready(function (e) {
+                $('#selectAll').prop('checked', false);
+                $('#btnGetSN').prop('disabled', true);
+                $('#btnGetSN').hide();
+
+
+
+
+                $('#selectAll').on('change',(e)=>{
+                    let checkAll = $('#selectAll').is(':checked');
+                    var numberNotChecked = $('input:checkbox:not(":checked")').length;
+                    console.log(checkAll);
+                    if(checkAll==true){
+                        $('.chechList').prop('checked', true);
+                        $('#btnGetSN').show();
+                    }else{
+                        $('.chechList').prop('checked', false);
+                    }
+                    
+                    if($('.chechList:checked').length >= 1){
+                        $('#btnGetSN').prop('disabled', false);
+                        $('#btnGetSN').show();
+                    }else{
+                        $('#btnGetSN').prop('disabled', true);
+                    }
+                });
+
+
+                // checkbox 
+                $('.table').on('change','.chechList',(e)=>{
+                    console.info('chechList click');
+                    if($('.chechList:checked').length >= 1){
+                        $('#btnGetSN').prop('disabled', false);
+                        $('#btnGetSN').show();
+                    }else{
+                        $('#btnGetSN').prop('disabled', true);
+                    }
+                });
+
+            });    
+        </script>
+    @endPushOnce
+@endonce

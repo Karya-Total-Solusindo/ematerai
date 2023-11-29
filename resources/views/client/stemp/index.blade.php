@@ -14,8 +14,9 @@
             @if ($datas[0]->template==0)
                 @include('client.stemp.upload')       
             @else
-                @include('client.stemp.upload_multiple')    
-                {{-- @include('client.configure.directory.show')     --}}
+                <script>window.location = "/document/create";</script>
+                {{-- @include('client.stemp.upload_multiple')     --}}
+                {{-- @include('client.document.upload.multiple')     --}}
             @endif
         @elseif (Route::currentRouteName() == 'process')  
             @include('client.stemp.stemp')

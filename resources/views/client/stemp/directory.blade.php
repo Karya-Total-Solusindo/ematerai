@@ -7,7 +7,8 @@
                 {{ $datas[0]->company->name ?? '' }} 
             </div>
             <div class="col text-end">
-                <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ route('company') }}"> Back</a>
+                {{-- <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ route('company') }}"> Back</a> --}}
+                <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ URL::previous() }}"> Back</a>
             </div>
             {{-- <p class="card-text">Text</p> --}}
         </div>

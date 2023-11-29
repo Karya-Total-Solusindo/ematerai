@@ -9,7 +9,7 @@
         <div class="card mb-4">
             <div class="card-header pb-0">
                 <h6>Users</h6>
-                @role('Superadmin', 'web')
+                @role('Superadmin, web')
                     I am a super-admin!
                 @else
                     I am not a super-admin...
@@ -31,7 +31,7 @@
                             @foreach ($users as $user)
                                 <tr>
                                     <td>
-                                        <a href="{{URL::to('/users/'.$user->id); }}" title="{{$user->firstname.' '.$user->lastname }}" >
+                                        <a href="{{URL::to('/users/'.$user->id)}}" title="{{$user->firstname.' '.$user->lastname }}" >
                                         <div class="d-flex px-3 py-1">
                                             <div>
                                                 <img src="./img/team-{{ rand(1,3) }}.jpg" class="avatar me-3" alt="image">
@@ -64,7 +64,7 @@
                                     </td>
                                     <td class="align-middle text-end">
                                         <div class="d-flex px-3 py-1 justify-content-center align-items-center">
-                                            <a href="{{URL::to('/users/'.$user->id.'/edit'); }}" class="text-sm font-weight-bold mb-0">Edit</a>
+                                            <a href="{{ URL::to('/users/'.$user->id.'/edit') }}" class="text-sm font-weight-bold mb-0">Edit</a>
                                             <p class="text-sm font-weight-bold mb-0 ps-2">Delete</p>
                                         </div>
                                     </td>

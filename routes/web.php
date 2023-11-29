@@ -90,6 +90,7 @@ Route::group(['middleware' => ['auth'],], function () {
     });
     Route::group([ 'prefix' => 'serialnumber'], function(){
         // Route::get('/getOne', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
+        Route::post('/getOne', [DocumentController::class, 'getSerialNumber'])->middleware('auth')->name('getSerialNumber');
         Route::post('/getBatch', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
     });
 
@@ -119,6 +120,7 @@ Route::group(['middleware' => ['auth'],], function () {
     // Route::get('/rtl', [PageController::class, 'rtl'])->name('rtl');
     Route::get('/profile', [UserProfileController::class, 'show'])->name('profile');
     Route::post('/profile', [UserProfileController::class, 'update'])->name('profile.update');
+    Route::post('/updatepassword', [UserProfileController::class, 'updatepassword'])->name('profile.password');
     Route::get('/profile-static', [PageController::class, 'profile'])->name('profile-static');
     Route::get('/sign-in-static', [PageController::class, 'signin'])->name('sign-in-static');
     Route::get('/sign-up-static', [PageController::class, 'signup'])->name('sign-up-static');

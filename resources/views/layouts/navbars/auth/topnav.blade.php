@@ -38,28 +38,13 @@
                     </a>
                 </li> --}}
                 <li class="nav-item dropdown pe-2 d-flex align-items-center">
-                    <a href="javascript:;" class="nav-link text-white p-0" id="dropdownMenuButton"
-                        data-bs-toggle="dropdown" aria-expanded="false">
+                    <a href="javascript:;" class="nav-link text-white p-0" aria-expanded="false" data-bs-toggle="modal" data-bs-target="#modalLogout">
                         <h6 class="font-weight-bolder text-white mb-0 me-sm-2"><i class="fa fa-user me-sm-1"></i> {{ Auth::user()->username }}</h6>
                     </a>
                     <ul class="dropdown-menu  dropdown-menu-end  px-2 py-3 me-sm-n4"
                         aria-labelledby="dropdownMenuButton">
                         <li class="mb-2">
-                            <form role="form" method="post" action="{{ route('logout') }}" id="logout-form">
-                                @csrf
-                                <a class="dropdown-item border-radius-md" href="{{ route('logout') }}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">
-                                    <div class="d-flex py-1 mb-0">
-                                            <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle me-3">
-                                                <i class="fas fa-power-off text-lg opacity-10" aria-hidden="true"></i>
-                                            </div>
-                                        <div class="d-flex flex-column justify-content-center mb-0">
-                                            <h6 class="text-sm font-weight-normal mb-1">
-                                                <span class="font-weight-bold">Log Out</span> 
-                                            </h6>
-                                        </div>
-                                    </div>
-                                </a>
-                            </form>
+                            
                         </li>
                         {{-- <li class="mb-2">
                             <a class="dropdown-item border-radius-md" href="javascript:;">

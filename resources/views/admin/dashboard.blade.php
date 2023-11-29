@@ -6,23 +6,50 @@
         <div class="row">
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
-                    <div class="card-body p-3">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Today's Money</p>
-                                    <h5 class="font-weight-bolder">
-                                        $53,000
+                    <div class="card-body p-3 mb-0">
+                        <div class="row mb-0">
+                            <div class="col-8 mb-0">
+                                <div class="numbers mb-0">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Total Files</p>
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{ $datas['COUNT_DOCUMENT'] }}
+                                        <span style="font-size:3vh;">sheet</span>
                                     </h5>
                                     <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">+55%</span>
+                                        {{-- <span class="text-success text-sm font-weight-bolder">+55%</span> --}}
                                         since yesterday
                                     </p>
                                 </div>
                             </div>
-                            <div class="col-4 text-end">
+                            <div class="col-4 text-end mb-0">
                                 <div class="icon icon-shape bg-gradient-primary shadow-primary text-center rounded-circle">
-                                    <i class="ni ni-money-coins text-lg opacity-10" aria-hidden="true"></i>
+                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6">
+                <div class="card">
+                    <div class="card-body p-3 mb-0">
+                        <div class="row mb-0">
+                            <div class="col-8 mb-0">
+                                <div class="numbers mb-0">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">NOT STAMPED</p>
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{$datas['NOT_STAMPED']}}
+                                        <span style="font-size:3vh;">sheet</span>
+                                    </h5>
+                                    <p class="mb-0">
+                                        {{-- <span class="text-success text-sm font-weight-bolder">+5%</span> than last month --}}
+                                        since last quarter
+                                    </p>
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
+                                    <i class="ni ni-archive-2 text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
@@ -31,23 +58,24 @@
             </div>
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
-                    <div class="card-body p-3">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Today's Users</p>
-                                    <h5 class="font-weight-bolder">
-                                        2,300
+                    <div class="card-body p-3 mb-0">
+                        <div class="row mb-0">
+                            <div class="col-8 mb-0">
+                                <div class="numbers mb-0">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Failed</p>
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{ $datas['COUNT_FAILUR'] }}
+                                        <span style="font-size:3vh;">sheet</span>
                                     </h5>
                                     <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">+3%</span>
-                                        since last week
+                                        {{-- <span class="text-success text-sm font-weight-bolder">+3%</span> --}}
+                                        since last quarter
                                     </p>
                                 </div>
                             </div>
                             <div class="col-4 text-end">
                                 <div class="icon icon-shape bg-gradient-danger shadow-danger text-center rounded-circle">
-                                    <i class="ni ni-world text-lg opacity-10" aria-hidden="true"></i>
+                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
@@ -56,16 +84,18 @@
             </div>
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
-                    <div class="card-body p-3">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">New Clients</p>
-                                    <h5 class="font-weight-bolder">
-                                        +3,462
+                    <div class="card-body p-3 mb-0">
+                        <div class="row mb-0">
+                            <div class="col-8 mb-0">
+                                <div class="numbers mb-0">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">CERTIFIED</p>
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{-- {{rand(200000,900000)}}  --}}
+                                        {{ $datas['COUNT_SUCCESS'] }}
+                                        <span style="font-size:3vh;">sheet</span>
                                     </h5>
                                     <p class="mb-0">
-                                        <span class="text-danger text-sm font-weight-bolder">-2%</span>
+                                        {{-- <span class="text-danger text-sm font-weight-bolder">-2%</span> --}}
                                         since last quarter
                                     </p>
                                 </div>
@@ -79,30 +109,54 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
-                    <div class="card-body p-3">
-                        <div class="row">
-                            <div class="col-8">
-                                <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Sales</p>
-                                    <h5 class="font-weight-bolder">
-                                        $103,430
+                    <div class="card-body p-3 mb-0">
+                        <div class="row mb-0">
+                            <div class="col-8 mb-0">
+                                <div class="numbers mb-0">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai</p>
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{-- {{rand(200000,900000)}}  --}}
+                                        {{ $datas['COUNT_MATERAI'] }}
+                                        <span style="font-size:3vh;"></span>
                                     </h5>
-                                    <p class="mb-0">
-                                        <span class="text-success text-sm font-weight-bolder">+5%</span> than last month
-                                    </p>
+                                    {{-- <p class="mb-0"></p> --}}
                                 </div>
                             </div>
                             <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
-                                    <i class="ni ni-cart text-lg opacity-10" aria-hidden="true"></i>
+                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-body p-3 mb-0">
+                        <div class="row mb-0">
+                            <div class="col-8 mb-0">
+                                <div class="numbers mb-0">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai Unused</p>
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{-- {{rand(200000,900000)}}  --}}
+                                        {{ $datas['COUNT_MATERAI_NOSTEMP'] }}
+                                        <span style="font-size:3vh;"></span>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
         <div class="row mt-4">
             <div class="col-lg-7 mb-lg-0 mb-4">
@@ -122,6 +176,25 @@
                 </div>
             </div>
             <div class="col-lg-5">
+                <div class="card">
+                    <div class="card-body">
+                    <div class="table-responsive">
+                        <table class="table table-default">
+                            <tbody>
+                                <tr class="">
+                                    <td scope="row">R1C1</td>
+                                    <td>R1C2</td>
+                                    <td>R1C3</td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                    
+                </div>                   
+            </div>                   
+            {{--  --}}
+            {{-- <div class="col-lg-5">
                 <div class="card card-carousel overflow-hidden h-100 p-0">
                     <div id="carouselExampleCaptions" class="carousel slide h-100" data-bs-ride="carousel">
                         <div class="carousel-inner border-radius-lg h-100">
@@ -169,9 +242,10 @@
                         </button>
                     </div>
                 </div>
-            </div>
+            </div> --}}
+            {{--  --}}
         </div>
-        <div class="row mt-4">
+        {{-- <div class="row mt-4">
             <div class="col-lg-7 mb-lg-0 mb-4">
                 <div class="card ">
                     <div class="card-header pb-0 p-3">
@@ -389,7 +463,7 @@
                     </div>
                 </div>
             </div>
-        </div>
+        </div> --}}
         {{-- @include('layouts.footers.auth.footer') --}}
     </div>
 @endsection
@@ -401,82 +475,82 @@
 
         var gradientStroke1 = ctx1.createLinearGradient(0, 230, 0, 50);
 
-        gradientStroke1.addColorStop(1, 'rgba(251, 99, 64, 0.2)');
-        gradientStroke1.addColorStop(0.2, 'rgba(251, 99, 64, 0.0)');
-        gradientStroke1.addColorStop(0, 'rgba(251, 99, 64, 0)');
-        new Chart(ctx1, {
-            type: "line",
-            data: {
-                labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
-                datasets: [{
-                    label: "Mobile apps",
-                    tension: 0.4,
-                    borderWidth: 0,
-                    pointRadius: 0,
-                    borderColor: "#fb6340",
-                    backgroundColor: gradientStroke1,
-                    borderWidth: 3,
-                    fill: true,
-                    data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
-                    maxBarThickness: 6
+        // gradientStroke1.addColorStop(1, 'rgba(251, 99, 64, 0.2)');
+        // gradientStroke1.addColorStop(0.2, 'rgba(251, 99, 64, 0.0)');
+        // gradientStroke1.addColorStop(0, 'rgba(251, 99, 64, 0)');
+        // new Chart(ctx1, {
+        //     type: "line",
+        //     data: {
+        //         labels: ["Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"],
+        //         datasets: [{
+        //             label: "Mobile apps",
+        //             tension: 0.4,
+        //             borderWidth: 0,
+        //             pointRadius: 0,
+        //             borderColor: "#fb6340",
+        //             backgroundColor: gradientStroke1,
+        //             borderWidth: 3,
+        //             fill: true,
+        //             data: [50, 40, 300, 220, 500, 250, 400, 230, 500],
+        //             maxBarThickness: 6
 
-                }],
-            },
-            options: {
-                responsive: true,
-                maintainAspectRatio: false,
-                plugins: {
-                    legend: {
-                        display: false,
-                    }
-                },
-                interaction: {
-                    intersect: false,
-                    mode: 'index',
-                },
-                scales: {
-                    y: {
-                        grid: {
-                            drawBorder: false,
-                            display: true,
-                            drawOnChartArea: true,
-                            drawTicks: false,
-                            borderDash: [5, 5]
-                        },
-                        ticks: {
-                            display: true,
-                            padding: 10,
-                            color: '#fbfbfb',
-                            font: {
-                                size: 11,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                    x: {
-                        grid: {
-                            drawBorder: false,
-                            display: false,
-                            drawOnChartArea: false,
-                            drawTicks: false,
-                            borderDash: [5, 5]
-                        },
-                        ticks: {
-                            display: true,
-                            color: '#ccc',
-                            padding: 20,
-                            font: {
-                                size: 11,
-                                family: "Open Sans",
-                                style: 'normal',
-                                lineHeight: 2
-                            },
-                        }
-                    },
-                },
-            },
-        });
+        //         }],
+        //     },
+        //     options: {
+        //         responsive: true,
+        //         maintainAspectRatio: false,
+        //         plugins: {
+        //             legend: {
+        //                 display: false,
+        //             }
+        //         },
+        //         interaction: {
+        //             intersect: false,
+        //             mode: 'index',
+        //         },
+        //         scales: {
+        //             y: {
+        //                 grid: {
+        //                     drawBorder: false,
+        //                     display: true,
+        //                     drawOnChartArea: true,
+        //                     drawTicks: false,
+        //                     borderDash: [5, 5]
+        //                 },
+        //                 ticks: {
+        //                     display: true,
+        //                     padding: 10,
+        //                     color: '#fbfbfb',
+        //                     font: {
+        //                         size: 11,
+        //                         family: "Open Sans",
+        //                         style: 'normal',
+        //                         lineHeight: 2
+        //                     },
+        //                 }
+        //             },
+        //             x: {
+        //                 grid: {
+        //                     drawBorder: false,
+        //                     display: false,
+        //                     drawOnChartArea: false,
+        //                     drawTicks: false,
+        //                     borderDash: [5, 5]
+        //                 },
+        //                 ticks: {
+        //                     display: true,
+        //                     color: '#ccc',
+        //                     padding: 20,
+        //                     font: {
+        //                         size: 11,
+        //                         family: "Open Sans",
+        //                         style: 'normal',
+        //                         lineHeight: 2
+        //                     },
+        //                 }
+        //             },
+        //         },
+        //     },
+        // });
     </script>
 @endpush

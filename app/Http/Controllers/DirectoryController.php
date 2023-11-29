@@ -48,7 +48,7 @@ class DirectoryController extends Controller
         $user = Auth::user()->id;
         // return $datas = User::with('company')->find($user)->get('*');
         $datas =  Company::where('user_id',$user)->get();
-         DB::getQueryLog();
+        // DB::getQueryLog();
         if($datas->count()){
             return view("client.configure.directory.index",compact('datas'));
         }

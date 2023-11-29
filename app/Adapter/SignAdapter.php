@@ -6,7 +6,10 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Http\Response;
 use App\Models\Company;
 use App\Models\Directory;
+use App\Models\User;
 use App\Models\Document;
+use App\Models\Serialnumber;
+use Illuminate\Support\Facades\Storage;
 
 class SignAdapter
 {
@@ -36,6 +39,100 @@ class SignAdapter
         }else{
             return $response['message'];
         }
+    }
+    /**
+     * disini method generated sigle Serial number
+     * 
+     */
+    static function getSaldo()
+    {
+        
+    }
+
+
+    /**
+     * disini method generated sigle Serial number
+     * 
+     */
+    public static function getSerial(array $arrayDocumentId){
+        // {
+        //     "isUpload": false,
+        //     "namadoc": "4b",
+        //     "namafile": "dok1.pdf",
+        //     "nilaidoc": "10000",
+        //     "namejidentitas": "KTP",
+        //     "noidentitas": "1251087201650003",
+        //     "namedipungut": "Santoso",
+        //     "snOnly": false,
+        //     "nodoc": "1",
+        //     "tgldoc": "2022-04-25"
+        // }
+        $dataArray =[];    
+        foreach ($arrayDocumentId as $id) {
+            $doc = Document::find($id);
+            $desPath = '/docs/'.$doc->company->name.'/'.$doc->directory->name;
+            $data = [
+                "isUpload"=> false,
+                "namadoc"=> "4b",
+                "namafile"=>  $doc['filename'],
+                "nilaidoc"=> "10000",
+                "namejidentitas"=> "KTP",
+                "noidentitas"=> "1251087201650003",
+                "namedipungut"=> "Santoso",
+                "snOnly"=> false,
+                "nodoc"=> $doc['docnumber'],
+                "tgldoc"=> $doc['created_at']->format('Y-m-d')
+            ];
+            // do generated SN
+            $Url = config('sign-adapter.API_GENERATE_SERIAL_NUMBER');
+            $requestAPI = (string) Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
+            ])->withBody(json_encode($data))->post($Url);
+            $response = json_decode($requestAPI,true);
+            $response['data'] = $doc; 
+            if($response['statusCode'] == '01'){
+                return back()->with($response['message'],$response['result']['err']);
+            }
+            // return response()->json([$response,$data]);
+            if($response['statusCode']=='00'){
+                // save serialnumber
+                $dataSN =[
+                   'sn' => $response['result']['sn'],
+                   'image' => $response['result']['image'],
+                   'namejidentitas'=> 'KTP',
+                   'noidentitas'=> '1251087201650003',
+                   'namedipungut'=> 'Santoso',
+                   'user_id' => Auth::user()->id,
+                   'documet_id' =>  $doc['id'],
+                ];
+                $SN = Serialnumber::insert($dataSN);
+                //Update date Document
+                $status = Document::find($id);
+                $status->certificatelevel = 'NOT_CERTIFIED';
+                $status->sn = $response['result']['sn'];
+                $status->x1 = $doc->directory->x1;
+                $status->x2 = $doc->directory->x2;
+                $status->y1 = $doc->directory->y1;
+                $status->y2 = $doc->directory->y2;
+                $status->update();                
+                $sn = $response['result']['sn'];
+                $image = $response['result']['image'];
+                $path = $desPath."/spesimen/".$sn.".png";
+                Storage::disk('public')->put($path, base64_decode($image));
+                Document::where('id', $id)
+                ->update(['sn'=>$sn,'spesimenPath' => $desPath."/spesimen/".$sn.".png"]);
+            }else{
+                //$status = Document::find($id);
+                //$status->update();
+                //$type = 'application/json';
+                //$datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
+            }
+            array_push($dataArray,$response);
+        }
+        // $response = json_decode($data,true);
+        return back()->with($response['message'],$response['result']['sn']);
+        return response()->json($dataArray);
     }
     /**
      * disini method generated Batch Serial number
@@ -92,8 +189,10 @@ class SignAdapter
             'Content-Type' => 'application/json',
             'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
         ])->withBody(json_encode($data))->post($Url);
-
         $response = json_decode($requestAPI,true);
+        if($response['statusCode'] == '01'){
+            return response()->json($response);
+        }
         if($response['message']=='success'){
             //Set/update Serial Number to database document
             $sn = $response['result']['batchId'];
@@ -103,7 +202,7 @@ class SignAdapter
             // return response()->json($response);
         } 
         return response()->json($response);
-        dd($response);
-        dd('disini method generatedn bulk Serial number');
+        // dd($response);
+        // dd('disini method generatedn bulk Serial number');
     }
 }

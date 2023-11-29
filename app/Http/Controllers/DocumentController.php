@@ -68,7 +68,19 @@ class DocumentController extends Controller
                   ->where('company_id',$input['company'])->get('name');
         $filePath = ('/docs/'.$directory->company->name.'/'.$directory->name.'/in/');
         $file = $request->file('pdf'); 
-        $fileName = str_replace('','_',$file->getClientOriginalName());
+        $fileName = str_replace(' ','_',$file->getClientOriginalName());
+        $file_path = $filePath.$fileName;
+        //Check File is exists
+        if (Storage::disk('public')->exists($file_path)) {
+            $messeage = [
+                'success' => false,
+                'extension'=> $request->pdf->extension(),
+                'message'=> '<b>'.$file->getClientOriginalName()."<br> is  exists,  please upload another file or rename the file! </b><br>",
+            ];
+            // return response()->json($messeage);
+        }
+       
+        
         $path = Storage::disk('public')->put($filePath.$fileName,file_get_contents($request->pdf));
         $document =[
             'user_id'=> Auth::user()->id,
@@ -77,10 +89,11 @@ class DocumentController extends Controller
             'company_id'=> $directory->company->id ?? '0',
             'directory_id'=> $directory->id ?? '0',
             'docnumber' => $input['number'],
-            'x1'=> $input['x1'] ?? '0',
-            'x2'=> $input['x2'] ?? '0',
-            'y1'=> $input['y1'] ?? '0',
-            'y2'=> $input['y2'] ?? '0',
+             //get coordinate from template (table directory)
+            'x1'=> $directory->x1 ?? '0',
+            'x2'=> $directory->x2 ?? '0',
+            'y1'=> $directory->y1 ?? '0',
+            'y2'=> $directory->y2 ?? '0',
             'height' => $input['dokumen_height'] ?? '0',
             'width' => $input['dokumen_width'] ?? '0',
             'page' => $input['dokumen_page'] ?? '0',
@@ -98,7 +111,7 @@ class DocumentController extends Controller
                 'extension'=> $request->pdf->extension(),
                 'message'=> '<b>'.$input['title']."<b><br> File uploaded successfully!",
                 'test' => $company,
-                'path'=>$filePath.$fileName,
+                'path'=> $filePath.$fileName,
                 'result' => $result 
             ];
         }else{
@@ -121,7 +134,11 @@ class DocumentController extends Controller
         $input = $request->all();
         // dd($request->all());
         return SignAdapter::getBatchSerial($input['doc']);
+    }
 
+    public function getSerialNumber(Request $request){
+        $input = $request->all();
+        return SignAdapter::getSerial($input['doc']);
     }
 
     /**

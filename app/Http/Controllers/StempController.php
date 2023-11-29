@@ -7,6 +7,7 @@ use App\Models\Company;
 use App\Models\Directory;
 use App\Models\Document;
 use App\Models\User;
+use App\Models\Serialnumber;
 // use GuzzleHttp\Psr7\Uri;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
@@ -89,7 +90,7 @@ class StempController extends Controller
     {
         $user = Auth::user()->id;
         $request['company'] = $directory_id;
-        $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])->Where('certificatelevel','<>', 'CERTIFIED')->orderBy('updated_at', 'desc')->paginate(5);
+        $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])->orderBy('updated_at', 'desc')->paginate(5);
         if (($s = $request->s)) {
             $datas = Document::where([
                 [function ($query) use ($request) {
@@ -113,7 +114,7 @@ class StempController extends Controller
         if(Auth::user()->ematerai_token){
             if(env('APP_DEBUG')=='true'){
                 //echo Auth::user()->ematerai_token;
-                session(['success' => env('APP_DEBUG')." ".Auth::user()->ematerai_token]);
+                //session(['success' => env('APP_DEBUG')." ".Auth::user()->ematerai_token]);
             }
         } 
         $datas = Directory::with('company')->find($directory->id)->where('id',$directory->id)->get();
@@ -215,6 +216,17 @@ class StempController extends Controller
             Storage::disk('public')->put($path, base64_decode($image));
             Document::where('id',$fileUpload->id)
             ->update(['sn'=>$sn,'spesimenPath' => $desPath."/spesimen/".$sn.".png"]);
+            
+            $dataSN =[
+                'sn' => $getSerialNumber['result']['sn'],
+                'image' => $getSerialNumber['result']['image'],
+                'namejidentitas'=> 'KTP',
+                'noidentitas'=> '1251087201650003',
+                'namedipungut'=> 'Santoso',
+                'user_id' => Auth::user()->id,
+                'documet_id' =>  $fileUpload->id,
+             ];
+             $SN = Serialnumber::insert($dataSN);
         }
         // echo $getSerialNumber['statusCode'];
         // echo $getSerialNumber['message'];

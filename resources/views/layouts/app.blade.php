@@ -14,37 +14,25 @@
     <!-- Nucleo Icons -->
     <link href="{{ asset('./assets/css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('./assets/css/nucleo-svg.css') }}" rel="stylesheet" />
-    <!-- Font Awesome Icons -->
-    {{-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> --}}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" integrity="sha512-uKQ39gEGiyUJl4AI6L+ekBdGKpGw4xJ55+xyJG7YFlJokPNYegn9KwQ3P8A7aFQAUtUsAQHep+d/lrGqrbPIDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    {{-- <script src="{{ asset('assets/js/plugins/fontawesome_42d5adcbca.js') }}" crossorigin="anonymous"></script> --}}
-    <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script>
-    {{-- <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script> --}}
-    {{-- <script src="{{ asset("assets/js/plugins/pdf/pdf.js") }}" type="module"></script> --}}
-        <!-- jQuery 3 -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/js/jquery.imgareaselect.min.js" integrity="sha512-59swnhUs+9AinrKlTPqsoO5ukNPPFbPXFyaf41MAgiTG/fv3LBZwWQWiZNYeksneLhiUo4xjh/leTZ53sZzQ4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <!-- toastr js -->
-         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-        {{-- PDF Librarys --}}
-        <script src="{{ asset("assets/js/plugins/pdf/pdf.19.js") }}"></script>
-        <script src="{{ asset("assets/js/plugins/pdf/pdf.worker.19.js") }}"></script>
 
 
     
+    <!-- Font Awesome Icons -->
+    {{-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> --}}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/themes/default/style.min.css" />
     <link href="{{ asset('assets/css/nucleo-svg.css" rel="stylesheet') }}" />
     <!-- CSS Files -->
     <link id="pagestyle" href="{{ asset('assets/css/argon-dashboard.css') }}" rel="stylesheet" />
     {{-- <link id="pagestyle" data="bule" href="{{ asset('assets/css/argon-dashboard.2.0.0.min.css') }}" rel="stylesheet" /> --}}
-    <link id="pagestyle" href="{{ asset('assets/css/validity.css') }}" rel="stylesheet" />
-    <link id="pagestyle" href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" />
-    <link id="pagestyle" href="{{ asset('assets/css/sidebar-nav.css') }}" rel="stylesheet" />
-    <!-- toastr css -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-
-    <style>
-        
+    <link href="{{ asset('assets/css/validity.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" />
+    <link href="{{ asset('assets/css/sidebar-nav.css') }}" rel="stylesheet" />
+     <!-- toastr css -->
+     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    
+    
+     <style>
         @media screen and (max-width: 360px){
             html{
                 min-width:360px !important;   
@@ -97,15 +85,34 @@
             line-height: 1.5;
             border-radius: 3px;
         }
-        .form-control-sm + span{
-            content: "✓";
-            top:-29px;
-        }
-
+ 
         .btn:disabled{
             background: lightgray;
         }
+        .badge.badge-xs{
+            padding: 0.1em 0.3em;
+        }
     </style>
+
+
+
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" integrity="sha512-uKQ39gEGiyUJl4AI6L+ekBdGKpGw4xJ55+xyJG7YFlJokPNYegn9KwQ3P8A7aFQAUtUsAQHep+d/lrGqrbPIDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{-- <script src="{{ asset('assets/js/plugins/fontawesome_42d5adcbca.js') }}" crossorigin="anonymous"></script> --}}
+    <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script>
+    {{-- <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script> --}}
+    {{-- <script src="{{ asset("assets/js/plugins/pdf/pdf.js") }}" type="module"></script> --}}
+        <!-- jQuery 3 -->
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/js/jquery.imgareaselect.min.js" integrity="sha512-59swnhUs+9AinrKlTPqsoO5ukNPPFbPXFyaf41MAgiTG/fv3LBZwWQWiZNYeksneLhiUo4xjh/leTZ53sZzQ4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+        <!-- toastr js -->
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+         {{--  jsTree --}}
+         <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+         {{-- PDF Librarys --}}
+        <script src="{{ asset("assets/js/plugins/pdf/pdf.19.js") }}"></script>
+        <script src="{{ asset("assets/js/plugins/pdf/pdf.worker.19.js") }}"></script>
+
     <script>
         var myVar;
         const pageEnd = performance.mark('pageEnd');
@@ -122,7 +129,7 @@
     </script>
 </head>
 <body onload="loader()" class="{{ $class ?? '' }}" style="margin:0; background-color: '#6c757d !important">
-    @if ($message = Session::get('success'))
+    {{-- @if ($message = Session::get('success'))
     <div class="alert alert-success alert-dismissible text-white" style="position: fixed;
     width: 100%;">
         <p>{{ $message }}</p>
@@ -130,41 +137,67 @@
             <span aria-hidden="true">&times;</span>
         </button>
     </div>
-    @endif
- 
-    <x-alert id="my-alert" role="alert" type="success">
-        Uh oh!
-    </x-alert>
+    @endif --}}
     <div id="loader"></div>
     <div id="main-page" style="display:none;">
-    @guest
-        @yield('content')
-    @endguest
-
-    @auth
-        @if (in_array(request()->route()->getName(), ['sign-in-static', 'sign-up-static', 'login', 'register', 'recover-password', 'rtl', 'virtual-reality']))
+        @guest
             @yield('content')
-        @else
-            @if (!in_array(request()->route()->getName(), ['profile', 'profile-static']))
-                <div class="min-height-300 bg-primary position-absolute w-100"></div>
-            @elseif (in_array(request()->route()->getName(), ['profile-static', 'profile']))
-                <div class="position-absolute w-100 min-height-300 top-0" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg'); background-position-y: 50%;">
-                    <span class="mask bg-primary opacity-6"></span>
-                </div>
-            @endif
-            @role('Superadmin', 'web')
-                @include('layouts.navbars.auth.sidenavsuper') 
+        @endguest
+
+        @auth
+            @if (in_array(request()->route()->getName(), ['sign-in-static', 'sign-up-static', 'login', 'register', 'recover-password', 'rtl', 'virtual-reality']))
+                @yield('content')
             @else
-                @include('layouts.navbars.auth.sidenav')
-            @endrole
-                <main class="main-content border-radius-lg">
-                    @yield('content')
-                    @include('layouts.footers.auth.footer')
-                </main>
-            @include('components.fixed-plugin')
-        @endif
-    @endauth
-    </div>               
+                @if (!in_array(request()->route()->getName(), ['profile', 'profile-static']))
+                    <div class="min-height-300 bg-primary position-absolute w-100"></div>
+                @elseif (in_array(request()->route()->getName(), ['profile-static', 'profile']))
+                    <div class="position-absolute w-100 min-height-300 top-0" style="background-image: url('https://raw.githubusercontent.com/creativetimofficial/public-assets/master/argon-dashboard-pro/assets/img/profile-layout-header.jpg'); background-position-y: 50%;">
+                        <span class="mask bg-primary opacity-6"></span>
+                    </div>
+                @endif
+                @role('Superadmin, web')
+                    @include('layouts.navbars.auth.sidenavsuper') 
+                @else
+                    @include('layouts.navbars.auth.sidenav')
+                @endrole
+                    <main class="main-content border-radius-lg">
+                        @yield('content')
+                        @include('layouts.footers.auth.footer')
+                    </main>
+                @include('components.fixed-plugin')
+            @endif
+        @endauth
+    </div>
+       
+    <!-- Modal Body -->
+    <!-- if you want to close by clicking outside the modal, delete the last endpoint:data-bs-backdrop and data-bs-keyboard -->
+    <div class="modal fade" style="z-index: 999999;" id="modalLogout" tabindex="-1" data-bs-backdrop="static" data-bs-keyboard="false" role="dialog" aria-labelledby="modalTitleId" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-scrollable modal-dialog-centered modal-sm" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="modalTitleId"><i class="fas fa-power-off text-lg opacity-10" aria-hidden="true"></i></h5>
+                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    Are you sure, you want to log out?
+                </div>
+                <div class="modal-footer">
+                    <a type="button" class="btn btn-secondary" data-bs-dismiss="modal">No</a>
+                    <form role="form" method="post" action="{{ route('logout') }}" id="logout-form">
+                        @csrf
+                        <button type="submit" class="btn btn-primary">Yes</button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    
+    <!-- Optional: Place to the bottom of scripts -->
+    <script>
+        const myModal = new bootstrap.Modal(document.getElementById('modalId'), options)
+    
+    </script>
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>
@@ -199,6 +232,15 @@
             "hideMethod": "fadeOut",
             "tapToDismiss": true
         }
+        
+        setTimeout(function(){
+            $('.alert').fadeOut();
+        },5000);
+        @if($message = Session::get('success'))
+        toastr["success"]('{{ $message }}','success'); 
+        @elseif($message = Session::get('error'))
+        toastr["error"]('{{ $message }}','error'); 
+        @endif
         @if (env('APP_ENV')!='production')
         // toastr["success"]("Toastr Test", "Toastr Test");
         // toastr["info"]("error", "Toastr Test");
@@ -206,6 +248,7 @@
         // toastr["warning"]('Clear itself?<br /><br /><button type="button" class="btn clear">Yes</button>');
         @endif
     </script>
+
     <!-- Github buttons -->
     {{-- <script async defer src="https://buttons.github.io/buttons.js"></script> --}}
     <script async defer src="{{ asset('assets/js/plugins/buttons.js') }}"></script>
