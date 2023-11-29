@@ -213,7 +213,7 @@
                       <div id="pdf-contents">
                           <div id="pdf-meta" class="p-0 mb-0"></div>
                               <div class="row mb-0">
-                                @if(env('APP_DEBUG')!=true)
+                                @if(env('APP_DEBUG')!=false)
                                   <div class="input-group">
                                     <title id="txt_lower_left_x" class="input-group-text pe-0 input-sm" style="padding-right: 0px !important;">Lower Left X : </title>
                                     <title id="txt_lower_left_y" class="input-group-text pe-0 input-sm" style="top:0px; padding-right: 0px !important;">Lower Left Y :</title>
