@@ -11,25 +11,34 @@
             <h6 class="font-weight-bolder text-white mb-0">{{ $title }} {{ (env('APP_DEBUG')==true)? Route::currentRouteName():'' }}</h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
+
             <div class="ms-md-auto pe-md-3 d-flex align-items-center">
-            <form action="" method="get" class="mb-0 mt-2">
-                {{-- <div class="input-group mb-0">
-                    <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
-                    <input type="text" name="s" class="form-control" placeholder="Type here..." required>
-                    <button class="btn btn-sm bg-gradient-primary my-1 me-1">Search</button>
-                </div> --}}
-                <div class="col-auto">
-                    <div class="bg-white border-radius-lg d-flex me-2">
-                      {{-- <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span> --}}
-                      <input type="text" name="s" class="form-control border-0 ps-3" placeholder="Search here..." >
-                        @if (request()->has('s'))
-                            <a class="btn bg-gradient-danger my-1 me-1" href="{{Request::url()}}">Reset</a>
-                        @else
-                            <button class="btn bg-gradient-primary my-1 me-1">Search</button>
-                        @endif
-                    </div>
-                  </div>
-            </form>
+                    @if(Route::currentRouteName()=='company.index' 
+                    || Route::currentRouteName()=='success'
+                    || Route::currentRouteName()=='directory'
+                    || Route::currentRouteName()=='document'
+                    || Route::currentRouteName()=='directory.index' 
+                    || Route::currentRouteName()=='directory.index' 
+                    || Route::currentRouteName()=='document.index')
+                    <form action="" method="get" class="mb-0 mt-2">
+                        {{-- <div class="input-group mb-0">
+                            <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span>
+                            <input type="text" name="s" class="form-control" placeholder="Type here..." required>
+                            <button class="btn btn-sm bg-gradient-primary my-1 me-1">Search</button>
+                        </div> --}}
+                        <div class="col-auto">
+                            <div class="bg-white border-radius-lg d-flex me-2">
+                            {{-- <span class="input-group-text text-body"><i class="fas fa-search" aria-hidden="true"></i></span> --}}
+                            <input type="text" name="s" class="form-control border-0 ps-3" placeholder="Search here..." >
+                                @if (request()->has('s'))
+                                    <a class="btn bg-gradient-danger my-1 me-1" href="{{Request::url()}}">Reset</a>
+                                @else
+                                    <button class="btn bg-gradient-primary my-1 me-1">Search</button>
+                                @endif
+                            </div>
+                        </div>
+                    </form>
+                    @endif
             </div>
             <ul class="navbar-nav dropdown justify-content-end">
                 {{-- <li class="nav-item px-3 d-flex align-items-center">

@@ -10,3 +10,15 @@
     /* background-color: #fb6340 !important; */
     color: white !important;
 }
+
+#loading-response{
+    position: fixed;
+    z-index: 99999;
+    margin: auto;
+    background-color: #00000070;
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    color: #fff;
+    padding-top: 20%;
+}

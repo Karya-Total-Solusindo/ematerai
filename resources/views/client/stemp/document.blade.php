@@ -8,12 +8,14 @@
     height: 120% !important;
 }
 </style>
+
+
 <div class="card">
     {{-- <img class="card-img-top" src="https://picsum.photos/200/10/?blur" alt="Card image cap"> --}}
     <div class="card-body">
         <div class="row p-0">
             <div class="col">
-                <h4 class=" card-title">My Document </h4>
+                <h4 class=" card-title">New Documents</h4>
                 <span class=""> <i class="fas fa-briefcase"></i> {{ $datas[0]->company->name ?? '' }} @if(!empty($datas[0]->directory))  <i class="fas fa-folder-tree"></i>  @endif  {{ $datas[0]->directory->name ?? ''}}</span>
                 {{-- {{ ($datas[0]->directory->template ?? '')}} --}}
             </div>
@@ -28,87 +30,152 @@
         </div>
         <div class="card-body px-0 pt-0 pb-2">
             <div class="table-responsive p-0">
+                {{-- Show data with template --}}
+                @if ($directory->template ==1)
                 <form action="{{ route('getSerialNumber') }}" method="POST">
-                   
-                <table class="table align-items-center mb-0">
-                    <thead>
-                        <tr>
-                            @if($datas->count()>0)
-                            @if($datas->directory->template ?? 1)
-                            <td>
-                                <input type="checkbox" id="selectAll">
-                            </td>
-                            @endif
-                            @endif
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                Name</th>
-                            <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                Materai Serial Number</th>
-                            {{-- <th
-                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                Status</th> --}}
-                            <th
-                                class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                Create</th>
-                            <th class="text-secondary text-end m-0 p-0 opacity-7" width="10%">
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
                                 @if($datas->count()>0)
-                                {{-- @if($datas[0]->directory->template == 1) --}}
-                                 <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
-                                {{-- @endif --}}
+                                    @if($datas[0]->directory->template==1)
+                                        <td><input type="checkbox" id="selectAll"></td>
+                                    @endif
                                 @endif
-                            </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($datas as $data)
-                        <tr>
-                            {{-- @if($data->directory->template==1) --}}
-                            <td>
-                                <input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
-                            </td>
-                            {{-- @endif --}}
-                            <td>
-                                <div class="align-middle text-sm">
-                                    {{-- <div>
-                                        <img src="/img/team-2.jpg" class="avatar avatar-sm me-3"
-                                            alt="user1">
-                                    </div> --}}
-                                    <div class="">
-                                        <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}</a></h6>
-                                        {{-- <p class="text-xs text-secondary mb-0">john@creative-tim.com</p> --}}
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Name</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Materai Serial Number</th>
+                                {{-- <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Status</th> --}}
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Create</th>
+                                <th class="text-secondary text-end m-0 p-0 opacity-7" width="10%">
+                                    @if($datas->count()>0)
+                                    {{-- @if($datas[0]->directory->template == 1) --}}
+                                     <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
+                                    {{-- @endif --}}
+                                    @endif
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($datas as $data)
+                            <tr>
+                                @if($data->directory->template==1)    
+                                <td>
+                                    @if($data->sn == '')
+                                        <input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
+                                    @endif
+                                </td>
+                                @endif
+                                <td>
+                                    <div class="align-middle text-sm">
+                                        <div class="">
+                                            <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}</a></h6>
+                                        </div>
                                     </div>
-                                </div>
-                            </td>
-                            <td class="align-middle text-sm">
-                                {{ $data->sn ?? 'NOT_CERTIFIED' }}
-                            </td>
-                            <td class="align-middle text-center">
-                                <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y H:i:s') }}</span>
-                            </td>
-                            <td class="align-middle text-end ">
-                                {{-- <pre>
-                                {{var_dump($datas)}} --}}
-                                <a href="{{ route('stemp.show',$data->id) }}" class="btn btn-s btn-primary text-white font-weight-bold text-xs"
-                                    data-toggle="tooltip" data-original-title="Edit Company">
-                                    Detail 
-                                </a>
-                                {{-- <a href="{{ asset('/docs/'.$data->company->name.'/'.$data->directory->name.'/in/'.$data->filename) }}" class="btn btn-s btn-primary text-white font-weight-bold text-xs"
-                                    data-toggle="tooltip" data-original-title="Edit Company">
-                                    Open
-                                </a> --}}
-                                {{-- <button class="btn btn-s btn-primary text-white font-weight-bold text-xs view" data-title="{{$data->filename}}" data-bs-toggle="modal" data-bs-target="#modalId" data-url="{{ asset('/docs/'.$data->company->name.'/'.$data->directory->name.'/in/'.$data->filename) }}">View</button> --}}
-                                {{-- <span class="btn btn-s btn-primary text-white font-weight-bold text-xs view" data-title="{{$data->filename}}" data-bs-toggle="modal" data-bs-target="#modalId" data-url="{{ route('process',$data->id)}}">View</span> --}}
-                                @if($data->sn != '')
-                                    <a href="{{ route('process',$data->id)}}" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" >Stemp Document</a>
+                                </td>
+                                <td class="align-middle text-sm">
+                                    {{ $data->sn ?? 'NOT_CERTIFIED' }}
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y H:i:s') }}</span>
+                                </td>
+                                <td class="align-middle text-end ">
+                                    <a href="{{ route('stemp.show',$data->id) }}" class="btn btn-s btn-primary text-white font-weight-bold text-xs"
+                                        data-toggle="tooltip" data-original-title="Edit Company">
+                                        Detail 
+                                    </a>
+                                    @if($data->sn != '')
+                                        <a href="{{ route('process',$data->id)}}" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" ><i class="fas fa-stamp"></i> Stemp Materai</a>
+                                    @else
+                                        <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
+                                        {{-- <button href="#" disabled class="btn btn-s btn-disable text-white font-weight-bold text-xs view" >Stemp Document</button> --}}
+                                    @endif
+                                </td>
+                            </tr>
+                            @endforeach
+                            </tbody>
+                    </table>
+                        @csrf
+                    </form>
+                @else 
+                {{-- data don have template --}}
+                    <table class="table align-items-center mb-0">
+                        <thead>
+                            <tr>
+                                @if($datas->count()>0)
+                                    @if($datas[0]->directory->template==1)
+                                        <td><input type="checkbox" id="selectAll"></td>
+                                    @endif
                                 @endif
-                               
-                            </td>
-                        </tr>
-                        @endforeach
-                        </tbody>
-                </table>
-                    @csrf
-                </form>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Name</th>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
+                                    Materai Serial Number</th>
+                                {{-- <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Status</th> --}}
+                                <th
+                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                    Create</th>
+                                <th class="text-secondary text-end m-0 p-0 opacity-7" width="10%">
+                                    @if($datas->count()>0)
+                                    {{-- @if($datas[0]->directory->template == 1) --}}
+                                     <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
+                                    {{-- @endif --}}
+                                    @endif
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($datas as $data)
+                            <form action="{{ route('getSerialNumber') }}" method="POST">
+                            <tr>
+                                @if($data->directory->template==1)    
+                                <td>
+                                    @if($data->sn == '')
+                                        <input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
+                                    @endif
+                                </td>
+                                @endif
+                                <td>
+                                    <div class="align-middle text-sm">
+                                        <div class="">
+                                            <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}</a></h6>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td class="align-middle text-sm">
+                                    {{ $data->sn ?? 'NOT_CERTIFIED' }}
+                                </td>
+                                <td class="align-middle text-center">
+                                    <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y H:i:s') }}</span>
+                                </td>
+                                <td class="align-middle text-end ">
+                                    <a href="{{ route('stemp.show',$data->id) }}" class="btn btn-s btn-primary text-white font-weight-bold text-xs"
+                                        data-toggle="tooltip" data-original-title="Edit Company">
+                                        Detail 
+                                    </a>
+                                    @if($data->sn != '')
+                                        <a href="{{ route('process',$data->id)}}" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" ><i class="fas fa-stamp"></i> Stemp Materai</a>
+                                    @else
+                                        <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
+                                        {{-- <button href="#" disabled class="btn btn-s btn-disable text-white font-weight-bold text-xs view" >Stemp Document</button> --}}
+                                    @endif
+                                </td>
+                            </tr>
+                                <input type="hidden" name="doc[]" value={{ $data->id }}>
+                                @csrf
+                            </form>
+                            @endforeach
+                            </tbody>
+                    </table>
+                    
+                @endif
+                
             </div>
         </div>
         {{ $datas->links() }}
@@ -167,14 +234,12 @@
                 $('#selectAll').prop('checked', false);
                 $('#btnGetSN').prop('disabled', true);
                 $('#btnGetSN').hide();
-
-
-
+               
 
                 $('#selectAll').on('change',(e)=>{
                     let checkAll = $('#selectAll').is(':checked');
                     var numberNotChecked = $('input:checkbox:not(":checked")').length;
-                    console.log(checkAll);
+                    var chechListChecked = $('input.chechList:checked').length;
                     if(checkAll==true){
                         $('.chechList').prop('checked', true);
                         $('#btnGetSN').show();
@@ -188,18 +253,27 @@
                     }else{
                         $('#btnGetSN').prop('disabled', true);
                     }
+                    // console.log(checkAll,numberNotChecked,chechListChecked);
                 });
 
 
                 // checkbox 
                 $('.table').on('change','.chechList',(e)=>{
-                    console.info('chechList click');
+                    var chechListNotChecked = $('input.chechList:not(":checked")').length;
+                    var chechListChecked = $('input.chechList:checked').length;
+                    // console.info('chechList click');
                     if($('.chechList:checked').length >= 1){
                         $('#btnGetSN').prop('disabled', false);
                         $('#btnGetSN').show();
                     }else{
                         $('#btnGetSN').prop('disabled', true);
                     }
+                    if(chechListNotChecked == 0){
+                        $('#selectAll').prop('checked', true);
+                    }else{
+                        $('#selectAll').prop('checked', false);
+                    } 
+                    // console.log(chechListChecked,chechListNotChecked);
                 });
 
             });    

@@ -89,7 +89,7 @@ class StempController extends Controller
     public function document($directory_id, Request $request)
     {
         $user = Auth::user()->id;
-        $request['company'] = $directory_id;
+        $request['directory_id'] = $directory_id;
         $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])->orderBy('updated_at', 'desc')->paginate(5);
         if (($s = $request->s)) {
             $datas = Document::where([
@@ -107,7 +107,8 @@ class StempController extends Controller
                 }]
                 ])->orderBy('updated_at', 'desc')->paginate(5);
         }
-        return view("client.stemp.index", compact("datas"));
+        $directory = Directory::find(['id'=>$directory_id])->first();
+        return view("client.stemp.index", compact("datas","directory"));
     }
 
     public function addfile(Directory $directory){
@@ -272,6 +273,14 @@ class StempController extends Controller
 
     public function stemp(Request $request)
     {
+        $valid = $request->validate([
+            'lower_left_x' =>'required',
+            'lower_left_y' =>'required',
+            'upper_right_x' =>'required',
+            'upper_right_y' =>'required',
+            'dokumen_page' =>'required',
+        ]);
+
         $input = $request->all();
         $headers =[];
         $user = Auth::user()->id;
@@ -333,10 +342,10 @@ class StempController extends Controller
                     "refToken"=> $datas->sn,
                     "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
                     "src"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
-                    'visLLX'=> $input['x1'] ?? '0',
-                    'visURX'=> $input['x2'] ?? '0',
-                    'visLLY'=> $input['y1'] ?? '0',
-                    'visURY'=> $input['y2'] ?? '0',
+                    'visLLX'=> $input['lower_left_x'] ?? '0',
+                    'visLLY'=> $input['lower_left_y'] ?? '0',
+                    'visURX'=> $input['upper_right_x'] ?? '0',
+                    'visURY'=> $input['upper_right_y'] ?? '0',
                     'visSignaturePage' => $input['dokumen_page'] ?? '0',
                 ]))->post($Url)->getBody();
                 $response = json_decode($stemting,true);

@@ -161,7 +161,9 @@
                     @include('layouts.navbars.auth.sidenav')
                 @endrole
                     <main class="main-content border-radius-lg">
+                        <div class="container-fluid py-4">
                         @yield('content')
+                        </div>
                         @include('layouts.footers.auth.footer')
                     </main>
                 @include('components.fixed-plugin')
