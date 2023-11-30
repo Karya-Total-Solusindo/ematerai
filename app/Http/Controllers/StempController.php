@@ -83,8 +83,12 @@ class StempController extends Controller
                 }]
                 ])->orderBy('update_at', 'desc')->paginate(5);
         }
-        $company = Directory::with('company_id',$company_id);
-        return view("client.stemp.index", compact(["datas","company"]));
+        $company = Company::find(['id'=>$company_id])->where(['user_id'=>$user])->first();
+        if ($company) {
+            return view("client.stemp.index", compact(["datas","company"]));
+        }
+        return redirect()->route('home')->with('error', 'Directory not found!');
+       
     }
     public function document($directory_id, Request $request)
     {
@@ -107,8 +111,11 @@ class StempController extends Controller
                 }]
                 ])->orderBy('updated_at', 'desc')->paginate(5);
         }
-        $directory = Directory::find(['id'=>$directory_id])->first();
-        return view("client.stemp.index", compact("datas","directory"));
+        $directory = Directory::find(['id',$directory_id])->where('user_id',$user)->first();
+        if($directory){
+            return view("client.stemp.index", compact("datas","directory"));
+        }
+        return redirect()->route('company')->with('error', 'Directory not found!');
     }
 
     public function addfile(Directory $directory){

@@ -21,8 +21,26 @@
                 </button>
             </div>
             <script>
-                toastr["warning"]("Error", "{{ session()->get('error') }}");
+                toastr["error"]("Error", "{{ session()->get('error') }}");
             </script>
          </div>
     @endif
-
+ 
+    
+    {{-- Javascript --}}
+@once  
+@pushOnce('js')
+    @if ($message = session()->has('warning'))
+            <script>
+                toastr["warning"]("warning", "{{ session()->get('warning') }}");
+            </script>
+         </div>
+    @endif
+    @if ($message = session()->has('info'))
+            <script>
+                toastr["info"]("info", "{{ session()->get('info') }}");
+            </script>
+         </div>
+    @endif
+    @endPushOnce
+@endonce

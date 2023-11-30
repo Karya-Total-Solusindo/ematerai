@@ -51,14 +51,20 @@
                             </td>
                         </tr>
                         <tr class="">
-                            <td>Stemp Serial Number</td>
+                            <td>Stamp Serial Number</td>
                             <td>:</td>
-                            <td>{{ $data->sn ?? '{Serial Number}'  }}</td>
+                            <td>{{ $data->sn ?? '-'  }}</td>
                         </tr>
                         <tr class="">
                             <td>Materai</td>
                             <td>:</td>
-                            <td><img src="{{ asset('storage/'.$data->spesimenPath) ?? '#'  }}" alt="Stemp spesimenPath"></td>
+                            <td>
+                                @if($data->spesimenPath != '')
+                                <img src="{{ asset('storage/'.$data->spesimenPath) ?? '#'  }}" alt="Stemp spesimenPath">
+                                @else
+                                -
+                                @endif
+                            </td>
                         </tr>
                     @endforeach
                 </tbody>

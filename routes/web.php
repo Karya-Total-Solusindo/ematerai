@@ -87,11 +87,14 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::resource('/document', DocumentController::class)->middleware('auth');
     Route::group(['/doicument'], function(){
         Route::get('/document/directory/{company}', [DocumentController::class, 'getDirectory'])->middleware('auth')->name('getDirectory');
+        Route::get('/document/create/{directory}', [DocumentController::class, 'create'])->middleware('auth')->name('document.create');
     });
     Route::group([ 'prefix' => 'serialnumber'], function(){
         // Route::get('/getOne', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
+        Route::post('/exeStamp', [DocumentController::class, 'stampExecute'])->middleware('auth')->name('stampExecute');
         Route::post('/getOne', [DocumentController::class, 'getSerialNumber'])->middleware('auth')->name('getSerialNumber');
-        Route::post('/getBatch', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
+        // getSerialNumberBatch tidakdipakai
+        // Route::post('/getBatch', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
     });
 
     // STEMP 

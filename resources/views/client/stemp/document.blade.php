@@ -16,28 +16,42 @@
         <div class="row p-0">
             <div class="col">
                 <h4 class=" card-title">New Documents</h4>
-                <span class=""> <i class="fas fa-briefcase"></i> {{ $datas[0]->company->name ?? '' }} @if(!empty($datas[0]->directory))  <i class="fas fa-folder-tree"></i>  @endif  {{ $datas[0]->directory->name ?? ''}}</span>
                 {{-- {{ ($datas[0]->directory->template ?? '')}} --}}
             </div>
             <div class="col text-end">
+                <span class=""> <i class="fas fa-briefcase"></i> {{ $datas[0]->company->name ?? '' }} @if(!empty($datas[0]->directory))  <i class="fas fa-folder-tree"></i>  @endif  {{ $datas[0]->directory->name ?? ''}}</span>
                 
-                <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ URL::previous() }}"> Back</a>
+                {{-- {{ URL::previous() }} --}}
                 {{-- <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ route('directory', $datas[0]->company->id ?? '') }}"> Back</a> --}}
                 {{-- <a @class(['btn btn-sm btn-primary', 'font-bold' => true]) href="{{ route('add.file', Request::segment(4)) }}"> Create</a> --}}
-                <a @class(['btn btn-sm btn-primary', 'font-bold' => true]) href="{{ route('document.create') }}"> Create</a>
+            </div>
+            <div class="row mb-0">
+                <div class="col-8 text-start">
+                    @if($datas->count()>0)
+                    {{-- @if($datas[0]->directory->template == 1) --}}
+                     <button @class(['btn me-5 btn-sm btn-info align-items-right', 'font-bold' => true]) class="btn btn-sm btn-info" id="btnGetSN" onclick="$('#execute').submit();"><i class="fas fa-qrcode"></i> Execute Materai</button>
+                    {{-- @endif --}}
+                    @endif
+                    <a @class(['btn me-5 btn-sm btn-primary', 'font-bold' => true]) href="{{ route('document.create', $directory->id) }}"> Upload</a>
+                    <a @class(['btn ms-5 btn-sm btn-dark', 'font-bold' => true]) href="{{ route('company') }}"> Back</a>
+                </div>
+                <div class="col-4 text-end">
+                    <a @class(['btn ms-5 btn-sm btn-danger', 'font-bold' => true]) href="#" onclick="alert('on dev')"> Delete</a> 
+                </div>
             </div>
             {{-- <p class="card-text">Text</p> --}}
         </div>
         <div class="card-body px-0 pt-0 pb-2">
             <div class="table-responsive p-0">
                 {{-- Show data with template --}}
-                @if ($directory->template ==1)
-                <form action="{{ route('getSerialNumber') }}" method="POST">
+                
+                {{-- <form id="execute" action="{{ route('getSerialNumber') }}" method="POST"> --}}
+                    <form id="execute" action="{{ route('stampExecute') }}" method="POST">test 
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                                @if($datas->count()>0)
-                                    @if($datas[0]->directory->template==1)
+                                @if($directory->count()>0)
+                                    @if($directory->template==1)
                                         <td><input type="checkbox" id="selectAll"></td>
                                     @endif
                                 @endif
@@ -52,11 +66,7 @@
                                     class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                     Create</th>
                                 <th class="text-secondary text-end m-0 p-0 opacity-7" width="10%">
-                                    @if($datas->count()>0)
-                                    {{-- @if($datas[0]->directory->template == 1) --}}
-                                     <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
-                                    {{-- @endif --}}
-                                    @endif
+                                   
                                 </th>
                             </tr>
                         </thead>
@@ -84,14 +94,14 @@
                                     <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y H:i:s') }}</span>
                                 </td>
                                 <td class="align-middle text-end ">
-                                    <a href="{{ route('stemp.show',$data->id) }}" class="btn btn-s btn-primary text-white font-weight-bold text-xs"
+                                    {{-- <a href="{{ route('stemp.show',$data->id) }}" class="btn btn-s btn-primary text-white font-weight-bold text-xs"
                                         data-toggle="tooltip" data-original-title="Edit Company">
                                         Detail 
-                                    </a>
+                                    </a> --}}
                                     @if($data->sn != '')
-                                        <a href="{{ route('process',$data->id)}}" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" ><i class="fas fa-stamp"></i> Stamp Materai</a>
+                                        {{-- <a href="{{ route('process',$data->id)}}" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" ><i class="fas fa-stamp"></i> Stamp Materai</a> --}}
                                     @else
-                                        <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
+                                        {{-- <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button> --}}
                                         {{-- <button href="#" disabled class="btn btn-s btn-disable text-white font-weight-bold text-xs view" >Stemp Document</button> --}}
                                     @endif
                                 </td>
@@ -100,87 +110,18 @@
                             </tbody>
                     </table>
                         @csrf
+                        
                     </form>
-                @else 
+    
                 {{-- data don have template --}}
-                    <table class="table align-items-center mb-0">
-                        <thead>
-                            <tr>
-                                @if($datas->count()>0)
-                                    @if($datas[0]->directory->template==1)
-                                        <td><input type="checkbox" id="selectAll"></td>
-                                    @endif
-                                @endif
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                    Name</th>
-                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
-                                    Materai Serial Number</th>
-                                {{-- <th
-                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                    Status</th> --}}
-                                <th
-                                    class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                    Create</th>
-                                <th class="text-secondary text-end m-0 p-0 opacity-7" width="10%">
-                                    @if($datas->count()>0)
-                                    {{-- @if($datas[0]->directory->template == 1) --}}
-                                     <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
-                                    {{-- @endif --}}
-                                    @endif
-                                </th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($datas as $data)
-                            
-                            <tr>
-                                @if($data->directory->template==1)    
-                                <td>
-                                    @if($data->sn == '')
-                                        <input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
-                                    @endif
-                                </td>
-                                @endif
-                                <td>
-                                    <div class="align-middle text-sm">
-                                        <div class="">
-                                            <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}</a></h6>
-                                        </div>
-                                    </div>
-                                </td>
-                                <td class="align-middle text-sm">
-                                    {{ $data->sn ?? 'NOT_CERTIFIED' }}
-                                </td>
-                                <td class="align-middle text-center">
-                                    <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y H:i:s') }}</span>
-                                </td>
-                                <td class="align-middle text-end ">
-                                    <a href="{{ route('stemp.show',$data->id) }}" class="btn btn-s btn-primary text-white font-weight-bold text-xs"
-                                        data-toggle="tooltip" data-original-title="Edit Company">
-                                        Detail 
-                                    </a>
-                                    @if($data->sn != '')
-                                        <a href="{{ route('process',$data->id)}}" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" ><i class="fas fa-stamp"></i> Stamp Materai</a>
-                                    @else
-                                    <form action="{{ route('getSerialNumber') }}" method="POST">
-                                        <button class="btn btn-sm btn-info" id="btnGetSN"><i class="fas fa-qrcode"></i> Get Materai</button>
-                                        <input type="hidden" name="doc[]" value={{ $data->id }}>
-                                        @csrf
-                                        {{-- <button href="#" disabled class="btn btn-s btn-disable text-white font-weight-bold text-xs view" >Stemp Document</button> --}}
-                                    </form>
-                                    @endif
-                                </td>
-                            </tr>
-                           
-                            @endforeach
-                            </tbody>
-                    </table>
-                    
-                @endif
-                
             </div>
         </div>
+        <hr class="horizontal dark">
         {{ $datas->links() }}
+
+        @env('local')
+        {{$directory->template}}
+        @endenv
     </div>
 
 
@@ -235,9 +176,7 @@
              $(document).ready(function (e) {
                 $('#selectAll').prop('checked', false);
                 $('#btnGetSN').prop('disabled', true);
-                $('#btnGetSN').hide();
-               
-
+                // $('#btnGetSN').hide();
                 $('#selectAll').on('change',(e)=>{
                     let checkAll = $('#selectAll').is(':checked');
                     var numberNotChecked = $('input:checkbox:not(":checked")').length;

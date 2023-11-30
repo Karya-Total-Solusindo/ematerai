@@ -81,7 +81,13 @@ a.btn-sm{
     {{-- <div class="card-header">
         Configure
     </div> --}}
-    <form action="{{ Route('directory.store') }}" method="post">
+    {{-- kordinat tapilan awal --}}
+<input type="text" placeholder="Lower Left X" class="form-control input-sm" name="x1" value="" hidden />
+<input type="text" placeholder="Lower Left Y" class="form-control input-sm" name="y1" value="" hidden/>
+<input type="text" placeholder="Upper Right X" class="form-control input-sm" name="x2" value="" hidden/>
+<input type="text" placeholder="Upper Right Y" class="form-control input-sm" name="y2" value="" hidden/>
+
+    <form action="{{ Route('directory.store') }}" method="post" enctype="multipart/form-data" >
         @csrf
             <div class="card-body">
             <h4 class="card-title">Create Directory</h4>
@@ -98,22 +104,21 @@ a.btn-sm{
                 </div>
                 <div class="col-md-6">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" autocomplete="off" name="name" id="name" value="{{ $directory->name ?? '' }}" required>
+                    <input type="text" class="form-control" autocomplete="off" name="name" id="name" style="text-transform:uppercase" value="{{ $directory->name ?? '' }}" required>
                     <span></span>
                 </div>
                 <div class="col-md-6">
-                  <div class="form-check">
+                  {{-- <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="template" value="" id="template">
-                    <label class="form-check-label" for="template">
-                      With Template.
-                    </label>
-                  </div>
+                    <label class="form-check-label" for="template"> With Template. </label>
+                  </div> --}}
                     <span></span>
               </div>
             </div>
-            <div class="row" id="template-stemp" style="display: none;">
+            <div class="row" id="template-stemp" style="display:block;">
                 <div class="col-md-12">
-                  <button type="button" class="btn btn-primary btn-block btn-sm col-12" id="upload-button">Pilih File PDF</button> 
+                  <button type="button" class="btn btn-primary btn-block btn-sm col-12" id="upload-button">Template PDF</button> 
+                  @if(env('APP_DEBUG')!=false)
                   <div class="row">
                     <div class="col-md-3">
                       <font style="font-weight: bold"><strong>Lower Left X</strong></font>
@@ -132,13 +137,13 @@ a.btn-sm{
                       <input type="text" class="form-control" name="upper_right_y" value="" style="width: 100%"/>
                     </div>
                   </div>
-                  
-                    <input type="hidden" id="template" value="1" required/>
-                    <input type="file" id="file-to-upload" accept="application/pdf" />
-                    <input type="hidden" name="x1" value="" required/>
-                    <input type="hidden" name="x2" value="" required />
-                    <input type="hidden" name="y1" value="" required />
-                    <input type="hidden" name="y2" value="" required />
+                  @endif
+                    <input type="text" name="template" id="template" value=""  required style="z-index: -4; display:none; position: absolute;"/>
+                    <input type="file" name="file" id="file-to-upload" accept="application/pdf" />
+                    <input type="hidden" name="lower_left_x" value="" required/>
+                    <input type="hidden" name="lower_left_y" value="" required />
+                    <input type="hidden" name="upper_right_x" value="" required />
+                    <input type="hidden" name="upper_right_y" value="" required />
                     <input type="hidden" name="dokumen_height" value="" required="required" />
                     <input type="hidden" name="dokumen_width" value="" required="required" />
                     <input type="hidden" name="dokumen_page" id="dokumen_page" required>
@@ -186,7 +191,7 @@ a.btn-sm{
                     <a class="btn btn-danger" href="{{ route('directory.index') }}">
                             Close 
                     </a>
-                    <button type="submit" class="btn btn-primary">Save</button>
+                    <button type="submit" id="save" class="btn btn-primary">Save</button>
                 </div>
             </div>
         </div>
@@ -206,6 +211,7 @@ a.btn-sm{
 <script src="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/js/jquery.imgareaselect.min.js" integrity="sha512-59swnhUs+9AinrKlTPqsoO5ukNPPFbPXFyaf41MAgiTG/fv3LBZwWQWiZNYeksneLhiUo4xjh/leTZ53sZzQ4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
 
 <script>
+  $('#save').hide();
   var __PDF_DOC,
     __CURRENT_PAGE,
     __TOTAL_PAGES,
@@ -312,14 +318,16 @@ a.btn-sm{
                   y2 : $('input[name="y2"]').val()
                 });
               } else {						
-                $('input[name="x1"]').val(parseInt(lower_left_x));
-                $('input[name="x2"]').val(parseInt(upper_right_x));
-                $('input[name="y1"]').val(parseInt(lower_left_y));
-                $('input[name="y2"]').val(parseInt(upper_right_y));
+                $('input[name="x1"]').val(parseInt(selection.x1));
+                $('input[name="x2"]').val(parseInt(selection.x2));
+                $('input[name="y1"]').val(parseInt(selection.y1));
+                $('input[name="y2"]').val(parseInt(selection.y2));
                 $('input[name="lower_left_x"]').val(parseInt(lower_left_x));
                 $('input[name="lower_left_y"]').val(parseInt(lower_left_y));
                 $('input[name="upper_right_x"]').val(parseInt(upper_right_x));
                 $('input[name="upper_right_y"]').val(parseInt(upper_right_y));
+                $('#template').val(1);
+                $('input[name="template"]').val(1);
               }
             },
             zIndex: -2,
@@ -344,15 +352,16 @@ a.btn-sm{
               lower_left_y = height - (y2 * scale),
               upper_right_x = x2 * scale,
               upper_right_y = height - (y1 * scale);
-            $('input[name="x1"]').val(parseInt(lower_left_x));
-            $('input[name="x2"]').val(parseInt(upper_right_x));
-            $('input[name="y1"]').val(parseInt(lower_left_y));
-            $('input[name="y2"]').val(parseInt(upper_right_y));
+              $('input[name="x1"]').val(parseInt(x1));
+              $('input[name="x2"]').val(parseInt(x2));
+              $('input[name="y1"]').val(parseInt(y1));
+              $('input[name="y2"]').val(parseInt(y2));
             $('input[name="lower_left_x"]').val(parseInt(lower_left_x));
             $('input[name="lower_left_y"]').val(parseInt(lower_left_y));
             $('input[name="upper_right_x"]').val(parseInt(upper_right_x));
             $('input[name="upper_right_y"]').val(parseInt(upper_right_y));
             $('input[name="dokumen_page"]').val(parseInt(__CURRENT_PAGE));
+            $('input[name="template"]').val(1);
             
             
             $( canvaspdf ).imgAreaSelect({ 
@@ -370,6 +379,7 @@ a.btn-sm{
   
         imgsign.src = $('#digital_signature_path').val();
       });
+      $('#save').show();
     });
   }
   
@@ -435,15 +445,15 @@ a.btn-sm{
       showPage(__TOTAL_PAGES);
   });
   
-  $("#template").change(function(e) {
-    console.log($(this).is(':checked'));
-    if ($(this).is(':checked')) {
-        $(this).val(1);
-        $('#template-stemp').show();
-    };
-    if ($(this).is(':checked') == false) {
-        $(this).val(0);
-        $('#template-stemp').hide();
-    };
-  });
+  // $("#template").change(function(e) {
+  //   console.log($(this).is(':checked'));
+  //   if ($(this).is(':checked')) {
+  //       $(this).val(1);
+  //       $('#template-stemp').show();
+  //   };
+  //   if ($(this).is(':checked') == false) {
+  //       $(this).val(0);
+  //       $('#template-stemp').hide();
+  //   };
+  // });
   </script>

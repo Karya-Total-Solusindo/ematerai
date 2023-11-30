@@ -134,6 +134,84 @@ class SignAdapter
         return back()->with($response['message'],$response['result']['sn']);
         return response()->json($dataArray);
     }
+
+    /** 
+     * execusi serial dan lakukan stamp
+    */
+    public static function exeSreialStamp(array $arrayDocumentId){
+
+        try{
+            $Url = config('sign-adapter.API_STEMPTING');
+            foreach ($arrayDocumentId as $id) {
+            $datas = Document::find($id);
+            $stemting = (string) Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
+                ])->withBody(json_encode([
+                    "certificatelevel"=> "NOT_CERTIFIED",
+                    'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
+                    "docpass"=> "",
+                    "jwToken"=> Auth::user()->ematerai_token,
+                    "location"=> "JAKARTA",
+                    "profileName"=> "emeteraicertificateSigner",
+                    "reason"=> "Ematerai Farpoint",
+                    "refToken"=> $datas->sn,
+                    "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
+                    "src"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
+                    'visLLX'=> $datas->x1, //$input['lower_left_x'] ?? '0',
+                    'visLLY'=> $datas->y1, //$input['lower_left_y'] ?? '0',
+                    'visURX'=> $datas->x2, //$input['upper_right_x'] ?? '0',
+                    'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
+                    'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
+                ]))->post($Url)->getBody();
+                $response = json_decode($stemting,true);
+                    //Update status document jika stemting berhasil berhasil
+                        if($response['status']=='True'){
+                            $status = Document::find($id);
+                            $status->certificatelevel = 'CERTIFIED';
+                            $status->update();
+                        }else{
+                            $status = Document::find($id);
+                            $status->certificatelevel = 'FAILUR';
+                            $status->update();
+                            $type = 'application/json';
+                            $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
+                        }
+                    return json_encode($response);
+                }    
+            }catch(\GuzzleHttp\Exception\RequestException $e){
+            // you can catch here 40X response errors and 500 response errors
+             
+            }   
+    }
+
+
+     // lemparan STEMTING
+        /*
+         {
+            "certificatelevel": "NOT_CERTIFIED",
+            "dest": "{{fileStamp}}",  // simpan disini setelah distemting
+            "docpass": "",
+            "jwToken": "{{token}}",
+            "location": "JAKARTA",
+            "profileName": "emeteraicertificateSigner",
+            "reason": "Akta Pejabat",
+            "refToken": "{{serialNumber}}",
+            "spesimenPath": "{{fileQr}}",
+            "src": "{{file}}", //sumber file 
+            "visLLX": 237,
+            "visLLY": 559,
+            "visURX": 337,
+            "visURY": 459,
+            "visSignaturePage": 1
+        } 
+         */
+        //harusnya ambil dari database
+
+
+
+
+
     /**
      * disini method generated Batch Serial number
      * 

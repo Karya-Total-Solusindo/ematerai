@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use DB;
 use App\Models\Company;
 use App\Models\Directory;
 use App\Models\Document;
@@ -24,14 +25,28 @@ class DocumentController extends Controller
     /**
      * Show the form for creating a new resource.
      */
-    public function create()
+    public function create(Directory $directory)
     {
+
         //user data
         $user_id = Auth::user()->id;
-        $companies = Company::where('user_id',$user_id)->orderBy('created_at', 'desc')->get();
+        $directorys = Directory::select('directories.*','companies.name as companyName')
+        ->where('directories.id','=',$directory->id)
+        ->where('directories.user_id','=',$user_id)
+        ->join('companies','companies.id','=','directories.company_id')      
+        ->first();
+        if($directorys){
+            return view('client.document.index', compact('directorys'));
+        }
+        return redirect()->route('company')->with('error', 'No Directory');
+
+        // dd($directorys);
+        // ->where('user_id',$user_id);
+        //where('user_id',$user_id)->orderBy('created_at', 'desc')->get();
+        // $company = Company::where('user_id',$user_id)
         // return
         // return view('client.document.upload.multiple'); // source path
-        return view('client.document.index', compact('companies'));
+        
     }
 
     public function getDirectory(Company $company)
@@ -140,6 +155,12 @@ class DocumentController extends Controller
         $input = $request->all();
         return SignAdapter::getSerial($input['doc']);
     }
+
+    public function stampExecute(Request $request){
+        $input = $request->all();
+        return SignAdapter::exeSreialStamp($input['doc']);
+    }
+    
 
     /**
      * Display the specified resource.

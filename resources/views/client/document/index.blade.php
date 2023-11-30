@@ -3,7 +3,11 @@
     @include('layouts.navbars.auth.topnav', ['title' => 'Stemp'])
     <div class="container-fluid py-4">
         @if (Route::currentRouteName() == 'document.create')
-            @include('client.document.upload.multiple')
+            {{-- @include('client.document.upload.multiple')
+            
+        @elseif(Route::currentRouteName() == 'document.create') --}}
+            @include('client.document.upload.upload_multiple')
+            {{-- @include('client.document.upload.multiple') --}}
         @else
 
         @endif    

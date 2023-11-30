@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Collection;
 
 class DirectoryController extends Controller
@@ -52,7 +53,7 @@ class DirectoryController extends Controller
         if($datas->count()){
             return view("client.configure.directory.index",compact('datas'));
         }
-        return redirect()->route('company.index')->with('success','You have to create a company');
+        return redirect()->route('company.index')->with('error','You have to create a company first');
     }
 
     /**
@@ -66,74 +67,89 @@ class DirectoryController extends Controller
         $company = Company::find($input['company'])->name;
         $this->validate($request, [
             'name' => 'required',
+            'template' => 'required',
+            'file' => 'required',
+            // 'lower_left_x' => 'required',
+            // 'lower_left_y' => 'required',
+            // 'lower_right_x' => 'required',
+            // 'upper_right_y' => 'required',
         ]);
         $uniq = [
             'company_id'=>  $companyId,
-            'name'=> $input['name'],
+            'name'=> Str::upper($input['name']),
             'active'=> 1,
         ];
         $data = [
             'user_id'=> Auth::user()->id,
             'active'=> 1,
             'template'=> $input['template'] ?? '0',
-            'x1'=> $input['x1'] ?? '0',
-            'x2'=> $input['x2'] ?? '0',
-            'y1'=> $input['y1'] ?? '0',
-            'y2'=> $input['y2'] ?? '0',
+            // 'x1'=> $input['x1'] ?? '0',
+            // 'x2'=> $input['x2'] ?? '0',
+            // 'y1'=> $input['y1'] ?? '0',
+            // 'y2'=> $input['y2'] ?? '0',
+            'x1'=> $input['lower_left_x'] ?? '0',
+            'y1'=> $input['lower_left_y'] ?? '0',
+            'x2'=> $input['upper_right_x'] ?? '0',
+            'y2'=> $input['upper_right_y'] ?? '0',
             'height' => $input['dokumen_height'] ?? '0',
             'width' => $input['dokumen_width'] ?? '0',
             'page' => $input['dokumen_page'] ?? '0',
         ];
-        $Company = Directory::updateOrCreate($uniq,$data);
 
-        $name =  strtolower($input['name']);
-        $path = '/docs/'.$company.'/'.$name.'/in';
+        $Company = Directory::updateOrCreate($uniq,$data);
+        $name =  strtoupper($input['name']);
+        $path = '/docs/'.Str::upper($company).'/'.Str::upper($name).'/in';
         Storage::disk('public')->makeDirectory($path);
         if (!File::exists(storage_path($path))) {
             File::makeDirectory(storage_path($path), 0777, true);
         }
         // File::makeDirectory($path, $mode = 0777, true, true);
-        $path = '/docs/'.$company.'/'.$name.'/out';
+        $path = '/docs/'.Str::upper($company).'/'.Str::upper($name).'/out';
         Storage::disk('public')->makeDirectory($path);
         if (!File::exists(storage_path($path))) {
             File::makeDirectory(storage_path($path), 0777, true);
         }
         // File::makeDirectory($path, $mode = 0777, true, true);
-        $path = '/docs/'.$company.'/'.$name.'/backup';
+        $path = '/docs/'.Str::upper($company).'/'.Str::upper($name).'/backup';
         Storage::disk('public')->makeDirectory($path);
         if (!File::exists(storage_path($path))) {
             File::makeDirectory(storage_path($path), 0777, true);
         }
         // File::makeDirectory($path, $mode = 0777, true, true);
-        $path = '/docs/'.$company.'/'.$name.'/spesimen';
+        $path = '/docs/'.Str::upper($company).'/'.Str::upper($name).'/spesimen';
         Storage::disk('public')->makeDirectory($path);
         if (!File::exists(storage_path($path))) {
             File::makeDirectory(storage_path($path), 0777, true);
         }
+        //upload template
+        $file = $request->file('file');
+        $fileName = str_replace('','_','template_'.Str::upper($company).'__'.Str::upper($name).'.pdf');//$file->getClientOriginalName());
+        $templatepath = '/app/public/docs/'.Str::upper($company).'/'.Str::upper($name).'/';
+        $file->move(storage_path($templatepath),$fileName);
         // File::makeDirectory($path, $mode = 0777, true, true);
         // Session::flash('message', 'Image are uploaded successfully');
         return redirect()->route('directory.index')->with('success','created successfully');
     }
     public function upload(Request $request)
     {
+        //multipel upload for ajax  
         $input = $request->all();
         $file = $request->file('file');
         $fileName = str_replace('','_',$file->getClientOriginalName());
-        $path = 'docs/'.$input['company_name'].'/'.$input['directory_name'].'/in';
-        $file->move(public_path($path),$fileName);
+        $path = '/app/public/docs/'.Str::upper($input['company_name']).'/'.Str::upper($input['directory_name']).'/in';
+        $file->move(storage_path($path),$fileName);
         $companyId = $input['company'];
         $user = Auth::user()->id;
         $uniq = [
-           
-           
             // 'active'=> 1,
         ];
         $data = [ 
             'user_id'=>  $user,
             'company_id'=>  $companyId,
             'directory_id'=> $input['directory'],
+            'docnumber'=> Str::uuid(),
             'active'=> 1,
-            'source'=> '/docs/'.$input['company_name'].'/'.$input['directory_name'].'/in/'.$fileName ?? '0',
+            'source'=> '/docs/'.Str::upper($input['company_name']).'/'.Str::upper($input['directory_name']).'/in/'.$fileName ?? '0',
             'x1'=> $input['x1'] ?? '0',
             'x2'=> $input['x2'] ?? '0',
             'y1'=> $input['y1'] ?? '0',
@@ -167,20 +183,118 @@ class DirectoryController extends Controller
     {
         $user = Auth::user()->id;
         $id = $directory->id;
-        $company = User::with('company')->where('id',$user)->get();
-        $datas = Directory::where('id',$id)->get();
+        $datas = Directory::where('id',$id)->first();
+        $company = User::with('company')->where('id',$user)->first();
+        $templatefile = Str::upper($datas->company->name).'__'.Str::upper($datas->name).'.pdf';
+        $templatepath =  'storage/docs/'.Str::upper($datas->company->name).'/'.Str::upper($datas->name).'/'.'template_'.$templatefile;
+        $fileThemp = false;
+        if (File::exists(public_path($templatepath))){
+            // untuk diset di showPDF({{ }});
+            $fileThemp = url($templatepath);
+        }
+    
         if($datas->count()){
-            return view("client.configure.directory.index",compact('directory','company'));
+            return view("client.configure.directory.index",compact('datas','directory','company','fileThemp'));
         }
         return redirect()->route('company.index')->with('success','You have to create a company');
     }
+
+
+    /**
+     * Show the form for editing the specified resource. backup
+     */
+    // public function edit(Directory $directory)
+    // {
+    //     $user = Auth::user()->id;
+    //     $id = $directory->id;
+    //     $company = User::with('company')->where('id',$user)->get();
+    //     $datas = Directory::where('id',$id)->get();
+    //     if($datas->count()){
+    //         return view("client.configure.directory.index",compact('directory','company'));
+    //     }
+    //     return redirect()->route('company.index')->with('success','You have to create a company');
+    // }
 
     /**
      * Update the specified resource in storage.
      */
     public function update(Request $request, Directory $directory)
     {
-        //
+        $input = $request->all();
+        //dd($input);
+        //$companyId = $input['company'];
+        $company = Company::find($directory->company_id)->name;
+        $input['name']= $directory->name;
+      $this->validate($request, [
+            // 'name' => 'required',
+            'template' => 'required',
+            // 'lower_left_x' => 'required',
+            // 'lower_left_y' => 'required',
+            // 'lower_right_x' => 'required',
+            // 'upper_right_y' => 'required',
+        ]);
+        // dd($directory);
+        $uniq = [
+            'company_id'=>  $directory->company_id,
+            'name'=> $directory->name,
+            'active'=> 1,
+        ];
+
+       
+        $data = [
+            'user_id'=> Auth::user()->id,
+            'active'=> 1,
+            'template'=> $input['template'] ?? '0',
+            // 'x1'=> $input['x1'] ?? '0',
+            // 'x2'=> $input['x2'] ?? '0',
+            // 'y1'=> $input['y1'] ?? '0',
+            // 'y2'=> $input['y2'] ?? '0',
+            'x1'=> $input['lower_left_x'] ?? '0',
+            'y1'=> $input['lower_left_y'] ?? '0',
+            'x2'=> $input['upper_right_x'] ?? '0',
+            'y2'=> $input['upper_right_y'] ?? '0',
+            'height' => $input['dokumen_height'] ?? '0',
+            'width' => $input['dokumen_width'] ?? '0',
+            'page' => $input['dokumen_page'] ?? '0',
+        ];
+
+        // $Company = Directory::update([$data]);
+        $directory->update($data);
+        
+        $name =  strtoupper($input['name']);
+        $path = '/docs/'.Str::upper($company).'/'.Str::upper($name).'/in';
+        Storage::disk('public')->makeDirectory($path);
+        if (!File::exists(storage_path($path))) {
+            File::makeDirectory(storage_path($path), 0777, true);
+        }
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.Str::upper($company).'/'.Str::upper($name).'/out';
+        Storage::disk('public')->makeDirectory($path);
+        if (!File::exists(storage_path($path))) {
+            File::makeDirectory(storage_path($path), 0777, true);
+        }
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.Str::upper($company).'/'.Str::upper($name).'/backup';
+        Storage::disk('public')->makeDirectory($path);
+        if (!File::exists(storage_path($path))) {
+            File::makeDirectory(storage_path($path), 0777, true);
+        }
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        $path = '/docs/'.Str::upper($company).'/'.Str::upper($name).'/spesimen';
+        Storage::disk('public')->makeDirectory($path);
+        if (!File::exists(storage_path($path))) {
+            File::makeDirectory(storage_path($path), 0777, true);
+        }
+        //upload template
+        $file = $request->file('file');
+        if($file){
+            $fileName = str_replace('','_','template_'.Str::upper($company).'__'.Str::upper($name).'.pdf');//$file->getClientOriginalName());
+            $templatepath = '/app/public/docs/'.Str::upper($company).'/'.Str::upper($name).'/';
+            $file->move(storage_path($templatepath),$fileName);
+        }
+        // File::makeDirectory($path, $mode = 0777, true, true);
+        // Session::flash('message', 'Image are uploaded successfully');
+        return redirect()->route('directory.index')->with('success','update successfully');
     }
 
     /**

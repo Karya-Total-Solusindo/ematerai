@@ -85,7 +85,7 @@
             </div>
             <div class="col text-end">
                 {{-- <a @class(['btn btn-primary', 'font-bold' => true]) href="{{ route('company.create') }}"> Create</a> --}}
-                <a @class(['btn btn-sm btn-primary', 'font-bold' => true]) href="{{ route('document.create') }}"> Create</a>
+                {{-- <a @class(['btn btn-sm btn-primary', 'font-bold' => true]) href="{{ route('document.create') }}"> Create</a> --}}
             </div>
             {{-- <p class="card-text">Text</p> --}}
         </div>
