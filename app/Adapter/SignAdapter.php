@@ -123,6 +123,9 @@ class SignAdapter
                 Document::where('id', $id)
                 ->update(['sn'=>$sn,'spesimenPath' => $desPath."/spesimen/".$sn.".png"]);
             }else{
+                $status = Document::find($id);
+                $status->certificatelevel = 'FAILUR';
+                $status->update();
                 //$status = Document::find($id);
                 //$status->update();
                 //$type = 'application/json';
@@ -139,7 +142,7 @@ class SignAdapter
      * execusi serial dan lakukan stamp
     */
     public static function exeSreialStamp(array $arrayDocumentId){
-
+        $dataArray =[];
         try{
             $Url = config('sign-adapter.API_STEMPTING');
             foreach ($arrayDocumentId as $id) {
@@ -174,14 +177,13 @@ class SignAdapter
                             $status = Document::find($id);
                             $status->certificatelevel = 'FAILUR';
                             $status->update();
-                            $type = 'application/json';
-                            $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
                         }
-                    return json_encode($response);
-                }    
+                        array_push($dataArray,$response);
+                        // return json_encode($response);
+                }
+                return response()->json($dataArray);    
             }catch(\GuzzleHttp\Exception\RequestException $e){
             // you can catch here 40X response errors and 500 response errors
-             
             }   
     }
 

@@ -81,19 +81,31 @@
           </div>
       </div>
     </div>
- 
-
+    @if(config('app.debug'))
     <script type="text/javascript">
+      const dev = true;  
+    </script>
+    @else
+    <script type="text/javascript">
+      const dev = false;  
+    </script>
+    @endif
+    <script type="text/javascript">
+
+
       Dropzone.options.dropzone =
        {
-          maxFilesize: 12,
+          maxFilesize: 16,
           renameFile: function(file) {
               var dt = new Date();
               var time = Math.ceil(dt.getTime()/1000);
-             return time+'_'+file.name;
+              if(dev==false){
+                  return time+'_'+file.name;
+              }
+              return file.name;
           },
           acceptedFiles: ".pdf",
-          addRemoveLinks: true,
+          addRemoveLinks: false,
           timeout: 5000,
           success: function(file, response) 
           {
