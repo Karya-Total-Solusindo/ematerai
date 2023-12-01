@@ -147,15 +147,22 @@ class DocumentController extends Controller
      *  certificatelevel
     */
     public function setInProgres(Request $request){
-        $document_id = $request->all();
-        foreach ($document_id['doc'] as $id) {
+        $document_id = $request->post('doc');
+        // dd($document_id);
+        $countSuccess = 0; 
+        $CountError = 0; 
+        foreach ($document_id as $id) {
                 $document = Document::where('id',$id)
                 ->update(['certificatelevel' => 'INPROGRESS']);
                 if($document){
-                  return redirect()->back()->with('success','The document was successfully sent in the processing queue.');    
+                    $countSuccess++;
+                }else{
+                    $CountError++;
                 }
-                return redirect()->back()->with('error','Failed sent to the processing queue.');    
-        }
+
+            }
+        return redirect()->back()->with('success','The document was successfully sent in the processing queue.<br> 
+        Success: '.$countSuccess.'<br> Failed: '.$CountError);        
     }
 
     public function getSerialNumber(Request $request){
