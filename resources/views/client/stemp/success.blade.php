@@ -6,6 +6,7 @@
                 <h4 class="card-title"><i class="ni ni-paper-diploma"></i> Certified Document</h4> 
             </div>
             <div class="col text-end">
+                <a class="btn btn-info" href="{{ route('exportSuccecc') }}">Export File</a>
                 {{-- <a @class(['btn btn-primary', 'font-bold' => true]) href="{{ route('directory.index') }}"> Create</a> --}}
             </div>
             {{-- <p class="card-text">Text</p> --}}

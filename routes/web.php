@@ -106,6 +106,7 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::post('/stemp/stemp', [StempController::class, 'stemp'])->middleware('auth')->name('stemp.stemp');
     Route::get('/stemp/success', [StempController::class, 'success'])->middleware('auth')->name('success');
     Route::get('/stemp/_modalProcess', [StempController::class, '_modalProcess'])->middleware('auth')->name('_modalProcess');
+    Route::get('/stemp/exportSuccess', [StempController::class, 'exportSuccecc'])->middleware('auth')->name('exportSuccecc');
     
     
     // Route::get('/stemp/{stemp}', [StempController::class, 'show'])->middleware('auth')->name('stemp.show');

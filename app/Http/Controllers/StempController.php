@@ -18,7 +18,12 @@ use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cookie;
 use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Storage;
+//excel
+use App\Exports\ExportDocumentSuccess;
+use App\Exports\ExportDocumentSuccessView;
 
+use Maatwebsite\Excel\Concerns\ToModel;
+use Maatwebsite\Excel\Facades\Excel;
 
 class StempController extends Controller
 {
@@ -411,6 +416,22 @@ class StempController extends Controller
             ->view('client.stemp.stemp', compact('datas'), 200)
             ->header('Content-Type', 'text/html; charset=UTF-8');
     }
-   
+
+        /**TODO Status Success Export Excel - 
+         * 
+         */
+       public function exportSuccecc() 
+        {
+        $heading = [
+            'NO',
+            'DOCUMENT',
+            'COMPANY',
+            'DIRECTORY',
+            'Status',
+            'STEMP',
+            'Date',
+        ];
+        return   Excel::download(new ExportDocumentSuccess, date('Y_m_d').'_Ematerai_Document_Stamp_Success.xlsx',\Maatwebsite\Excel\Excel::XLSX,$heading);
+        }
 
 }

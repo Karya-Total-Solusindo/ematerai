@@ -30,9 +30,8 @@ class SignAdapter
             'user' => env('EMATRERAI_USER'),
             'password' => env('EMATRERAI_PASSWORD'),
         ]))->post($Url);   
-
-            $responseC = response($response);
-            $responseC->withCookie(cookie('_token_ematerai',$response['token'], self::$minutes,'/'));
+            //$responseC = response($response);
+            //$responseC->withCookie(cookie('_token_ematerai',$response['token'], self::$minutes,'/'));
             // return $responseC;
         if($response['message'] == 'success'){ 
             return $response['token'];
@@ -84,10 +83,16 @@ class SignAdapter
                 "tgldoc"=> $doc['created_at']->format('Y-m-d')
             ];
             // do generated SN
+            $__token = '';
+            if(Auth::user()->ematerai_token){
+                $__token = Auth::user()->ematerai_token;
+            }else{
+                $__token =  self::getToken();
+            }
             $Url = config('sign-adapter.API_GENERATE_SERIAL_NUMBER');
             $requestAPI = (string) Http::withHeaders([
                 'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
+                'Authorization' => 'Bearer ' . $__token,
             ])->withBody(json_encode($data))->post($Url);
             $response = json_decode($requestAPI,true);
             $response['data'] = $doc; 
@@ -144,23 +149,30 @@ class SignAdapter
     public static function exeSreialStamp(array $arrayDocumentId){
         $dataArray =[];
         try{
+             // do generated SN
+             $__token = '';
+             if(isset(Auth::user()->ematerai_token)){
+                 $__token = Auth::user()->ematerai_token;
+             }else{
+                 $__token =  self::getToken();
+             }
             $Url = config('sign-adapter.API_STEMPTING');
             foreach ($arrayDocumentId as $id) {
             $datas = Document::find($id);
             $stemting = (string) Http::withHeaders([
                     'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
+                    'Authorization' => 'Bearer ' . $__token,
                 ])->withBody(json_encode([
                     "certificatelevel"=> "NOT_CERTIFIED",
-                    'dest'=>  '/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
+                    'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
                     "docpass"=> "",
-                    "jwToken"=> Auth::user()->ematerai_token,
+                    "jwToken"=> $__token,
                     "location"=> "JAKARTA",
                     "profileName"=> "emeteraicertificateSigner",
                     "reason"=> "Ematerai Farpoint",
                     "refToken"=> $datas->sn,
-                    "spesimenPath"=> '/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
-                    "src"=> '/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
+                    "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
+                    "src"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
                     'visLLX'=> $datas->x1, //$input['lower_left_x'] ?? '0',
                     'visLLY'=> $datas->y1, //$input['lower_left_y'] ?? '0',
                     'visURX'=> $datas->x2, //$input['upper_right_x'] ?? '0',

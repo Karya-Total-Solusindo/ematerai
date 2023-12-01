@@ -173,6 +173,8 @@ return [
         # PrettyRoutes
         Collective\Html\HtmlServiceProvider::class,
         PrettyRoutes\ServiceProvider::class,
+
+        Maatwebsite\Excel\ExcelServiceProvider::class,
     ])->toArray(),
 
     /*
@@ -189,6 +191,7 @@ return [
     'aliases' => Facade::defaultAliases()->merge([
         // 'Example' => App\Facades\Example::class,
         'SignAdapter' => App\Adapter\SignAdapter::class,
+        'Excel' => Maatwebsite\Excel\Facades\Excel::class,
     ])->toArray(),
 
     

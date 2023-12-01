@@ -50,11 +50,14 @@
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
+                             
                                 @if($directory->count()>0)
                                     @if($directory->template==1)
-                                        <td><input type="checkbox" id="selectAll"></td>
+                                    <td><input type="checkbox" id="selectAll"></td>
                                     @endif
                                 @endif
+                                <th class="text-uppercase text-start text-secondary text-xxs font-weight-bolder opacity-7">
+                                    No</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                     Name</th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -71,8 +74,10 @@
                             </tr>
                         </thead>
                         <tbody>
-                            @foreach ($datas as $data)
+                            @foreach ($datas  as $k =>  $data)
                             <tr>
+                                
+                               
                                 @if($data->directory->template==1)    
                                 <td>
                                     @if($data->sn == '')
@@ -80,10 +85,15 @@
                                     @endif
                                 </td>
                                 @endif
+                                <td class="align-middle text-center">
+                                    {{ $k+1 }}
+                                </td>
                                 <td>
                                     <div class="align-middle text-sm">
                                         <div class="">
-                                            <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}</a></h6>
+                                            <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}
+                                                
+                                            </a></h6>
                                         </div>
                                     </div>
                                 </td>
@@ -94,6 +104,7 @@
                                     <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y H:i:s') }}</span>
                                 </td>
                                 <td class="align-middle text-end ">
+                                   
                                     {{-- <a href="{{ route('stemp.show',$data->id) }}" class="btn btn-s btn-primary text-white font-weight-bold text-xs"
                                         data-toggle="tooltip" data-original-title="Edit Company">
                                         Detail 
