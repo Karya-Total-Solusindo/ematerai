@@ -135,7 +135,7 @@ class DirectoryController extends Controller
         //multipel upload for ajax  
         $input = $request->all();
         $file = $request->file('file');
-        $fileName = str_replace('','_',$file->getClientOriginalName());
+        $fileName = str_replace(' ','_',$file->getClientOriginalName());
         $path = '/app/public/docs/'.Str::upper($input['company_name']).'/'.Str::upper($input['directory_name']).'/in';
         $file->move(storage_path($path),$fileName);
         $companyId = $input['company'];
