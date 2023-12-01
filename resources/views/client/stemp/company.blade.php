@@ -98,7 +98,7 @@
                                 <li data-jstree='{"icon":"fas fa-folder","disabled":false}' class="mt-2">
                                     <a title="{{$data->created_at->format('d/m/Y H:i:s')}}"> 
                                         <b class="ms-2">{{$data->name}}</b>
-                                        <span class="position-absolute ms-1 border border-light badge badge-xs bg-gradient-warning">{{App\Models\Directory::where('company_id',$data->id)->count()}}</span>
+                                        {{-- <span class="position-absolute ms-1 border border-light badge badge-xs bg-gradient-warning">{{App\Models\Directory::where('company_id',$data->id)->count()}}</span> --}}
                                         {{-- <font size="1">{{$data->created_at->format('d/m/Y H:i:s')}}</font> --}}
                                     </a>
                                     <ul>
