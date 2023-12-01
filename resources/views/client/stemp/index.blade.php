@@ -20,7 +20,9 @@
             @endif
         
         @elseif (Route::currentRouteName() == 'progress')
-            @include('client.stemp.progress')    
+            @include('client.stemp.progress')  
+        @elseif (Route::currentRouteName() == 'failed')
+            @include('client.stemp.failed')            
         @elseif (Route::currentRouteName() == 'process')  
             @include('client.stemp.stemp')
         @elseif (Route::currentRouteName() == 'success')  

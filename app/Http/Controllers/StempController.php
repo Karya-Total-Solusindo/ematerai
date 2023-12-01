@@ -407,6 +407,36 @@ class StempController extends Controller
         }
         return view("client.stemp.index", compact("datas"));
     }
+
+     /**
+     * List Success Stemp.
+     */
+    public function failed(Request $request)
+    {
+        $user = Auth::user()->id;
+        if (($s = $request->s)) {
+            $datas =  Document::where([
+                [function ($query) use ($request) {
+                    if (($s = $request->s)) {
+                        $query->orWhere('filename', 'LIKE', '%' . $s . '%')
+                        ->Where('certificatelevel','=','FAILUR')
+                        ->Where('user_id','=',Auth::user()->id)
+                        ->orderBy('updated_at', 'desc')
+                            ->get();
+                    }
+                }]
+            ])->with('company')->orderBy('updated_at', 'desc')->paginate(5);
+        }else{
+            $datas =  Document::with('company')
+            ->where('user_id','=',Auth::user()->id)
+            ->where('certificatelevel','=','FAILUR')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(5);
+        }
+        return view("client.stemp.index", compact("datas"));
+    }
+
+
     /**
      * List Success Stemp.
      */

@@ -115,7 +115,7 @@
             <ul class="submenu collapse rounded {{ request()->segment(1) == 'stemp' ? 'show' : '' }}">
                 <li><a class="nav-link rounded {{ request()->segment(2) == 'company' ? 'active' : '' }}" href="{{route('company')}}">New </a></li>
                 <li><a class="nav-link rounded {{ request()->segment(2) == 'progress' ? 'active' : '' }}" href="{{route('progress')}}">In Progress </a></li>
-                <li><a class="nav-link rounded {{ request()->segment(2) == 'failed' ? 'active' : '' }}" href="{{route('progress')}}">Failed </a></li>
+                <li><a class="nav-link rounded {{ request()->segment(2) == 'failed' ? 'active' : '' }}" href="{{route('failed')}}">Failed </a></li>
                 
                 {{-- <li><a class="nav-link rounded" href="#">On Process </a></li> --}}
                 <li><a class="nav-link rounded {{ request()->segment(2) == 'success' ? 'active' : '' }}" href="{{route('success')}}">Success </a></li>
