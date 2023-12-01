@@ -18,6 +18,9 @@
                 {{-- @include('client.stemp.upload_multiple')     --}}
                 {{-- @include('client.document.upload.multiple')     --}}
             @endif
+        
+        @elseif (Route::currentRouteName() == 'progress')
+            @include('client.stemp.progress')    
         @elseif (Route::currentRouteName() == 'process')  
             @include('client.stemp.stemp')
         @elseif (Route::currentRouteName() == 'success')  

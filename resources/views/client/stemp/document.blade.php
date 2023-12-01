@@ -45,8 +45,10 @@
             <div class="table-responsive p-0">
                 {{-- Show data with template --}}
                 
-                {{-- <form id="execute" action="{{ route('getSerialNumber') }}" method="POST"> --}}
-                    <form id="execute" action="{{ route('stampExecute') }}" method="POST">test 
+                    {{-- <form id="execute" action="{{ route('getSerialNumber') }}" method="POST"> --}}
+                        {{-- Update status to INPROGRES --}}
+                    <form id="execute" action="{{ route('setInProgres') }}" method="POST"> 
+                        {{-- <form id="execute" action="{{ route('stampExecute') }}" method="POST">  --}}
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>

@@ -99,7 +99,10 @@ class StempController extends Controller
     {
         $user = Auth::user()->id;
         $request['directory_id'] = $directory_id;
-        $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])->orderBy('updated_at', 'desc')->paginate(5);
+        $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])
+        ->Where('certificatelevel','<>', 'CERTIFIED')
+        ->Where('certificatelevel','<>', 'INPROGRESS')
+        ->orderBy('updated_at', 'desc')->paginate(5);
         if (($s = $request->s)) {
             $datas = Document::where([
                 [function ($query) use ($request) {
@@ -109,6 +112,7 @@ class StempController extends Controller
                         ->orWhere('sn', 'LIKE', '%' . $s . '%')
                         ->Where('user_id', $user)
                         ->Where('certificatelevel','<>', 'CERTIFIED')
+                        ->Where('certificatelevel','<>', 'INPROGRESS')
                         ->Where('directory_id', $request->company)
                         ->orderBy('updated_at', 'desc')
                         ->get();
@@ -378,6 +382,30 @@ class StempController extends Controller
             // you can catch here 40X response errors and 500 response errors
              
             }      
+    }
+    public function progress(Request $request)
+    {
+        $user = Auth::user()->id;
+        if (($s = $request->s)) {
+            $datas =  Document::where([
+                [function ($query) use ($request) {
+                    if (($s = $request->s)) {
+                        $query->orWhere('filename', 'LIKE', '%' . $s . '%')
+                        ->Where('certificatelevel','=','INPROGRESS')
+                        ->Where('user_id','=',Auth::user()->id)
+                        ->orderBy('updated_at', 'desc')
+                            ->get();
+                    }
+                }]
+            ])->with('company')->orderBy('updated_at', 'desc')->paginate(5);
+        }else{
+            $datas =  Document::with('company')
+            ->where('user_id','=',Auth::user()->id)
+            ->where('certificatelevel','=','INPROGRESS')
+            ->orderBy('updated_at', 'desc')
+            ->paginate(5);
+        }
+        return view("client.stemp.index", compact("datas"));
     }
     /**
      * List Success Stemp.

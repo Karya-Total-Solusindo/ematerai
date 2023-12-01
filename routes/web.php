@@ -91,6 +91,7 @@ Route::group(['middleware' => ['auth'],], function () {
     });
     Route::group([ 'prefix' => 'serialnumber'], function(){
         // Route::get('/getOne', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
+        Route::post('/setInProgres', [DocumentController::class, 'setInProgres'])->middleware('auth')->name('setInProgres');
         Route::post('/exeStamp', [DocumentController::class, 'stampExecute'])->middleware('auth')->name('stampExecute');
         Route::post('/getOne', [DocumentController::class, 'getSerialNumber'])->middleware('auth')->name('getSerialNumber');
         // getSerialNumberBatch tidakdipakai
@@ -101,9 +102,11 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::get('/stemp/company', [StempController::class, 'company'])->middleware('auth')->name('company');
     Route::get('/stemp/company/{company}', [StempController::class, 'directory'])->middleware('auth')->name('directory');
     Route::get('/stemp/company/directory/{directory}', [StempController::class, 'document'])->middleware('auth')->name('document');
+
     Route::get('/stemp/company/directory/add/{directory}', [StempController::class, 'addfile'])->middleware('auth')->name('add.file');
     Route::get('/stemp/process/{document}', [StempController::class, 'process'])->middleware('auth')->name('process');
     Route::post('/stemp/stemp', [StempController::class, 'stemp'])->middleware('auth')->name('stemp.stemp');
+    Route::get('/stemp/progress', [StempController::class, 'progress'])->middleware('auth')->name('progress');
     Route::get('/stemp/success', [StempController::class, 'success'])->middleware('auth')->name('success');
     Route::get('/stemp/_modalProcess', [StempController::class, '_modalProcess'])->middleware('auth')->name('_modalProcess');
     Route::get('/stemp/exportSuccess', [StempController::class, 'exportSuccecc'])->middleware('auth')->name('exportSuccecc');

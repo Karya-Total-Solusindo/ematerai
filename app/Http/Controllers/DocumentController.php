@@ -39,14 +39,6 @@ class DocumentController extends Controller
             return view('client.document.index', compact('directorys'));
         }
         return redirect()->route('company')->with('error', 'No Directory');
-
-        // dd($directorys);
-        // ->where('user_id',$user_id);
-        //where('user_id',$user_id)->orderBy('created_at', 'desc')->get();
-        // $company = Company::where('user_id',$user_id)
-        // return
-        // return view('client.document.upload.multiple'); // source path
-        
     }
 
     public function getDirectory(Company $company)
@@ -149,6 +141,21 @@ class DocumentController extends Controller
         $input = $request->all();
         // dd($request->all());
         return SignAdapter::getBatchSerial($input['doc']);
+    }
+
+    /**TODO update status  tu INPROGRESS 
+     *  certificatelevel
+    */
+    public function setInProgres(Request $request){
+        $document_id = $request->all();
+        foreach ($document_id['doc'] as $id) {
+                $document = Document::where('id',$id)
+                ->update(['certificatelevel' => 'INPROGRESS']);
+                if($document){
+                  return redirect()->back()->with('success','The document was successfully sent in the processing queue.');    
+                }
+                return redirect()->back()->with('error','Failed sent to the processing queue.');    
+        }
     }
 
     public function getSerialNumber(Request $request){
