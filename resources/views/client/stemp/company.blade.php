@@ -106,7 +106,9 @@
                                         <li data-jstree='{"icon":"fas fa-folder","disabled":false}' class="mt-2">
                                             <a href="{{ route('document',$dir->id) }}">
                                                 <b class="ms-2" title="{{$data->created_at->format('d/m/Y H:i:s')}}">{{$dir->name}}</b>
-                                                <span class="position-absolute ms-1 border border-light badge badge-xs bg-gradient-warning">{{App\Models\Document::where('directory_id',$dir->id)->count()}}</span>
+                                                @if(App\Models\Document::where('directory_id',$dir->id)->where('certificatelevel','NEW')->count()>=0)
+                                                <span class="position-absolute ms-1 border border-light badge badge-xs bg-gradient-warning">{{App\Models\Document::where('directory_id',$dir->id)->where('certificatelevel','NEW')->count()}}</span>
+                                                @endif
                                             </a>
                                         </li>
                                     @endforeach    
