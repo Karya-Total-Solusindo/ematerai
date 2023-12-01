@@ -158,6 +158,7 @@ class DirectoryController extends Controller
             'width' => $input['dokumen_width'] ?? '0',
             'page' => $input['dokumen_page'] ?? '0',
             'filename' => $input['filename'] ?? '0',
+            'certificatelevel' => 'NEW'
             
         ];
         $fileUpload =  Document::Create($data);
