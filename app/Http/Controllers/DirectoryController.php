@@ -163,7 +163,7 @@ class DirectoryController extends Controller
         $fileUpload =  Document::Create($data);
         $fileUpload->filename = $fileName;
         $fileUpload->save();
-        return response()->json(['success'=>$fileName]);
+        return response()->json(['success'=>$fileName,'path'=> $path.$fileName]);
     }
 
     /**
