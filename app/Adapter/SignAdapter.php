@@ -195,8 +195,11 @@ class SignAdapter
                 }
                 return response()->json($dataArray);    
             }catch(\GuzzleHttp\Exception\RequestException $e){
-            // you can catch here 40X response errors and 500 response errors
+            // you can catch here 40X re
+            // sponse errors and 500 response errors
+                return back()->with($response['message'],'500 response errors');
             }   
+            return back()->with($response['message'],'Success');
     }
 
 
