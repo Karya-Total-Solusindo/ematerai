@@ -3,7 +3,7 @@
     <div class="card-body">
         <div class="row p-0">
             <div class="col">
-                <h4 class="card-title"><i class="ni ni-paper-diploma"></i> Certified Document</h4> 
+                <h4 class="card-title"><i class="ni ni-paper-diploma"></i>  Stamp Processing</h4> 
             </div>
             <div class="col text-end">
                 <a class="btn btn-info" href="{{ route('exportSuccecc') }}">Export File</a>
@@ -38,8 +38,9 @@
                                 Sataus</th>
                             {{-- <th
                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                Stemp</th>
-                            <th class="text-secondary opacity-7"></th> --}}
+                                Stemp</th> --}}
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                Last Update</th>
                         </tr>
                     </thead>
                     <tbody>
