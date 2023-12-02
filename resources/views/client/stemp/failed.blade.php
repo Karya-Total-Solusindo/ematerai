@@ -85,6 +85,9 @@
                                 </a>
                             </td> --}}
                         </tr>
+                        <tr class="error text-danger">
+                            <td colspan="5"><i class="fas fa-warning"></i> Error: <small class="text-muted"><em>{{$data->message}}</em></small></td>
+                        </tr>
                         @endforeach
                         </tbody>
                     @endif    

@@ -96,7 +96,9 @@ class SignAdapter
             ])->withBody(json_encode($data))->post($Url);
             $response = json_decode($requestAPI,true);
             $response['data'] = $doc; 
-            if($response['statusCode'] == '01'){
+            if($response['statusCode'] != '00'){
+                Document::where('id', $id)
+                ->update(['message'=>$response['result']['err']]);
                 return back()->with($response['message'],$response['result']['err']);
             }
             // return response()->json([$response,$data]);
@@ -188,6 +190,7 @@ class SignAdapter
                         }else{
                             $status = Document::find($id);
                             $status->certificatelevel = 'FAILUR';
+                            $status->message = $response['errorMessage'];
                             $status->update();
                         }
                         array_push($dataArray,$response);

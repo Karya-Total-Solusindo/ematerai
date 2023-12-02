@@ -13,7 +13,7 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('document', function ($table) {
-           $table->string('massage')->nullable();
+           $table->string('message')->nullable();
         });
     }
 
@@ -23,7 +23,7 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('document', function($table) {
-            $table->dropColumn('massage');
+            $table->dropColumn('message');
         });
     }
 };
