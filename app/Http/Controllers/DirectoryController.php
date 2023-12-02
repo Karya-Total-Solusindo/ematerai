@@ -136,38 +136,42 @@ class DirectoryController extends Controller
     {
         //multipel upload for ajax  
         $input = $request->all();
-        $directory = Directory::find($input['directory'])->first();
-        $file = $request->file('file');
-        $fileName = str_replace(' ','_',$file->getClientOriginalName());
-        $path = '/app/public/docs/'.Str::upper($directory->company->name).'/'.Str::upper($directory->name).'/in';
-        $file->move(storage_path($path),$fileName);
-        $companyId = $input['company'];
-        $user = Auth::user()->id;
-        $uniq = [
-            // 'active'=> 1,
-        ];
-        $data = [ 
-            'user_id'=>  $user,
-            'company_id'=>  $companyId,
-            'directory_id'=> $input['directory'],
-            'docnumber'=> Str::uuid(),
-            'active'=> 1,
-            'source'=> '/docs/'.Str::upper($input['company_name']).'/'.Str::upper($input['directory_name']).'/in/'.$fileName ?? '0',
-            'x1'=> $input['x1'] ?? '0',
-            'x2'=> $input['x2'] ?? '0',
-            'y1'=> $input['y1'] ?? '0',
-            'y2'=> $input['y2'] ?? '0',
-            'height' => $input['dokumen_height'] ?? '0',
-            'width' => $input['dokumen_width'] ?? '0',
-            'page' => $input['dokumen_page'] ?? '0',
-            'filename' => $input['filename'] ?? '0',
-            'certificatelevel' => 'NEW'
-            
-        ];
-        $fileUpload =  Document::Create($data);
-        $fileUpload->filename = $fileName;
-        $fileUpload->save();
-        return response()->json(['success'=>$fileName,'path'=> $path.'/'.$fileName]);
+        $directorys = Directory::where('id',$input['directory']);
+        $directory = $directorys->first();
+        if($directorys->get()->count()==1){
+            $file = $request->file('file');
+            $fileName = str_replace(' ','_',$file->getClientOriginalName());
+            $path = '/app/public/docs/'.Str::upper($directory->company->name).'/'.Str::upper($directory->name).'/in';
+            $file->move(storage_path($path),$fileName);
+            $companyId = $input['company'];
+            $user = Auth::user()->id;
+            $uniq = [
+                // 'active'=> 1,
+            ];
+            $data = [ 
+                'user_id'=>  $user,
+                'company_id'=>  $companyId,
+                'directory_id'=> $input['directory'],
+                'docnumber'=> Str::uuid(),
+                'active'=> 1,
+                'source'=> '/docs/'.Str::upper($directory->company->name).'/'.Str::upper($directory->company->name).'/in/'.$fileName ?? '0',
+                'x1'=> $input['x1'] ?? '0',
+                'x2'=> $input['x2'] ?? '0',
+                'y1'=> $input['y1'] ?? '0',
+                'y2'=> $input['y2'] ?? '0',
+                'height' => $input['dokumen_height'] ?? '0',
+                'width' => $input['dokumen_width'] ?? '0',
+                'page' => $input['dokumen_page'] ?? '0',
+                'filename' => $input['filename'] ?? '0',
+                'certificatelevel' => 'NEW'
+                
+            ];
+            $fileUpload =  Document::Create($data);
+            $fileUpload->filename = $fileName;
+            $fileUpload->save();
+            return response()->json(['success'=>$fileName,'path'=> $path.'/'.$fileName,'directory'=>$directory]);
+            }
+            return response()->json(['error'=>'No Directory']);    
     }
 
     /**
