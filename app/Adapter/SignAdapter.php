@@ -69,7 +69,7 @@ class SignAdapter
         $dataArray =[];    
         foreach ($arrayDocumentId as $id) {
             $doc = Document::find($id);
-            $desPath = '/docs/'.$doc->company->name.'/'.$doc->directory->name;
+            $desPath = '/docs/'.strtoupper($doc->company->name).'/'.strtoupper($doc->directory->name);
             $data = [
                 "isUpload"=> false,
                 "namadoc"=> "4b",
@@ -82,13 +82,9 @@ class SignAdapter
                 "nodoc"=> $doc['docnumber'],
                 "tgldoc"=> $doc['created_at']->format('Y-m-d')
             ];
+            // get jwt Token
+            $__token = self::getToken();
             // do generated SN
-            $__token = '';
-            if(Auth::user()->ematerai_token){
-                $__token = Auth::user()->ematerai_token;
-            }else{
-                $__token =  self::getToken();
-            }
             $Url = config('sign-adapter.API_GENERATE_SERIAL_NUMBER');
             $requestAPI = (string) Http::withHeaders([
                 'Content-Type' => 'application/json',
@@ -110,7 +106,7 @@ class SignAdapter
                    'namejidentitas'=> 'KTP',
                    'noidentitas'=> '1251087201650003',
                    'namedipungut'=> 'Santoso',
-                   'user_id' => Auth::user()->id,
+                   'user_id' => 0,
                    'documet_id' =>  $doc['id'],
                 ];
                 $SN = Serialnumber::insert($dataSN);
@@ -160,6 +156,10 @@ class SignAdapter
              }
             $Url = config('sign-adapter.API_STEMPTING');
             foreach ($arrayDocumentId as $id) {
+            $serialdata = Document::find($id);
+            if($serialdata->sn ==''){
+               self::getSerial([$id]);
+            }
             $datas = Document::find($id);
             $stemting = (string) Http::withHeaders([
                     'Content-Type' => 'application/json',
