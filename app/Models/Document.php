@@ -26,7 +26,10 @@ class Document extends Model
         'page',
         'source',
         'filename',
-        'certificatelevel'
+        'certificatelevel',
+        'namadoc',
+        'namadoc_detail',
+
     ];
 
     public function company()

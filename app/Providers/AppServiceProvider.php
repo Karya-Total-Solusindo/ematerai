@@ -6,6 +6,7 @@ use Illuminate\Support\Facades\Blade;
 use Illuminate\Support\ServiceProvider;
 use Mockery\Matcher\Any;
 use Illuminate\Pagination\Paginator;
+use Coduo\PHPHumanizer\NumberHumanizer;
 
 class AppServiceProvider extends ServiceProvider
 {

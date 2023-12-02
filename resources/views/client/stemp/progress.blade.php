@@ -6,7 +6,7 @@
                 <h4 class="card-title"><i class="ni ni-paper-diploma"></i>  Stamp Processing</h4> 
             </div>
             <div class="col text-end">
-                <a class="btn btn-info" href="{{ route('exportSuccecc') }}">Export File</a>
+                {{-- <a class="btn btn-info" href="{{ route('exportSuccecc') }}">Export File</a> --}}
                 {{-- <a @class(['btn btn-primary', 'font-bold' => true]) href="{{ route('directory.index') }}"> Create</a> --}}
             </div>
             {{-- <p class="card-text">Text</p> --}}
@@ -44,7 +44,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                       
                     @if ($datas->count()) 
                         @foreach ($datas as $num => $data)
                         <tr>
@@ -86,8 +85,15 @@
                             </td> --}}
                         </tr>
                         @endforeach
-                        </tbody>
-                    @endif    
+                        @else
+                                <tr>
+                                    <td colspan="5" class="text-center pt-5 align-middle text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        <h5>There is no data that needs to be processed</h5>
+                                    </td>
+                                </tr>
+                        @endif
+                    </tbody>
+                       
                 </table>
             </div>
         </div>

@@ -174,7 +174,7 @@ return [
         Collective\Html\HtmlServiceProvider::class,
         PrettyRoutes\ServiceProvider::class,
 
-        Maatwebsite\Excel\ExcelServiceProvider::class,
+        Maatwebsite\Excel\ExcelServiceProvider::class,        
     ])->toArray(),
 
     /*
@@ -192,6 +192,8 @@ return [
         // 'Example' => App\Facades\Example::class,
         'SignAdapter' => App\Adapter\SignAdapter::class,
         'Excel' => Maatwebsite\Excel\Facades\Excel::class,
+        #PHP Humanizer 
+        'PHPHumanizer' => Coduo\PHPHumanizer\NumberHumanizer::class,
     ])->toArray(),
 
     

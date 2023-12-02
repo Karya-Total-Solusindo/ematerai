@@ -105,6 +105,15 @@ a.btn-sm{
                     <span></span>
                 </div>
                 <div class="col-md-6">
+                  <div class="mb-3">
+                    <label for="" class="form-label">Jenis Dokumen</label>
+                    <select class="form-select form-select-lg" name="" id="" required>
+                      <option value="">Select one</option>
+                      @foreach ($jenisdocument as $jenis)
+                        <option value="{{ $jenis['kode'] }}" data-text="{{$jenis['nama']}}"> {{$jenis['nama']}}</option>
+                      @endforeach
+                    </select>
+                  </div>
                   {{-- <div class="form-check">
                     <input class="form-check-input" type="checkbox" name="template" value="" id="template">
                     <label class="form-check-label" for="template"> With Template. </label>

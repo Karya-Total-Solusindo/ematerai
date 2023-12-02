@@ -141,6 +141,9 @@ Route::group(['middleware' => ['auth'],], function () {
 
 });
 
+Route::get('/stemp/detail/{SN}', [StempController::class, 'stampDetail'])->middleware('auth')->name('stamp.detail');
+
+
 
 
 

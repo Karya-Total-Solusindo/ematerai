@@ -15,9 +15,11 @@ use App\Models\User;
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Traits\HasRoles;
+use Coduo\PHPHumanizer\NumberHumanizer;
 
 class HomeController extends Controller
 {
+    use HasRoles;
         /**
      * Create a new controller instance.
      *
@@ -37,7 +39,9 @@ class HomeController extends Controller
     {
         $saldo = 0;
         $notstamp = 0;
-        if(Auth::user()->hasRole('Admin')){
+        # role admin
+        $role_admin = User::role(['Superadmin','Admin'])->get();
+        if($role_admin){
             
             $Url = config('sign-adapter.API_CHECK_SALDO');
             $requestAPI = (string) Http::withHeaders([
@@ -64,23 +68,23 @@ class HomeController extends Controller
                 "NOT_STAMPTING" => Document::where('certificatelevel','<>','CERTIFIED')->orderBy('updated_at', 'desc')
                 ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
             ];
-            
-            
             return view('admin.dashboard', compact('datas'));
+
+        }else{
+            // user
+            $datas =[
+                'COUNT_DOCUMENT' => NumberHumanizer::metricSuffix(Document::where(['user_id'=> Auth::user()->id])->count()),
+                'COUNT_NOT_CERTIFIED' => NumberHumanizer::metricSuffix(Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'NOT_CERTIFIED'] )->count()),
+                'COUNT_SUCCESS' => NumberHumanizer::metricSuffix(Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'CERTIFIED'] )->count()),
+                'COUNT_FAILUR' => NumberHumanizer::metricSuffix(Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'FAILUR'] )->count()),
+                "NOT_STAMPED" => NumberHumanizer::metricSuffix(Document::where('user_id',Auth::user()->id)->where('certificatelevel','<>','CERTIFIED') ->count()),
+                "STAMPTING" => Document::where('user_id',Auth::user()->id)->where('certificatelevel','=','CERTIFIED')->orderBy('updated_at', 'desc')
+                ->paginate(5,['*'],'stemp_page')->setPageName('stemp_page'),
+                "NOT_STAMPTING" => Document::where('user_id',Auth::user()->id)->where('certificatelevel','<>','CERTIFIED')->orderBy('updated_at', 'desc')
+                ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
+            ];
+            return view('pages.dashboard', compact('datas'));
         }
-        // user
-        $datas =[
-            'COUNT_DOCUMENT' => Document::where(['user_id'=> Auth::user()->id])->count(),
-            'COUNT_NOT_CERTIFIED' => Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'NOT_CERTIFIED'] )->count(),
-            'COUNT_SUCCESS' => Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'CERTIFIED'] )->count(),
-            'COUNT_FAILUR' => Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'FAILUR'] )->count(),
-            "NOT_STAMPED" => Document::where('user_id',Auth::user()->id)->where('certificatelevel','<>','CERTIFIED') ->count(),
-            "STAMPTING" => Document::where('user_id',Auth::user()->id)->where('certificatelevel','=','CERTIFIED')->orderBy('updated_at', 'desc')
-            ->paginate(5,['*'],'stemp_page')->setPageName('stemp_page'),
-            "NOT_STAMPTING" => Document::where('user_id',Auth::user()->id)->where('certificatelevel','<>','CERTIFIED')->orderBy('updated_at', 'desc')
-            ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
-        ];
-        return view('pages.dashboard', compact('datas'));
         
     }
 }

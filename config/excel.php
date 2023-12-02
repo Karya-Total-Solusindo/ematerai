@@ -61,15 +61,15 @@ return [
         |
         */
         'properties'             => [
-            'creator'        => '',
-            'lastModifiedBy' => '',
-            'title'          => '',
-            'description'    => '',
-            'subject'        => '',
-            'keywords'       => '',
-            'category'       => '',
+            'creator'        => 'E-materai Farpoint',
+            'lastModifiedBy' => 'E-materai Farpoint',
+            'title'          => 'E-materai Export',
+            'description'    => 'E-materai Export',
+            'subject'        => 'E-materai',
+            'keywords'       => 'ematerai,export,spreadsheet',
+            'category'       => 'ematerai',
             'manager'        => '',
-            'company'        => '',
+            'company'        => 'Farpoint',
         ],
     ],
 
@@ -139,15 +139,15 @@ return [
         |
         */
         'properties'  => [
-            'creator'        => '',
-            'lastModifiedBy' => '',
-            'title'          => '',
-            'description'    => '',
-            'subject'        => '',
-            'keywords'       => '',
-            'category'       => '',
+            'creator'        => 'E-materai Farpoint',
+            'lastModifiedBy' => 'E-materai Farpoint',
+            'title'          => 'E-materai Export',
+            'description'    => 'E-materai Export',
+            'subject'        => 'E-materai',
+            'keywords'       => 'ematerai,export,spreadsheet',
+            'category'       => 'ematerai',
             'manager'        => '',
-            'company'        => '',
+            'company'        => 'Farpoint',
         ],
 
     ],

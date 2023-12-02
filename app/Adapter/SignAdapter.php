@@ -11,6 +11,11 @@ use App\Models\Document;
 use App\Models\Serialnumber;
 use Illuminate\Support\Facades\Storage;
 
+/** NOTE - SignAdapter
+ *  
+ * @config sing-adapter.php
+ * @url list of url on sing-adapter.php
+ */
 class SignAdapter
 {
     /**
@@ -39,15 +44,133 @@ class SignAdapter
             return $response['message'];
         }
     }
+
+    /**
+     * API Jenis Document digunakan untuk mendapatkan 
+     * list jenis dokumen yang digunakan untuk
+     * mengisi parameter “namadoc” saat melakukan generate SN.
+     * @return json id, kode, nama
+     */
+    public static function getJenisDocument()
+    {
+        $__token = self::getToken();
+        $Url = config('sign-adapter.API_JENIS_DOCUMENT');
+        $requestAPI = (string) Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . $__token,
+        ])->get($Url);
+        $response = json_decode($requestAPI,true);
+
+        if($response['statusCode']=='00'){
+            return $response['result']; // response()->json($response['result']);
+        }else{
+            $data =[  
+                [
+                    "id" => "4e9de1e8-879e-4bd3-a681-704afd6fd84b",
+                    "kode" => "3",
+                    "nama" => "Surat Keterangan",
+                ],
+                [
+                    "id" => "8ee8bdec-5ddf-4797-a74c-fd45977513c9",
+                    "kode" => "4a",
+                    "nama" => "Dokumen penerimaan uang (lebih dari 5 juta)",
+                ],
+                [
+                    "id" => "6a004c92-739d-4325-ab88-873d11d592a0",
+                    "kode" => "3",
+                    "nama" => "Surat Lainnya",
+                ],
+                [
+                    "id" => "5ab5ff9d-3fc0-452a-b63a-f78c021de06f",
+                    "kode" => "3",
+                    "nama" => "Surat Pernyataan",
+                ],
+                [
+                    "id" => "3e05283e-e98b-41b7-a3cc-8ae9d3cda2b5",
+                    "kode" => "2",
+                    "nama" => "Dokumen Transaksi",
+                ],
+                [
+                    "id" => "14bb5e08-3745-40de-b4ce-122a75ae09aa",
+                    "kode" => "4b",
+                    "nama" => "Dokumen pelunasan utang (lebih dari 5 juta)",
+                ],
+                [
+                    "id" => "8cf53120-3c28-496f-920f-aed7e587856f",
+                    "kode" => "2",
+                    "nama" => "Surat Berharga",
+                ],
+                [
+                    "id" => "d25e6e2f-ef10-44c2-941f-7e77beff2818",
+                    "kode" => "2",
+                    "nama" => "Akta Pejabat",
+                ],
+                [
+                    "id" => "8cf53120-3c28-496f-920f-aed7e587856e",
+                    "kode" => "2",
+                    "nama" => "Dokumen lain-lain",
+                ],
+                [
+                    "id" => "8ee8bdec-5ddf-4797-a74c-fd45977513c8",
+                    "kode" => "2",
+                    "nama" => "Akta Notaris",
+                ],
+                [
+                    "id" => "6a004c92-739d-4325-ab88-873d11d592a1",
+                    "kode" => "2",
+                    "nama" => "Dokumen Lelang",
+                ],
+                [
+                    "id" => "3e05283e-e98b-41b7-a3cc-8ae9d3cda2b4",
+                    "kode" => "3",
+                    "nama" => "Surat Perjanjian",
+                ],
+                [
+                    "id" => "3e05283e-e98b-41b7-a3cc-8ae9d3cda2b7",
+                    "kode" => "4a",
+                    "nama" => "Dokumen pernyataan jumlah uang lebih dari 5jt",
+                ]
+            ];
+            return response()->json($response['message']);
+        }
+    }
+
     /**
      * disini method generated sigle Serial number
      * 
      */
-    static function getSaldo()
+    public static function getSaldo()
     {
-        
+       return 'saldo';
     }
 
+    /** 
+     * Check Serial Number Ematerai
+     * @url sign-adapter.API_CHECK_SERIAL_NUMBER
+     * @return $return = true as json
+     * @return $return = false as boolean
+    */
+    public static function getCheckSN(string $serialnumber, bool $return = true){
+        $__token = self::getToken();
+        $data = [
+            'filter' => $serialnumber,
+        ];
+        $Url = config('sign-adapter.API_CHECK_SERIAL_NUMBER');
+        $requestAPI = (string) Http::withHeaders([
+            'Content-Type' => 'application/json',
+            'Authorization' => 'Bearer ' . $__token,
+        ])->withBody(json_encode($data))->get($Url);
+        $response = json_decode($requestAPI,true);
+        if($return){
+            if($response['statusCode']=='00'){
+                return response()->json($response['result']['data']);
+            }else{
+                return response()->json($response['message']);
+            }
+        }else{
+            return false;
+        }
+    }
 
     /**
      * disini method generated sigle Serial number
@@ -66,9 +189,13 @@ class SignAdapter
         //     "nodoc": "1",
         //     "tgldoc": "2022-04-25"
         // }
+        
         $dataArray =[];    
         foreach ($arrayDocumentId as $id) {
             $doc = Document::find($id);
+            if($doc->sn ==''){
+            
+            }
             $desPath = '/docs/'.strtoupper($doc->company->name).'/'.strtoupper($doc->directory->name);
             $data = [
                 "isUpload"=> false,

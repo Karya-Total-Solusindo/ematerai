@@ -74,10 +74,6 @@
     font-size: medium !important;
   }
 
-  #page-count-container {
-    /* float: right;
-    font-size: 15pt; */
-  }
   @media (max-width:768px){
     #page-count-container {
       float: right;

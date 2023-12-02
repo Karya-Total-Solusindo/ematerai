@@ -20,7 +20,6 @@
             </div>
             <div class="col text-end">
                 <span class=""> <i class="fas fa-briefcase"></i> {{ $datas[0]->company->name ?? '' }} @if(!empty($datas[0]->directory))  <i class="fas fa-folder-tree"></i>  @endif  {{ $datas[0]->directory->name ?? ''}}</span>
-                
                 {{-- {{ URL::previous() }} --}}
                 {{-- <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ route('directory', $datas[0]->company->id ?? '') }}"> Back</a> --}}
                 {{-- <a @class(['btn btn-sm btn-primary', 'font-bold' => true]) href="{{ route('add.file', Request::segment(4)) }}"> Create</a> --}}
@@ -44,7 +43,6 @@
         <div class="card-body px-0 pt-0 pb-2">
             <div class="table-responsive p-0">
                 {{-- Show data with template --}}
-                
                     {{-- <form id="execute" action="{{ route('getSerialNumber') }}" method="POST"> --}}
                         {{-- Update status to INPROGRES --}}
                     <form id="execute" action="{{ route('setInProgres') }}" method="POST"> 
@@ -52,7 +50,6 @@
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
-                             
                                 @if($directory->count()>0)
                                     @if($directory->template==1)
                                     <td><input type="checkbox" id="selectAll"></td>
@@ -76,14 +73,13 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @if($datas->count()>0)
                             @foreach ($datas  as $k =>  $data)
                             <tr>
-                                
-                               
                                 @if($data->directory->template==1)    
                                 <td>
+                                    <input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
                                     @if($data->sn == '')
-                                        <input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
                                     @endif
                                 </td>
                                 @endif
@@ -93,9 +89,9 @@
                                 <td>
                                     <div class="align-middle text-sm">
                                         <div class="">
-                                            <h6 class="p-0"><a href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}
-                                                
-                                            </a></h6>
+                                            <h6 class="p-0">
+                                                <a target="_blank" href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}</a>
+                                            </h6>
                                         </div>
                                     </div>
                                 </td>
@@ -106,7 +102,6 @@
                                     <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y H:i:s') }}</span>
                                 </td>
                                 <td class="align-middle text-end ">
-                                   
                                     {{-- <a href="{{ route('stemp.show',$data->id) }}" class="btn btn-s btn-primary text-white font-weight-bold text-xs"
                                         data-toggle="tooltip" data-original-title="Edit Company">
                                         Detail 
@@ -120,6 +115,13 @@
                                 </td>
                             </tr>
                             @endforeach
+                            @else
+                                <tr>
+                                    <td colspan="5" class="text-center pt-5 align-middle text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        <h5>Empty Data</h5>
+                                    </td>
+                                </tr>
+                            @endif
                             </tbody>
                     </table>
                         @csrf
@@ -133,7 +135,7 @@
         {{ $datas->links() }}
 
         @env('local')
-        {{$directory->template}}
+            {{$directory->template}}
         @endenv
     </div>
 

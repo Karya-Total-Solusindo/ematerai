@@ -6,10 +6,11 @@
                 <h4 class="card-title"><i class="ni ni-paper-diploma"></i> Certified Document</h4> 
             </div>
             <div class="col text-end">
-                <a class="btn btn-info" href="{{ route('exportSuccecc') }}">Export File</a>
-                {{-- <a @class(['btn btn-primary', 'font-bold' => true]) href="{{ route('directory.index') }}"> Create</a> --}}
+                <form action="{{ route('exportSuccecc') }}" method="get">
+                    <input type="hidden" name="status" value="CERTIFIED">
+                    <button type="submit" class="btn btn-sm btn-success"><i class="fas fa-file-excel"></i> Export Excel</button>
+                </form>
             </div>
-            {{-- <p class="card-text">Text</p> --}}
         </div>
         <div class="card-body px-0 pt-0 pb-2">
             @if ($errors->any())
@@ -43,7 +44,6 @@
                         </tr>
                     </thead>
                     <tbody>
-                       
                     @if ($datas->count()) 
                         @foreach ($datas as $data)
                         <tr>
@@ -84,8 +84,14 @@
                             </td>
                         </tr>
                         @endforeach
-                        </tbody>
-                    @endif    
+                    @else
+                        <tr>
+                            <td colspan="7" class="text-center pt-5 align-middle text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                <h5>Certified data is still empty</h5>
+                            </td>
+                        </tr>
+                    @endif
+                    </tbody>   
                 </table>
             </div>
         </div>

@@ -80,6 +80,7 @@ class StempController extends Controller
                     if (($s = $request->s)) {
                         $user = Auth::user()->id;
                         $query->orWhere('name', 'LIKE', '%' . $s . '%')
+                        ->orWhere('sn', 'LIKE', '%' . $s . '%')
                         ->Where('user_id', $user)
                         ->Where('company_id', $request->company)
                         ->orderBy('update_at', 'desc')
@@ -108,17 +109,19 @@ class StempController extends Controller
                 [function ($query) use ($request) {
                     if (($s = $request->s)) {
                         $user = Auth::user()->id;
-                        $query->orWhere('filename', 'LIKE', '%' . $s . '%')
+                        $query
+                        ->orWhere('filename', 'LIKE', '%' . $s . '%')
                         ->orWhere('sn', 'LIKE', '%' . $s . '%')
-                        ->Where('user_id', $user)
-                        ->Where('certificatelevel','<>', 'CERTIFIED')
-                        ->Where('certificatelevel','<>', 'INPROGRESS')
-                        ->Where('directory_id', $request->company)
                         ->orderBy('updated_at', 'desc')
                         ->get();
                     }
                 }]
-                ])->orderBy('updated_at', 'desc')->paginate(5);
+                ])
+                ->Where('user_id', $user)
+                ->Where('directory_id', $request->directory_id)
+                ->Where('certificatelevel','<>', 'CERTIFIED')
+                ->Where('certificatelevel','<>', 'INPROGRESS')
+                ->orderBy('updated_at', 'desc')->paginate(10);
         }
         $directory = Directory::find(['id',$directory_id])->where('user_id',$user)->first();
         if($directory){
@@ -478,19 +481,23 @@ class StempController extends Controller
         /**TODO Status Success Export Excel - 
          * 
          */
-       public function exportSuccecc() 
+       public function exportSuccecc(Request $request) 
         {
-        $heading = [
-            'NO',
-            'DOCUMENT',
-            'COMPANY',
-            'DIRECTORY',
-            'STATUS',
-            'SN',
-            'STEMP',
-            'DATE',
-        ];
-        return   Excel::download(new ExportDocumentSuccess, date('Y_m_d').'_Ematerai_Document_Stamp_Success.xlsx',\Maatwebsite\Excel\Excel::XLSX,$heading);
+            $url = $request->Query();
+            $status = (isset($url['status']))? ['certificatelevel'=>strtoupper($url['status'])]:'CERTIFIED';
+            $status_text = (isset($url['status']))? $url['status']:null;
+            $year = (isset($url['year']))? $url['status']:null;
+            $month = (isset($url['month']))? $url['status']:null;
+            $day = (isset($url['day']))? $url['status']:null;
+            // dd($url);
+            return   Excel::download(new ExportDocumentSuccess($status,$year,$month,$day), date('Y_m_d').'_Ematerai_Document_Stamp_'.$status_text.'.xlsx',\Maatwebsite\Excel\Excel::XLSX);
+        }
+
+
+
+        public function stampDetail(string $sn){
+           return SignAdapter::getCheckSN($sn, true);
+           
         }
 
 }

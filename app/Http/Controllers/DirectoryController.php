@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Adapter\SignAdapter;
 use App\Models\Company;
 use App\Models\Directory;
 use App\Models\Document;
@@ -49,9 +50,10 @@ class DirectoryController extends Controller
         $user = Auth::user()->id;
         // return $datas = User::with('company')->find($user)->get('*');
         $datas =  Company::where('user_id',$user)->get();
+        $jenisdocument = SignAdapter::getJenisDocument();
         // DB::getQueryLog();
         if($datas->count()){
-            return view("client.configure.directory.index",compact('datas'));
+            return view("client.configure.directory.index",compact(['datas','jenisdocument']));
         }
         return redirect()->route('company.index')->with('error','You have to create a company first');
     }
@@ -193,9 +195,9 @@ class DirectoryController extends Controller
             // untuk diset di showPDF({{ }});
             $fileThemp = url($templatepath);
         }
-    
+        $jenisdocument = SignAdapter::getJenisDocument();
         if($datas->count()){
-            return view("client.configure.directory.index",compact('datas','directory','company','fileThemp'));
+            return view("client.configure.directory.index",compact('datas','directory','company','fileThemp','jenisdocument'));
         }
         return redirect()->route('company.index')->with('success','You have to create a company');
     }
@@ -305,4 +307,5 @@ class DirectoryController extends Controller
     {
         //
     }
+
 }
