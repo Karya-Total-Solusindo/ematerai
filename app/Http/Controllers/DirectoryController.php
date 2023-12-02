@@ -136,9 +136,10 @@ class DirectoryController extends Controller
     {
         //multipel upload for ajax  
         $input = $request->all();
+        $directory = Directory::find($input['directory'])->first();
         $file = $request->file('file');
         $fileName = str_replace(' ','_',$file->getClientOriginalName());
-        $path = '/app/public/docs/'.Str::upper($input['company_name']).'/'.Str::upper($input['directory_name']).'/in';
+        $path = '/app/public/docs/'.Str::upper($directory->company->name).'/'.Str::upper($directory->name).'/in';
         $file->move(storage_path($path),$fileName);
         $companyId = $input['company'];
         $user = Auth::user()->id;
@@ -166,7 +167,7 @@ class DirectoryController extends Controller
         $fileUpload =  Document::Create($data);
         $fileUpload->filename = $fileName;
         $fileUpload->save();
-        return response()->json(['success'=>$fileName,'path'=> $path.$fileName]);
+        return response()->json(['success'=>$fileName,'path'=> $path.'/'.$fileName]);
     }
 
     /**
