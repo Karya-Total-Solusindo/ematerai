@@ -72,7 +72,7 @@
                                 <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y - H:i:s') }}</span>
                             </td>
                             <td class="align-middle text-end">
-                                <a href=" {{ asset('storage/docs/'.$data->company->name.'/'.$data->directory->name.'/out/'.$data->filename) }}" class="text-primary font-weight-bold text-xs"
+                                <a target="_blank" href=" {{ asset('storage/docs/'.$data->company->name.'/'.$data->directory->name.'/out/'.$data->filename) }}" class="text-primary font-weight-bold text-xs"
                                     data-toggle="tooltip" data-original-title="Edit Download">
                                     <span class="badge badge-sm bg-gradient-success">Download</span>
                                 </a>
