@@ -154,7 +154,7 @@ class DirectoryController extends Controller
                 'directory_id'=> $input['directory'],
                 'docnumber'=> Str::uuid(),
                 'active'=> 1,
-                'source'=> '/docs/'.Str::upper($directory->company->name).'/'.Str::upper($directory->company->name).'/in/'.$fileName ?? '0',
+                'source'=> '/docs/'.Str::upper($directory->company->name).'/'.Str::upper($directory->name).'/in/'.$fileName ?? '0',
                 'x1'=> $input['x1'] ?? '0',
                 'x2'=> $input['x2'] ?? '0',
                 'y1'=> $input['y1'] ?? '0',
