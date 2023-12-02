@@ -49,7 +49,7 @@
                             <th class="text-left text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Directory</th>            
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                Sataus</th>
+                                Status</th>
                             {{-- <th
                                 class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Stemp</th> --}}
