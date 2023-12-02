@@ -9,7 +9,7 @@ class Serialnumber extends Model
 {
     use HasFactory;
     use HasFactory;
-    protected $table = 'Serialnumber';
+    protected $table = 'serialnumber';
     protected $primaryKey = 'id';
     protected $fillable = [
         'user_id',
