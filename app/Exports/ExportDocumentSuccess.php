@@ -16,12 +16,10 @@ class ExportDocumentSuccess implements  FromCollection, WithHeadings
     use Exportable;
     public function collection()
     {
-    //    self::headings();
         return Document::where('document.certificatelevel', 'CERTIFIED')
         ->join('companies','companies.id','company_id')
         ->join('directories','directories.id','=','directory_id')
         ->get(['document.id','filename','companies.name as company','directories.name as directories','certificatelevel','directories.created_at']);
-        
     }
     public function headings(): array
     {
@@ -30,9 +28,10 @@ class ExportDocumentSuccess implements  FromCollection, WithHeadings
             'DOCUMENT',
             'COMPANY',
             'DIRECTORY',
-            'Status',
+            'STATUS',
+            'SN',
             'STEMP',
-            'Date',
+            'DATE',
         ];
     }
 

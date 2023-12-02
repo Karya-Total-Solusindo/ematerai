@@ -485,9 +485,10 @@ class StempController extends Controller
             'DOCUMENT',
             'COMPANY',
             'DIRECTORY',
-            'Status',
+            'STATUS',
+            'SN',
             'STEMP',
-            'Date',
+            'DATE',
         ];
         return   Excel::download(new ExportDocumentSuccess, date('Y_m_d').'_Ematerai_Document_Stamp_Success.xlsx',\Maatwebsite\Excel\Excel::XLSX,$heading);
         }

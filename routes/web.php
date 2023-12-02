@@ -112,6 +112,7 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::get('/stemp/success', [StempController::class, 'success'])->middleware('auth')->name('success');
     
     Route::get('/stemp/_modalProcess', [StempController::class, '_modalProcess'])->middleware('auth')->name('_modalProcess');
+    //EXPORT EXCEL
     Route::get('/stemp/exportSuccess', [StempController::class, 'exportSuccecc'])->middleware('auth')->name('exportSuccecc');
     
     

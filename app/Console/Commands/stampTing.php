@@ -31,12 +31,13 @@ class stampTing extends Command
     public function handle()
     { 
         //Log::info("Cron is working fine!"); 
-        $inprogress = Document::select('id')->where('certificatelevel','=','INPROGRESS')
+        $inprogress = Document::select('id')
+        ->where('certificatelevel','=','INPROGRESS')
         ->orWhere('certificatelevel','=','FAILUR')->get();
         $arrayId =[];
         foreach($inprogress as $item){
             array_push($arrayId,$item->id);
-            Log::info('Dociment id :'.$item->id);     
+            Log::info('Dociment id :'.$item->id.' '.$item->source);     
         $appsing = SignAdapter::exeSreialStamp([$item->id]);
         Log::info($appsing); 
         }
