@@ -41,9 +41,9 @@ class HomeController extends Controller
         $notstamp = 0;
         # role admin
         //$role_admin = User::role('Superadmin','Admin')->get();
-        $role_admin = Auth::user()->hasRole('Admin');
+        //$role_admin = Auth::user()->hasRole('Admin');
 
-        if($role_admin){
+        if(Auth::user()->hasRole('Admin')){
             
             $Url = config('sign-adapter.API_CHECK_SALDO');
             $requestAPI = (string) Http::withHeaders([
