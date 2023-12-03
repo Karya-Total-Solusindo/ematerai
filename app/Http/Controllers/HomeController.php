@@ -40,7 +40,9 @@ class HomeController extends Controller
         $saldo = 0;
         $notstamp = 0;
         # role admin
-        $role_admin = User::role(['Superadmin','Admin'])->get();
+        //$role_admin = User::role('Superadmin','Admin')->get();
+        $role_admin = Auth::user()->hasRole(['Superadmin','Admin']);
+
         if($role_admin){
             
             $Url = config('sign-adapter.API_CHECK_SALDO');
@@ -50,9 +52,11 @@ class HomeController extends Controller
             ])->post($Url);
             $response = json_decode($requestAPI,true)['result'];
             // dd($response);
-            if($response['status']=='00'){
-                $saldo = $response['saldo'];
-                $notstamp = $response['notstamp']; 
+            if(isset($response['status'])){
+                if($response['status']=='00'){
+                    $saldo = $response['saldo'];
+                    $notstamp = $response['notstamp']; 
+                }
             }
 
             $datas =[
