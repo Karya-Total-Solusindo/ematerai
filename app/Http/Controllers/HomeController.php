@@ -41,7 +41,7 @@ class HomeController extends Controller
         $notstamp = 0;
         # role admin
         //$role_admin = User::role('Superadmin','Admin')->get();
-        $role_admin = Auth::user()->hasRole(['Superadmin','Admin']);
+        $role_admin = Auth::user()->hasRole('Admin');
 
         if($role_admin){
             
