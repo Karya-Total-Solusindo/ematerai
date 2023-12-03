@@ -9,14 +9,35 @@
     <title>
         {{ env('APP_NAME') }}
     </title>
+    <!-- jQuery 3 -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" integrity="sha512-uKQ39gEGiyUJl4AI6L+ekBdGKpGw4xJ55+xyJG7YFlJokPNYegn9KwQ3P8A7aFQAUtUsAQHep+d/lrGqrbPIDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    {{-- <script src="{{ asset('assets/js/plugins/fontawesome_42d5adcbca.js') }}" crossorigin="anonymous"></script> --}}
+    <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script>
+    {{-- <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script> --}}
+    {{-- <script src="{{ asset("assets/js/plugins/pdf/pdf.js") }}" type="module"></script> --}}
+    
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/js/jquery.imgareaselect.min.js" integrity="sha512-59swnhUs+9AinrKlTPqsoO5ukNPPFbPXFyaf41MAgiTG/fv3LBZwWQWiZNYeksneLhiUo4xjh/leTZ53sZzQ4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+    <!-- toastr js -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
+    {{--  jsTree --}}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
+    {{-- PDF Librarys --}}
+    <script src="{{ asset("assets/js/plugins/pdf/pdf.19.js") }}"></script>
+    <script src="{{ asset("assets/js/plugins/pdf/pdf.worker.19.js") }}"></script>
+    {{-- Date range picker --}}
+    {{-- <script type="text/javascript" src="//cdn.jsdelivr.net/jquery/1/jquery.min.js"></script> --}}
+    <script type="text/javascript" src="//cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    {{-- <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap/latest/css/bootstrap.css" /> --}}
+    <script type="text/javascript" src="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.js"></script>
+    
+
+    <link rel="stylesheet" type="text/css" href="//cdn.jsdelivr.net/bootstrap.daterangepicker/2/daterangepicker.css" />
     <!--     Fonts and icons     -->
     <link href="https://fonts.googleapis.com/css?family=Open+Sans:300,400,600,700" rel="stylesheet" />
     <!-- Nucleo Icons -->
     <link href="{{ asset('./assets/css/nucleo-icons.css') }}" rel="stylesheet" />
     <link href="{{ asset('./assets/css/nucleo-svg.css') }}" rel="stylesheet" />
-
-
-    
     <!-- Font Awesome Icons -->
     {{-- <script src="https://kit.fontawesome.com/42d5adcbca.js" crossorigin="anonymous"></script> --}}
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" integrity="sha512-z3gLpd7yknf1YoNbCzqRKc4qyor8gaKU1qmn+CShxbuBusANI9QpRohGBreCFkKxLhei6S9CQXFEbbKuqLg0DA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
@@ -28,8 +49,8 @@
     <link href="{{ asset('assets/css/validity.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/custom.css') }}" rel="stylesheet" />
     <link href="{{ asset('assets/css/sidebar-nav.css') }}" rel="stylesheet" />
-     <!-- toastr css -->
-     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+    <!-- toastr css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
     
     
      <style>
@@ -95,23 +116,8 @@
     </style>
 
 
-
     
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/js/all.min.js" integrity="sha512-uKQ39gEGiyUJl4AI6L+ekBdGKpGw4xJ55+xyJG7YFlJokPNYegn9KwQ3P8A7aFQAUtUsAQHep+d/lrGqrbPIDQ==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-    {{-- <script src="{{ asset('assets/js/plugins/fontawesome_42d5adcbca.js') }}" crossorigin="anonymous"></script> --}}
-    <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script>
-    {{-- <script src="{{ asset('assets/js/plugins/sidebar-nav.js') }}" crossorigin="anonymous"></script> --}}
-    {{-- <script src="{{ asset("assets/js/plugins/pdf/pdf.js") }}" type="module"></script> --}}
-        <!-- jQuery 3 -->
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.7.1/jquery.min.js" integrity="sha512-v2CJ7UaYy4JwqLDIrZUI/4hqeoQieOmAZNXBeQyjo21dadnwR+8ZaIJVT8EE2iyI61OV8e6M8PP2/4hpQINQ/g==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/imgareaselect/0.9.10/js/jquery.imgareaselect.min.js" integrity="sha512-59swnhUs+9AinrKlTPqsoO5ukNPPFbPXFyaf41MAgiTG/fv3LBZwWQWiZNYeksneLhiUo4xjh/leTZ53sZzQ4Q==" crossorigin="anonymous" referrerpolicy="no-referrer"></script>
-        <!-- toastr js -->
-         <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/js/toastr.min.js"></script>
-         {{--  jsTree --}}
-         <script src="https://cdnjs.cloudflare.com/ajax/libs/jstree/3.2.1/jstree.min.js"></script>
-         {{-- PDF Librarys --}}
-        <script src="{{ asset("assets/js/plugins/pdf/pdf.19.js") }}"></script>
-        <script src="{{ asset("assets/js/plugins/pdf/pdf.worker.19.js") }}"></script>
+    
 
     <script>
         var myVar;
@@ -127,8 +133,11 @@
             document.querySelector('body').style.background= '#f8f9fa !important';
         }
     </script>
+    
+
 </head>
 <body onload="loader()" class="{{ $class ?? '' }}" style="margin:0; background-color: '#6c757d !important">
+   
     {{-- @if ($message = Session::get('success'))
     <div class="alert alert-success alert-dismissible text-white" style="position: fixed;
     width: 100%;">
@@ -138,6 +147,7 @@
         </button>
     </div>
     @endif --}}
+
     <div id="loader"></div>
     <div id="main-page" style="display:none;">
         @guest
@@ -194,19 +204,13 @@
         </div>
     </div>
     
-    
-    <!-- Optional: Place to the bottom of scripts -->
-    <script>
-        const myModal = new bootstrap.Modal(document.getElementById('modalId'), options)
-    
-    </script>
     <!--   Core JS Files   -->
     <script src="{{ asset('assets/js/core/popper.min.js') }}"></script>
     <script src="{{ asset('assets/js/core/bootstrap.min.js') }}"></script>
     <script src="{{ asset("assets/js/plugins/perfect-scrollbar.min.js") }}"></script>
     <script src="{{ asset('assets/js/plugins/smooth-scrollbar.min.js') }}"></script>
 
-    <script>
+    <script id="js-main">
         var win = navigator.platform.indexOf('Win') > -1;
         if (win && document.querySelector('#sidenav-scrollbar')) {
             var options = {
@@ -238,17 +242,19 @@
         setTimeout(function(){
             $('.alert').fadeOut();
         },5000);
+        //message
         @if($message = Session::get('success'))
         toastr["success"]('{{ $message }}','success'); 
         @elseif($message = Session::get('error'))
         toastr["error"]('{{ $message }}','error'); 
         @endif
         @if (env('APP_ENV')!='production')
-        // toastr["success"]("Toastr Test", "Toastr Test");
+    // toastr["success"]("Toastr Test", "Toastr Test");
         // toastr["info"]("error", "Toastr Test");
         // toastr["error"]("error", "Toastr Test");
         // toastr["warning"]('Clear itself?<br /><br /><button type="button" class="btn clear">Yes</button>');
         @endif
+        
     </script>
 
     <!-- Github buttons -->
@@ -257,6 +263,12 @@
     <!-- Control Center for Soft Dashboard: parallax effects, scripts for the example pages etc -->
     <script src="{{ asset('assets/js/argon-dashboard.js') }}"></script>
     @stack('js')
+    <script>
+        //Optional: Place to the bottom of scripts 
+        if (document.getElementById('modalId') !== null) {
+            const myModal = new bootstrap.Modal(document.getElementById('modalId'), options)
+        }   
+    </script>
 </body>
 
 </html>

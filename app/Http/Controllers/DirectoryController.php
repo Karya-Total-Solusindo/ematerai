@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+
 use App\Adapter\SignAdapter;
 use App\Models\Company;
 use App\Models\Directory;
@@ -15,6 +16,7 @@ use Illuminate\Support\Facades\File;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 use Illuminate\Database\Eloquent\Collection;
+use Illuminate\Http\RedirectResponse;
 
 class DirectoryController extends Controller
 {
@@ -61,10 +63,17 @@ class DirectoryController extends Controller
     /**
      * Store a newly created resource in storage.
      */
-    public function store(Request $request)
+    public function store(Request $request): RedirectResponse
     {
         $input = $request->all();
-        //dd($input);
+        $request->validate([
+            'name'=> 'required|min:3',
+            //'name'=> ['required','regex:/^([A-Z0-9-_ ]+)$/s']
+        ]);
+        preg_match('/^([A-Z0-9-_ ]+)$/s', strtoupper($input['name']), $matches,PREG_OFFSET_CAPTURE, 0);
+        if($matches==false){
+            return redirect()->route('directory.create')->with('error','wrong input on Directory name');
+        }
         $companyId = $input['company'];
         $company = Company::find($input['company'])->name;
         $this->validate($request, [

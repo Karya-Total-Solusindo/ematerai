@@ -104,7 +104,9 @@ a.btn-sm{
                 </div>
                 <div class="col-md-6">
                     <label for="name" class="form-label">Name</label>
-                    <input type="text" class="form-control" autocomplete="off" name="name" id="name" style="text-transform:uppercase" value="{{ $directory->name ?? '' }}" required>
+                    @error('name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                    {{-- <input type="text" pattern="[A-Z0-9-\_\ ]+" title="Invalid input" class="form-control" autocomplete="off" name="name" id="name" style="text-transform:uppercase" value="{{ $directory->name ?? '' }}" required> --}}
+                    <input type="text" pattern="^[a-zA-Z0-9_ ]+" title="Invalid input" class="form-control" autocomplete="off" name="name" id="name" style="text-transform:uppercase" value="{{ $directory->name ?? '' }}" required>
                     <span></span>
                 </div>
                 <div class="col-md-12">

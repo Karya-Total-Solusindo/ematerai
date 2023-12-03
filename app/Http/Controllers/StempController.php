@@ -43,9 +43,9 @@ class StempController extends Controller
                             ->get();
                     }
                 }]
-            ])->with('company')->orderBy('created_at', 'desc')->paginate(5);
+            ])->with('company')->orderBy('created_at', 'desc')->paginate(50);
         }else{
-            $datas =  Document::with('company')->where('user_id','=',Auth::user()->id)->orderBy('created_at', 'desc')->paginate(5);
+            $datas =  Document::with('company')->where('user_id','=',Auth::user()->id)->orderBy('created_at', 'desc')->paginate(50);
         }
         return view("client.stemp.index", compact("datas"));
     }
@@ -53,7 +53,7 @@ class StempController extends Controller
     public function company(Request $request)
     {
         $user = Auth::user()->id;
-        $datas = Company::where(['user_id'=>$user])->paginate(5);
+        $datas = Company::where(['user_id'=>$user])->paginate(50);
         if (($s = $request->s)) {
             $datas = Company::where([
                 [function ($query) use ($request) {
@@ -65,7 +65,7 @@ class StempController extends Controller
                         ->get();
                     }
                 }]
-                ])->orderBy('created_at', 'desc')->paginate(5);
+                ])->orderBy('created_at', 'desc')->paginate(50);
         }
         return view("client.stemp.index", compact("datas"));
     }
@@ -73,7 +73,7 @@ class StempController extends Controller
     {
         $user = Auth::user()->id;
         $request['company'] = $company_id;
-        $datas = Directory::where(['user_id'=>$user,'company_id'=> $company_id])->paginate(5);
+        $datas = Directory::where(['user_id'=>$user,'company_id'=> $company_id])->paginate(50);
         if (($s = $request->s)) {
             $datas = Directory::where([
                 [function ($query) use ($request) {
@@ -87,7 +87,7 @@ class StempController extends Controller
                         ->get();
                     }
                 }]
-                ])->orderBy('update_at', 'desc')->paginate(5);
+                ])->orderBy('update_at', 'desc')->paginate(50);
         }
         $company = Company::find(['id'=>$company_id])->where(['user_id'=>$user])->first();
         if ($company) {
@@ -103,7 +103,7 @@ class StempController extends Controller
         $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])
         ->Where('certificatelevel','<>', 'CERTIFIED')
         ->Where('certificatelevel','<>', 'INPROGRESS')
-        ->orderBy('updated_at', 'desc')->paginate(5);
+        ->orderBy('updated_at', 'desc')->paginate(50);
         if (($s = $request->s)) {
             $datas = Document::where([
                 [function ($query) use ($request) {
@@ -378,7 +378,7 @@ class StempController extends Controller
                             $status->certificatelevel = 'FAILUR';
                             $status->update();
                             $type = 'application/json';
-                            $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
+                            $datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(50);
                         }
                     return json_encode($response);
             }catch(\GuzzleHttp\Exception\RequestException $e){
@@ -400,13 +400,13 @@ class StempController extends Controller
                             ->get();
                     }
                 }]
-            ])->with('company')->orderBy('updated_at', 'desc')->paginate(5);
+            ])->with('company')->orderBy('updated_at', 'desc')->paginate(50);
         }else{
             $datas =  Document::with('company')
             ->where('user_id','=',Auth::user()->id)
             ->where('certificatelevel','=','INPROGRESS')
             ->orderBy('updated_at', 'desc')
-            ->paginate(5);
+            ->paginate(50);
         }
         return view("client.stemp.index", compact("datas"));
     }
@@ -428,13 +428,13 @@ class StempController extends Controller
                             ->get();
                     }
                 }]
-            ])->with('company')->orderBy('updated_at', 'desc')->paginate(5);
+            ])->with('company')->orderBy('updated_at', 'desc')->paginate(50);
         }else{
             $datas =  Document::with('company')
             ->where('user_id','=',Auth::user()->id)
             ->where('certificatelevel','=','FAILUR')
             ->orderBy('updated_at', 'desc')
-            ->paginate(5);
+            ->paginate(50);
         }
         return view("client.stemp.index", compact("datas"));
     }
@@ -442,6 +442,7 @@ class StempController extends Controller
 
     /**
      * List Success Stemp.
+     * todo SUCCESS
      */
     public function success(Request $request)
     {
@@ -457,14 +458,35 @@ class StempController extends Controller
                             ->get();
                     }
                 }]
-            ])->with('company')->orderBy('updated_at', 'desc')->paginate(5);
-        }else{
+            ])->with('company')->orderBy('updated_at', 'desc')->paginate(50);
+            return view("client.stemp.index", compact("datas"));
+        }
+        if($c = $request->company || $d = $request->directory || $r = $request->periode) {
+            // dd($c = $request->company, $d = $request->directory, $r = $request->periode);
+            // dd('filter');
+            //filter company directory daterange
+            $datas =  Document::where([
+                [function ($query) use ($request) {
+                    if ($c = $request->company || $d = $request->directory) {
+                        $d = $request->directory;
+                        $query->Where('company_id','=',$c)
+                        ->Where('directory_id','=',$d)
+                        ->Where('certificatelevel','=','CERTIFIED')
+                        ->Where('user_id','=',Auth::user()->id)
+                        ->orderBy('updated_at', 'desc')
+                            ->get();
+                    }
+                }]
+            ])->with('company')->orderBy('updated_at', 'desc')->paginate(50);
+            return view("client.stemp.index", compact("datas"));
+        }
+       
             $datas =  Document::with('company')
             ->where('user_id','=',Auth::user()->id)
             ->where('certificatelevel','=','CERTIFIED')
             ->orderBy('updated_at', 'desc')
-            ->paginate(5);
-        }
+            ->paginate(50);
+        
         return view("client.stemp.index", compact("datas"));
     }
 
@@ -498,6 +520,67 @@ class StempController extends Controller
         public function stampDetail(string $sn){
            return SignAdapter::getCheckSN($sn, true);
            
+        }
+
+
+        public function downloadOne(){
+            $zip_file = date('YmdHis').'_ematerai.zip'; // Name of our archive to download
+
+            // Initializing PHP class
+            $zip = new \ZipArchive();
+            $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+
+            $invoice_file = 'invoices/aaa001.pdf';
+
+            // Adding file: second parameter is what will the path inside of the archive
+            // So it will create another folder called "storage/" inside ZIP, and put the file there.
+            $zip->addFile(storage_path($invoice_file), $invoice_file);
+            $zip->close();
+
+            // We return the file immediately after download
+            return response()->download($zip_file);
+        }
+
+
+        public function download(Request $request){
+
+            $dir_id = $request->directory;
+            $all = Directory::find($dir_id);
+            //dd($all->company->name);
+            $zip_file = date('YmdHis').'_ematerai.zip'; // Name of our archive to download
+            $zip = new \ZipArchive();
+            $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+            $_DIRECTORY = 'app/public/docs/'.$all->company->name.'/'.$all->name.'/in/';
+            $RESULT_DIRECTORY=  $all->company->name.'/'.$all->name.'/';
+            $path = storage_path($_DIRECTORY);
+            //dd($path);
+            if(new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path))){
+                redirect()->back();
+            }
+            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+           
+            foreach ($files as $name => $file)
+            {
+                
+                
+                // We're skipping all subfolders
+                if (!$file->isDir()) {
+                    if($file->getSize()>0){
+                       
+                        $filePath     = $file->getRealPath();
+
+                        // extracting filename with substr/strlen
+                        $relativePath = $_DIRECTORY . substr($filePath, strlen($path) + 1);
+                        $notrelativePath = $RESULT_DIRECTORY . substr($filePath, strlen($path) + 1);
+
+                        //$zip->addFile($filePath, $relativePath);
+                        $zip->addFile($filePath, $notrelativePath);
+                    }
+                    //dd($filePath);
+                }
+            }
+            $zip->close();
+            return response()->download($zip_file);
         }
 
 }

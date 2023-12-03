@@ -213,7 +213,7 @@
                         </div>
                     </div>
                     <div class="card-footer row">
-                        {{ $datas['NOT_STAMPTING']->links()}}    
+                        {{ $datas['NOT_STAMPTING']->onEachSide(1)->links()}}    
                     </div>
                 </div>
             </div>

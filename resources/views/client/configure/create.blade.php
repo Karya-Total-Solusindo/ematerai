@@ -8,8 +8,9 @@
             <h4 class="card-title">Create Company Directory</h4>
             <p class="card-text">Text</p>
             <div class="col-md-4">
-                <label for="name" class="form-label">Name</label>
-                <input type="text" class="form-control" name="name" id="name" value="" required>
+                <label for="name" class="form-label">Name</label> 
+                @error('name') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
+                <input type="text" class="form-control" name="name" id="name" value="{{ old('name') }}"required>
                 <span></span>
             </div>
             <div class="col-md-4">
