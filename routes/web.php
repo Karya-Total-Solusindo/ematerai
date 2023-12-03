@@ -40,6 +40,7 @@ Route::get('/', function () {
     return redirect('/dashboard');
 })->middleware('auth');
 
+
 /** 
  * Guest
  */
@@ -114,7 +115,7 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::get('/stemp/_modalProcess', [StempController::class, '_modalProcess'])->middleware('auth')->name('_modalProcess');
     //EXPORT EXCEL
     Route::get('/stemp/exportSuccess', [StempController::class, 'exportSuccecc'])->middleware('auth')->name('exportSuccecc');
-    
+    Route::get('/stemp/download', [StempController::class, 'download'])->middleware('auth')->name('stamp.download');
     
     // Route::get('/stemp/{stemp}', [StempController::class, 'show'])->middleware('auth')->name('stemp.show');
     Route::resource('/stemp', StempController::class);
@@ -142,6 +143,7 @@ Route::group(['middleware' => ['auth'],], function () {
 });
 
 Route::get('/stemp/detail/{SN}', [StempController::class, 'stampDetail'])->middleware('auth')->name('stamp.detail');
+
 
 
 
