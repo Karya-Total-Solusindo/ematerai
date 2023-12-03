@@ -145,7 +145,7 @@ class DirectoryController extends Controller
             if (File::exists(storage_path($path).$fileName)) {
                 return response()->json(['error'=>'file exists','message'=>"file exists ".$path.$fileName]);   
             }
-            dd(storage_path($path).$fileName,File::exists($path.$fileName));
+            //dd(storage_path($path).$fileName,File::exists($path.$fileName));
             $file->move(storage_path($path),$fileName);
             $companyId = $input['company'];
             $user = Auth::user()->id;
