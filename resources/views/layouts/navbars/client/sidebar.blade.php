@@ -119,6 +119,7 @@
                 
                 {{-- <li><a class="nav-link rounded" href="#">On Process </a></li> --}}
                 <li><a class="nav-link rounded {{ request()->segment(2) == 'success' ? 'active' : '' }}" href="{{route('success')}}">Success </a></li>
+                <li><a class="nav-link rounded {{ request()->segment(2) == 'history' ? 'active' : '' }}" href="{{route('history')}}">History </a></li>
                 {{-- <li><a class="nav-link rounded" href="#">Failure </a></li> --}}
                 {{-- <li><a class="nav-link rounded" href="#">Submenu item 3 </a> </li> --}}
             </ul>

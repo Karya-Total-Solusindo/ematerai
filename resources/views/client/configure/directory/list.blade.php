@@ -48,7 +48,7 @@
                                 {{-- {{ $data->detail }} --}}
                             </td>
                             <td>
-                                <h6 class="mb-0 text-sm"><a href="{{ route('document',$data->id) }}">{{ $data->name }}</a></h6>
+                                <h6 class="mb-0 text-sm"><a href="{{ route('directory.edit',$data->id) }}">{{ $data->name }}</a></h6>
                             </td>
                             <td class="align-middle text-center">
                                 {{ App\Models\Document::where('directory_id',$data->id)->count() ?? 0 }}

@@ -27,6 +27,8 @@
             @include('client.stemp.stemp')
         @elseif (Route::currentRouteName() == 'success')  
             @include('client.stemp.success')
+        @elseif (Route::currentRouteName() == 'history')  
+            @include('client.stemp.history')    
         @elseif (Route::currentRouteName() == 'stemp.create')
             @include('client.stemp.create')
         @elseif (Route::currentRouteName() == 'stemp.show')

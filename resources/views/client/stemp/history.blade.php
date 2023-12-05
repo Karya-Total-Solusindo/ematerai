@@ -41,52 +41,19 @@
     <div class="card-body">
         <div class="row p-0">
             <div class="col">
-                <h4 class="card-title"><i class="ni ni-paper-diploma"></i> Certified Document</h4> 
+                <h4 class="card-title"><i class="ni ni-paper-diploma"></i> History Document</h4> 
             </div>
             <div class="col text-end">
                 <form action="{{ route('exportSuccecc') }}" method="get">
-                    <input type="hidden" name="status" value="CERTIFIED">
+                    <input type="hidden" name="status" value="HISTORY">
                     
                     {{-- <a href="{{ route("stamp.download") }}" id="btn-download" class="btn btn-sm btn-info" ><i class="fas fa-download"></i> DOWNLOAD</a> --}}
-                    <a href="#download" id="btn-download" class="btn btn-sm btn-info" onclick="$('#download-success').submit();" ><i class="fas fa-download"></i> DOWNLOAD</a>
-                    <button type="submit" class="btn btn-sm btn-success"><i class="fas fa-file-excel"></i> Export Excel</button>
+                    <a href="#download" id="btn-download" class="btn btn-sm btn-danger" onclick="$('#download-success').submit();" ><i class="fas fa-trash"></i>  DELETE</a>
+                    {{-- <button type="submit" class="btn btn-sm btn-success"><i class="fas fa-file-excel"></i> Export Excel</button> --}}
                 </form>
             </div>
             <div class="col-md-12">
-                <form action="" method="get">
-                    <div class="row">
-                        <div class="col-md-4">
-                            <div class="input-group mb-0 input-sm mb-3">
-                                <label class="input-group-text" for="company">Company</label>
-                                <select required name="company" class="form-select form-select-sm" id="company">
-                                  <option value="">Choose Company...</option>
-                                  @foreach (App\Models\Company::where('user_id',Auth::user()->id)->get() as $com)
-                                        <option @if($company==$com->id) selected @endif value="{{$com->id}}">{{$com->name}}</option>
-                                  @endforeach
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group mb-0 input-sm mb-3">
-                                <label class="input-group-text" for="inputGroupSelectDirectory">Directory</label>
-                                <select disabled name="directory" class="form-select form-select-sm" id="inputGroupSelectDirectory">
-                                  <option value="">Choose Directory...</option>
-                                </select>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="input-group mb-0 input-sm mb-3">
-                                <label class="input-group-text" for="date-periode" title="Periode"> <i class="fas fa-calendar"></i></label>
-                                  <input type="text" class="form-control daterange" name="periode" id="date-periode" aria-describedby="helpId" placeholder="">
-                                {{-- <span></span> --}}
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <button type="submit" class="btn btn-sm btn-primary">Filter</button>
-                            <a href="{{ route('success') }}" class="btn btn-sm btn-dark"> Reset</a>
-                        </div>                      
-                    </div>
-                </form>
+                
             </div>
         </div>
         <div class="card-body px-0 pt-0 pb-2">
@@ -122,7 +89,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <form id="download-success" method="post" action="{{ route("stamp.download") }}">
+                        <form id="download-success" method="post" action="{{ route("stamp.trash") }}">
                             @csrf
                             @if ($datas->count()) 
                                 @foreach ($datas as $data)

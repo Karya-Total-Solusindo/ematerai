@@ -111,11 +111,13 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::get('/stemp/progress', [StempController::class, 'progress'])->middleware('auth')->name('progress');
     Route::get('/stemp/failed', [StempController::class, 'failed'])->middleware('auth')->name('failed');
     Route::get('/stemp/success', [StempController::class, 'success'])->middleware('auth')->name('success');
+    Route::get('/stemp/history', [StempController::class, 'history'])->middleware('auth')->name('history');
     
     Route::get('/stemp/_modalProcess', [StempController::class, '_modalProcess'])->middleware('auth')->name('_modalProcess');
     //EXPORT EXCEL
     Route::get('/stemp/exportSuccess', [StempController::class, 'exportSuccecc'])->middleware('auth')->name('exportSuccecc');
-    Route::get('/stemp/download', [StempController::class, 'download'])->middleware('auth')->name('stamp.download');
+    Route::post('/stemp/download', [StempController::class, 'download'])->middleware('auth')->name('stamp.download');
+    Route::post('/stemp/trash', [StempController::class, 'trash'])->middleware('auth')->name('stamp.trash');
     
     // Route::get('/stemp/{stemp}', [StempController::class, 'show'])->middleware('auth')->name('stemp.show');
     Route::resource('/stemp', StempController::class);

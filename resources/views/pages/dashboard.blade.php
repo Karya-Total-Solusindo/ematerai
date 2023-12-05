@@ -82,7 +82,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+            <div class="col-xl-3 col-sm-12 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-body p-3 mb-0">
                         <div class="row mb-0">
@@ -111,7 +111,7 @@
             </div>
         </div>
         <div class="row mt-4">
-            <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="col-lg-12 mb-lg-0 mb-4">
                 <div class="card z-index-2 h-100">
                     <div class="card-header pb-0 pt-3 bg-transparent">
                         <h6 class="text-capitalize">Overview of stamp</h6>
@@ -163,7 +163,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-lg-6 mb-lg-0 mb-4">
+            <div class="col-lg-12 mb-lg-0 mb-4">
                 <div class="card z-index-2 h-100">
                     <div class="card-header pb-0 pt-3 bg-transparent">
                         <h6 class="text-capitalize">Overview of stamp process</h6>
@@ -213,7 +213,7 @@
                         </div>
                     </div>
                     <div class="card-footer row">
-                        {{ $datas['NOT_STAMPTING']->onEachSide(1)->links()}}    
+                        {{ $datas['NOT_STAMPTING']->onEachSide(0)->links()}}    
                     </div>
                 </div>
             </div>

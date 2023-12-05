@@ -28,21 +28,26 @@ class SignAdapter
     public static $minutes = 120;
     static function getToken()
     {
-        $Url = config('sign-adapter.API_LOGIN');
-        $response = Http::withHeaders([
-            'Content-Type' => 'application/json'
-        ])->withBody(json_encode([
-            'user' => env('EMATRERAI_USER'),
-            'password' => env('EMATRERAI_PASSWORD'),
-        ]))->post($Url);   
-            //$responseC = response($response);
-            //$responseC->withCookie(cookie('_token_ematerai',$response['token'], self::$minutes,'/'));
-            // return $responseC;
-        if($response['message'] == 'success'){ 
-            return $response['token'];
-        }else{
-            return $response['message'];
+        try{
+            $Url = config('sign-adapter.API_LOGIN');
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->withBody(json_encode([
+                'user' => env('EMATRERAI_USER'),
+                'password' => env('EMATRERAI_PASSWORD'),
+            ]))->post($Url);   
+                //$responseC = response($response);
+                //$responseC->withCookie(cookie('_token_ematerai',$response['token'], self::$minutes,'/'));
+                // return $responseC;
+            if($response['message'] == 'success'){ 
+                return $response['token'];
+            }else{
+                return $response['message'];
+            }
+        }catch(\Exception $e){
+            return $e;
         }
+        
     }
 
     /**
@@ -53,14 +58,17 @@ class SignAdapter
      */
     public static function getJenisDocument()
     {
-        $__token = self::getToken();
-        $Url = config('sign-adapter.API_JENIS_DOCUMENT');
-        $requestAPI = (string) Http::withHeaders([
-            'Content-Type' => 'application/json',
-            'Authorization' => 'Bearer ' . $__token,
-        ])->get($Url);
-        $response = json_decode($requestAPI,true);
-
+        try{
+            $__token = self::getToken();
+            $Url = config('sign-adapter.API_JENIS_DOCUMENT');
+            $requestAPI = (string) Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . $__token,
+            ])->get($Url);
+            $response = json_decode($requestAPI,true);
+        }catch(\Exception $e){
+            return $e;
+        }
         if($response['statusCode']=='00'){
             return $response['result']; // response()->json($response['result']);
         }else{
