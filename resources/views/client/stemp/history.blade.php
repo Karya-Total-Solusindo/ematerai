@@ -46,9 +46,8 @@
             <div class="col text-end">
                 <form action="{{ route('exportSuccecc') }}" method="get">
                     <input type="hidden" name="status" value="HISTORY">
-                    
                     {{-- <a href="{{ route("stamp.download") }}" id="btn-download" class="btn btn-sm btn-info" ><i class="fas fa-download"></i> DOWNLOAD</a> --}}
-                    <a href="#download" id="btn-download" class="btn btn-sm btn-danger" onclick="$('#download-success').submit();" ><i class="fas fa-trash"></i>  DELETE</a>
+                    {{-- <a href="#download" id="btn-download" class="btn btn-sm btn-danger" onclick="$('#download-success').submit();" ><i class="fas fa-trash"></i>  DELETE</a> --}}
                     {{-- <button type="submit" class="btn btn-sm btn-success"><i class="fas fa-file-excel"></i> Export Excel</button> --}}
                 </form>
             </div>
@@ -71,7 +70,7 @@
                 <table class="table align-items-center mb-0">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="selectAll"></td>
+                            {{-- <th><input type="checkbox" id="selectAll"></td> --}}
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Document</th>
                             {{-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -94,7 +93,7 @@
                             @if ($datas->count()) 
                                 @foreach ($datas as $data)
                                 <tr>
-                                    <td><input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id=""></td>
+                                    {{-- <td><input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id=""></td> --}}
                                     <td>
                                         <div class="d-flex px-2 py-1 align-items-center">
                                             <div>
