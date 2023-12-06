@@ -75,7 +75,7 @@ class HomeController extends Controller
             return view('admin.dashboard', compact('datas'));
 
         }else{
-            // user
+           // // user
             // $datas =[
             //     'COUNT_DOCUMENT' => NumberHumanizer::metricSuffix(Document::where(['user_id'=> Auth::user()->id])->count()??0),
             //     'COUNT_NOT_CERTIFIED' => NumberHumanizer::metricSuffix(Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'NOT_CERTIFIED'] )->count()),
@@ -87,7 +87,28 @@ class HomeController extends Controller
             //     "NOT_STAMPTING" => Document::where('user_id',Auth::user()->id)->where('certificatelevel','<>','CERTIFIED')->orderBy('updated_at', 'desc')
             //     ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
             // ];
+            $saldo = 0;
+            $notstamp = 0;
+            try {
+                $Url = config('sign-adapter.API_CHECK_SALDO');
+                $requestAPI = (string) Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
+                ])->post($Url);
+                $response = json_decode($requestAPI,true)['result'];
+                // dd($response);
+                if(isset($response['status'])){
+                    if($response['status']=='00'){
+                        $saldo = $response['saldo'];
+                        $notstamp = $response['notstamp']; 
+                    }
+                }    
+            } catch (\Exception $e) {
+                //throw $th;
+            }
             $datas =[
+                "COUNT_MATERAI" => $saldo,
+                "COUNT_MATERAI_NOSTEMP" => $notstamp,
                 'COUNT_DOCUMENT' => (Document::where(['user_id'=> Auth::user()->id])->count()??0),
                 'COUNT_NOT_CERTIFIED' => (Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'NOT_CERTIFIED'] )->count()),
                 'COUNT_SUCCESS' => (Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'CERTIFIED'] )->count()),

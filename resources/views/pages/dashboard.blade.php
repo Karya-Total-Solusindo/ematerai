@@ -109,10 +109,58 @@
                     </div>
                 </div>
             </div>
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-body p-3 mb-0">
+                        <div class="row mb-0">
+                            <div class="col-8 mb-0">
+                                <div class="numbers mb-0">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai</p>
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{-- {{rand(200000,900000)}}  --}}
+                                        {{ $datas['COUNT_MATERAI'] }}
+                                        <span style="font-size:3vh;"></span>
+                                    </h5>
+                                    {{-- <p class="mb-0"></p> --}}
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-body p-3 mb-0">
+                        <div class="row mb-0">
+                            <div class="col-8 mb-0">
+                                <div class="numbers mb-0">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai Unused</p>
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{-- {{rand(200000,900000)}}  --}}
+                                        {{ $datas['COUNT_MATERAI_NOSTEMP'] }}
+                                        <span style="font-size:3vh;"></span>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
         </div>
         <div class="row mt-4">
-            <div class="col-lg-12 mb-lg-0 mb-4">
-                <div class="card z-index-2 h-100">
+            <div class="col-lg-12 mb-lg-4 mb-4 ">
+                <div class="card z-index-2 h-100 ">
                     <div class="card-header pb-0 pt-3 bg-transparent">
                         <h6 class="text-capitalize">Overview of stamp</h6>
                         {{-- <p class="text-sm mb-0">
