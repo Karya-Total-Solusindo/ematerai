@@ -12,10 +12,12 @@
         height: fit-content !important; 
     }
     .input-group.input-sm>label{
+        height: fit-content;
         padding-bottom: 4px;
         padding-top: 4px;
     }
     .input-group.input-sm>label>svg{
+        /* height: fit-content; */
          padding-bottom: 4px;
         padding-top: 4px;
     }
