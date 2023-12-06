@@ -10,6 +10,7 @@
         "garygreen/pretty-routes": "^1.0",
         "guzzlehttp/guzzle": "^7.2",
         "intervention/image": "^2.7",
+        "itsgoingd/clockwork": "^5.1",
         "laravel-frontend-presets/argon": "^2.0",
         "laravel/framework": "^10.10",
         "laravel/sanctum": "^3.2",
