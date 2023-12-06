@@ -71,6 +71,15 @@
                                 <label class="input-group-text" for="inputGroupSelectDirectory">Directory</label>
                                 <select disabled name="directory" class="form-select form-select-sm" id="inputGroupSelectDirectory">
                                   <option value="">Choose Directory...</option>
+                                  @if(request()->has('company'))
+                                      @foreach (App\Models\Directory::where('company_id','=',request()->input('company') )->get()  as $d)
+                                        @if(request()->input('directory') == $d->id)
+                                          <option  selected value="{{$d->id}}">{{$d->name}}</option>
+                                          @else
+                                          <option value="{{$d->id}}">{{$d->name}}</option>
+                                          @endif
+                                      @endforeach  
+                                  @endif
                                 </select>
                             </div>
                         </div>
@@ -122,62 +131,75 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if(request()->has('company'))
                         <form id="download-success" method="post" action="{{ route("stamp.download") }}">
                             @csrf
-                            @if ($datas->count()) 
-                                @foreach ($datas as $data)
-                                <tr>
-                                    <td><input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id=""></td>
-                                    <td>
-                                        <div class="d-flex px-2 py-1 align-items-center">
-                                            <div>
-                                                <i class="fas fa-file-pdf"></i>
+                            
+                                @if ($datas->count()) 
+                                    @foreach ($datas as $data)
+                                    <tr>
+                                        <td><input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id=""></td>
+                                        <td>
+                                            <div class="d-flex px-2 py-1 align-items-center">
+                                                <div>
+                                                    <i class="fas fa-file-pdf"></i>
+                                                </div>
+                                                <div class="ms-4">
+                                                    <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6>
+                                                    {{-- <p class="text-xs text-secondary mb-0"><i class="ni ni-building"></i> {{ $data->company->name }} <i class="fas fa-folder-open"></i> {{ $data->directory->name }}</p> --}}
+                                                </div>
                                             </div>
-                                            <div class="ms-4">
-                                                <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6>
-                                                {{-- <p class="text-xs text-secondary mb-0"><i class="ni ni-building"></i> {{ $data->company->name }} <i class="fas fa-folder-open"></i> {{ $data->directory->name }}</p> --}}
-                                            </div>
-                                        </div>
-                                    </td>
-                                    <td class="align-middle text-sm text-left">
-                                    {{ $data->company->name }}
-                                    </td>
-                                    <td class="align-middle text-sm text-left">
-                                        {{ $data->directory->name }}
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="badge badge-sm  bg-gradient-success">{{ $data->certificatelevel ?? 'NOT_CERTIFIED' }}</span>
-                                        {{-- {{ App\Models\Document::where('directory_id',$data->id)->count() ?? 0 }} --}}
-                                    </td>
-                                    <td class="align-middle text-center">
-                                        <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y - H:i:s') }}</span>
-                                    </td>
-                                    <td class="align-middle text-end">
-                                        <a target="_blank" href=" {{ asset('storage/docs/'.$data->company->name.'/'.$data->directory->name.'/out/'.$data->filename) }}" class="text-primary font-weight-bold text-xs"
-                                            data-toggle="tooltip" data-original-title="Edit Download">
-                                            <span class="badge badge-sm bg-gradient-success"><i class="fas fa-eye"></i> View</span>
-                                        </a>
+                                        </td>
+                                        <td class="align-middle text-sm text-left">
+                                        {{ $data->company->name }}
+                                        </td>
+                                        <td class="align-middle text-sm text-left">
+                                            {{ $data->directory->name }}
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <span class="badge badge-sm  bg-gradient-success">{{ $data->certificatelevel ?? 'NOT_CERTIFIED' }}</span>
+                                            {{-- {{ App\Models\Document::where('directory_id',$data->id)->count() ?? 0 }} --}}
+                                        </td>
+                                        <td class="align-middle text-center">
+                                            <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y - H:i:s') }}</span>
+                                        </td>
+                                        <td class="align-middle text-end">
+                                            <a target="_blank" href=" {{ asset('storage/docs/'.$data->company->name.'/'.$data->directory->name.'/out/'.$data->filename) }}" class="text-primary font-weight-bold text-xs"
+                                                data-toggle="tooltip" data-original-title="Edit Download">
+                                                <span class="badge badge-sm bg-gradient-success"><i class="fas fa-eye"></i> View</span>
+                                            </a>
+                                        
+                                            {{-- <a href="{{ route('stemp.show',$data->id) }}" class="text-primary font-weight-bold text-xs"
+                                                data-toggle="tooltip" data-original-title="Edit Download">
+                                                <span class="badge badge-sm bg-gradient-info"> Detail</span>
+                                            </a> --}}
+                                        </td>
+                                    </tr>
+                                    @endforeach
                                     
-                                        {{-- <a href="{{ route('stemp.show',$data->id) }}" class="text-primary font-weight-bold text-xs"
-                                            data-toggle="tooltip" data-original-title="Edit Download">
-                                            <span class="badge badge-sm bg-gradient-info"> Detail</span>
-                                        </a> --}}
-                                    </td>
-                                </tr>
-                                @endforeach
-                            @else
-                        <tr>
-                            <td colspan="7" class="text-center pt-5 align-middle text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                <h5>Certified data is still empty</h5>
-                            </td>
-                        </tr>
-                    @endif
+                                @else
+                                    <tr>
+                                        <td colspan="7" class="text-center pt-5 align-middle text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                            <h5>Certified data is still empty</h5>
+                                        </td>
+                                    </tr>
+                                @endif
+                    @else
+                    <tr>
+                        <td colspan="7" class="text-center pt-5 align-middle text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                            <h5>Certified data is still empty</h5>
+                        </td>
+                    </tr>
+                    
                         </form>
+                    @endif
                     </tbody>   
                 </table>
             </div>
         </div>
+        @if(request()->has('company'))
         {{ $datas->links() }}
+        @endif
     </div>
 </div>
 
@@ -216,6 +238,9 @@
             // });
             //toastr["info"]("error", "Toastr Test");
         });
+        @if(request()->has('directory'))
+            $('#inputGroupSelectDirectory').prop("disabled", false); 
+        @endif
         //get directory of company 
         $('#company').on('change',(e)=>{
             let id = $(this).find(":selected").val();
@@ -223,9 +248,9 @@
             e.preventDefault();
             console.log(id); 
             if(id!=''){
-                $('#inputGroupSelectDirectory').prop("disabled", true); 
+                // $('#inputGroupSelectDirectory').prop("disabled", true); 
                 $.get(url+id, function( data ) {
-                    $('#inputGroupSelectDirectory').attr('disabled');
+                    //$('#inputGroupSelectDirectory').attr('disabled');
                     $('#inputGroupSelectDirectory').html('');  
                 }).done(function(data) {           
                     //alert( "second success" );
