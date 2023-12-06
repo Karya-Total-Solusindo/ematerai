@@ -175,7 +175,7 @@ return [
         PrettyRoutes\ServiceProvider::class,
 
         Maatwebsite\Excel\ExcelServiceProvider::class,  
-        Clockwork\Support\Laravel\ClockworkServiceProvider::class,      
+        //Clockwork\Support\Laravel\ClockworkServiceProvider::class,      
     ])->toArray(),
 
     /*
