@@ -55,7 +55,7 @@
             <div class="col-md-12">
                 <form action="" method="get">
                     <div class="row">
-                        <div class="col-md-4">
+                        <div class="col-md-12">
                             <div class="input-group mb-0 input-sm mb-3">
                                 <label class="input-group-text" for="company">Company</label>
                                 <select required name="company" class="form-select form-select-sm" id="company">
@@ -64,9 +64,29 @@
                                         <option @if($company==$com->id) selected @endif value="{{$com->id}}">{{$com->name}}</option>
                                   @endforeach
                                 </select>
+                                {{-- directory --}}
+                                <label class="input-group-text" for="inputGroupSelectDirectory">Directory</label>
+                                <select disabled name="directory" class="form-select form-select-sm" id="inputGroupSelectDirectory">
+                                  <option value="">Choose Directory...</option>
+                                  @if(request()->has('company'))
+                                      @foreach (App\Models\Directory::where('company_id','=',request()->input('company') )->get()  as $d)
+                                        @if(request()->input('directory') == $d->id)
+                                          <option  selected value="{{$d->id}}">{{$d->name}}</option>
+                                          @else
+                                          <option value="{{$d->id}}">{{$d->name}}</option>
+                                          @endif
+                                      @endforeach  
+                                  @endif
+                                </select>
+                                {{-- periode --}}
+                                <label class="input-group-text" for="date-periode" title="Periode"> <i class="fas fa-calendar"></i></label>
+                                  <input type="text" class="form-control daterange" name="periode" id="date-periode" aria-describedby="helpId" placeholder="">
+                                  {{-- button --}}
+                                  <button type="submit" class="btn btn-sm btn-primary">Filter</button>
+                                  <a href="{{ route('success') }}" class="btn btn-sm btn-dark"> Reset</a>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        {{-- <div class="col-md-3">
                             <div class="input-group mb-0 input-sm mb-3">
                                 <label class="input-group-text" for="inputGroupSelectDirectory">Directory</label>
                                 <select disabled name="directory" class="form-select form-select-sm" id="inputGroupSelectDirectory">
@@ -83,17 +103,17 @@
                                 </select>
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <div class="input-group mb-0 input-sm mb-3">
                                 <label class="input-group-text" for="date-periode" title="Periode"> <i class="fas fa-calendar"></i></label>
                                   <input type="text" class="form-control daterange" name="periode" id="date-periode" aria-describedby="helpId" placeholder="">
-                                {{-- <span></span> --}}
+                                
                             </div>
                         </div>
-                        <div class="col-md-4">
+                        <div class="col-md-3">
                             <button type="submit" class="btn btn-sm btn-primary">Filter</button>
                             <a href="{{ route('success') }}" class="btn btn-sm btn-dark"> Reset</a>
-                        </div>                      
+                        </div>                       --}}
                     </div>
                 </form>
             </div>
