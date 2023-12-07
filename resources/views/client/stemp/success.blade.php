@@ -137,11 +137,7 @@
         @endif
         <form action="" method="get">
         <div class="w-auto input-group input-sm mb-0 ">
-            {{-- button --}}
-            <button type="submit" class="  btn btn-sm  btn-primary">Filter</button>
-            @if(request()->has('company'))
-            <a href="{{ route('success') }}" class=" btn btn-sm btn-sm bg-gradient-dark"> Reset</a>
-            @endif
+            
             <label class="input-group-text" for="per_page" title="Show Per Page">Show</label>
             <select title="Show Per Page" name="view" id="per_page" class="select-per-page p-1  form-select form-select-sm">
                 <option @if(request()->input('view')==10) selected @endif value="10">10</option>
@@ -169,6 +165,11 @@
                 @endif
               </select>
               <input title="Date Interval" type="text" class="w-auto p-1 form-control daterange" name="periode" id="date-periode" aria-describedby="helpId" placeholder="">  
+              {{-- button --}}
+            <button type="submit" class="  btn btn-sm  btn-primary">Filter</button>
+            @if(request()->has('company'))
+            <a href="{{ route('success') }}" class=" btn btn-sm btn-sm bg-gradient-dark"> Reset</a>
+            @endif
             </form>
         </div> 
             <div class="table-responsive p-0">
