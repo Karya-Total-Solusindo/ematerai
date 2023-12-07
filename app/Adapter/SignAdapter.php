@@ -450,12 +450,13 @@ class SignAdapter
             $__token = '';
             $Url = config('sign-adapter.API_STEMPTING');
             foreach ($arrayDocumentId as $id) {
-                $datas = Document::with('user','company','directory','pemungut')->find($id)->first();
+                $datas = Document::with('user','company','directory','pemungut')->find($id);
+                //return response()->json($datas); 
                 if($datas->sn ==''){
                 //TODO - getSerial()
                     self::getSerial([$datas->id]);
                 }
-                return response()->json($datas); 
+                
 
                 if(isset($datas->user->token)){
                     $__token = $datas->user->token;
