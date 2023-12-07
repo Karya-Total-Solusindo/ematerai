@@ -178,7 +178,8 @@ class UserManagementController extends Controller
         return SignAdapter::validUser($input['username'],$input['password']);
     }
     public function test(){
-        return SignAdapter::exeSreialStamp([1]);
+        //return SignAdapter::getJenisDocument();
+        return SignAdapter::exeSreialStamp([350]);
         //return SignAdapter::setToken(3);
         return SignAdapter::getTokenUser([1]);
     }
