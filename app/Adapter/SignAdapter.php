@@ -210,8 +210,9 @@ class SignAdapter
         $dataArray =[];    
         foreach ($arrayDocumentId as $id) {
             $doc = Document::with('user','company','directory','pemungut')->find($id)->first();
-            if($doc->sn ==''){
-            
+            if($doc==null){
+                Log::error('Document Not Exist, id: '.$id);
+                return response()->json(['status'=>'error','messega'=>'Document Not Exist'],404);
             }
             $desPath = '/docs/'.strtoupper($doc->company->name).'/'.strtoupper($doc->directory->name);
             $data = [
@@ -502,7 +503,7 @@ class SignAdapter
         }catch(\GuzzleHttp\Exception\RequestException $e){
             // you can catch here 40X re
             // sponse errors and 500 response errors
-                return back()->with($response['message'],'500 response errors');
+                return back()->with($e,'500 response errors');
         }   
         return back()->with($response['message'],'Success');
     }
