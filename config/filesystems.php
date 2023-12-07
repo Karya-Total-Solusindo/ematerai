@@ -35,6 +35,12 @@ return [
             'root' => storage_path('app'),
             'throw' => false,
         ],
+        // images folder in public path
+        'document' => [
+            'driver' => 'local',
+            'root' => storage_path('app/public/docs'),
+            'url' => env('APP_URL').'/docs',
+        ],
 
         'public' => [
             'driver' => 'local',
