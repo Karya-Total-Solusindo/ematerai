@@ -16,16 +16,16 @@
                     </ul>
                 </li>
                 <li class="nav-item has-submenu">
-                    <a class="nav-link rounded border-0 mt-0 d-flex align-items-center {{ request()->segment(1) == 'manage' ? 'show' : '' }}" href="#"> 
+                    <a class="nav-link rounded border-0 mt-0 d-flex align-items-center {{ request()->segment(2) == 'users' ? 'active' : '' }}" {{ request()->segment(1) == 'manage' ? 'show' : '' }}" href="{{ route('users.index') }}"> 
                         <div class="ps-0 mb-0">
                             <i class="fas fa-users pe-3" style="color: #f4645f;"></i>
                         </div> 
                         <span class="text-uppercase text-xs font-weight-bolder opacity-6">User Manager </span> 
                     </a>
-                    <ul class="submenu collapse rounded  {{ request()->segment(1) == 'manage' ? 'show' : '' }}">
-                        <li><a class="nav-link rounded {{ request()->segment(2) == 'users' ? 'active' : '' }}" href="{{ route('users.index') }}">User </a></li>
+                    {{-- <ul class="submenu collapse rounded  {{ request()->segment(1) == 'manage' ? 'show' : '' }}"> --}}
+                        {{-- <li><a class="nav-link rounded {{ request()->segment(2) == 'users' ? 'active' : '' }}" href="{{ route('users.index') }}">User </a></li> --}}
                         {{-- <li><a class="nav-link rounded {{ request()->segment(2) == 'users' ? 'active' : '' }}" href="{{ route('users.index') }}">Saldo</a></li> --}}
-                    </ul>
+                    {{-- </ul> --}}
                 </li>
                 {{-- <li class="nav-item has-submenu">
                     <a class="nav-link rounded border-0 mt-0 d-flex align-items-center {{ request()->segment(1) == 'manage' ? 'show' : '' }}" href="#"> 
@@ -45,12 +45,11 @@
                         </div> 
                         <span class="text-uppercase text-xs font-weight-bolder opacity-6">Server</span> 
                     </a>
-                    <ul class="submenu collapse rounded  {{ request()->segment(1) == 'manage' ? 'show' : '' }} {{ request()->segment(1) == 'filemanager' ? 'show' : '' }}">
+                    <ul class="submenu collapse rounded {{ request()->segment(1) == 'filemanager' ? 'show' : '' }} {{ request()->segment(1) == 'backup' ? 'show' : '' }}">
                         <li><a class="nav-link rounded {{ request()->segment(1) == 'filemanager' ? 'active' : '' }}" href="{{route('filemanager')}}"><i class="fas fa-folder pe-3" style="color: #f4645f;"></i> File Manager</a></li>
-                        <li><a class="nav-link rounded {{ request()->segment(2) == 'log' ? 'active' : '' }}" href="{{route('log-viewer.index')}}"><i class="fas fa-clipboard-list pe-3" style="color: #f4645f;"></i> Log System</a></li>
-                        <li><a class="nav-link rounded {{ request()->segment(2) == 'beckup' ? 'active' : '' }}" href="{{ route('users.index') }}"><i class="fas fa-database pe-3" style="color: #f4645f;"></i> Backup</a></li>
+                        {{-- <li><a class="nav-link rounded {{ request()->segment(2) == 'log' ? 'active' : '' }}" href="{{route('log-viewer.index')}}"><i class="fas fa-clipboard-list pe-3" style="color: #f4645f;"></i> Log System</a></li> --}}
+                        <li><a class="nav-link rounded {{ request()->segment(1) == 'backup' ? 'active' : '' }}" href="{{ route('backup') }}"><i class="fas fa-database pe-3" style="color: #f4645f;"></i> Backup</a></li>
                     </ul>
-                    
                 </li>    
 
                 {{-- <li class="nav-item has-submenu">

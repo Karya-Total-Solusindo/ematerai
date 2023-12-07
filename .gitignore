@@ -29,7 +29,7 @@ yarn-error.log
 /public/.*
 /local_resouce
 /.env.*
-
+/lang/*
 ### composer
 composer.lock
 # Created by https://www.toptal.com/developers/gitignore/api/laravel,visualstudiocode,windows

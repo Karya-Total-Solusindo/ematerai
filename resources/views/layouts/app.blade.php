@@ -62,6 +62,9 @@
         .fm .fm-body{
             height: 500px !important;
             background-color: #e2e2e2;
+            padding: 5px;
+            border: none;
+            border-radius: 8px;
         }
     </style>
     @endif
@@ -189,7 +192,7 @@
                         </div>
                         @include('layouts.footers.auth.footer')
                     </main>
-                @include('components.fixed-plugin')
+                {{-- @include('components.fixed-plugin') --}}
             @endif
         @endauth
     </div>

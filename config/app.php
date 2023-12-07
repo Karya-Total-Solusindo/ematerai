@@ -170,6 +170,7 @@ return [
         App\Providers\EventServiceProvider::class,
         App\Providers\RouteServiceProvider::class,
         Spatie\Permission\PermissionServiceProvider::class,
+        Spatie\Backup\BackupServiceProvider::class,
         # PrettyRoutes
         Collective\Html\HtmlServiceProvider::class,
         PrettyRoutes\ServiceProvider::class,

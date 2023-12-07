@@ -31,7 +31,7 @@ return [
      * List of disk names that you want to use
      * (from config/filesystems)
      */
-    'diskList'          => ['document'],
+    'diskList'          => ['document','download'],
 
     /**
      * Default disk for left manager
@@ -90,12 +90,12 @@ return [
      *
      * [] - no restrictions
      */
-    'allowFileTypes'    => ['pdf'],
+    'allowFileTypes'    => ['pdf','png'],
 
     /**
      * Show / Hide system files and folders
      */
-    'hiddenFiles'       => true,
+    'hiddenFiles'       => false,
 
     /***************************************************************************
      * Middleware
@@ -103,7 +103,7 @@ return [
      * Add your middleware name to array -> ['web', 'auth', 'admin']
      * !!!! RESTRICT ACCESS FOR NON ADMIN USERS !!!!
      */
-    'middleware'        => ['web'],
+    'middleware'        => ['web','auth'],
 
     /***************************************************************************
      * ACL mechanism ON/OFF

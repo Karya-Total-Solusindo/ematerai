@@ -7,6 +7,8 @@ use Illuminate\Support\ServiceProvider;
 use Mockery\Matcher\Any;
 use Illuminate\Pagination\Paginator;
 use Coduo\PHPHumanizer\NumberHumanizer;
+use Opcodes\LogViewer\Facades\LogViewer;
+
 
 class AppServiceProvider extends ServiceProvider
 {
@@ -42,5 +44,9 @@ class AppServiceProvider extends ServiceProvider
         Paginator::useBootstrapFive();
         // Blade::component('alert', Alert::class);
         // Paginator::useBootstrapFour();
+        LogViewer::auth(function ($request) {
+            return auth()->user()->hasRole('Admin');
+            // return true to allow viewing the Log Viewer.
+        });
     }
 }

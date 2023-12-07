@@ -29,6 +29,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\EmateraiController;
 use App\Http\Controllers\DocumentController;
 use App\Http\Controllers\Admin\FileManagerController;
+use App\Http\Controllers\BackupController;
 
 
 // Route::resource('/test', TestController::class);
@@ -77,10 +78,14 @@ Route::group(['middleware' => ['auth'],], function () {
         Route::post('/users/check', [App\Http\Controllers\Admin\UserManagementController::class,'checkpemungut'])->name('checkpemungut');
         Route::get('/test', [App\Http\Controllers\Admin\UserManagementController::class,'test'])->name('test');
     });
-    
+
     Route::get('/filemanager', [FileManagerController::class,'index'])->middleware('auth')->name('filemanager');
     Route::get('/server/php', [App\Http\Controllers\Admin\ServerController::class,'phpinfo'])->middleware('auth')->name('phpinfo');
-
+    //backup
+    Route::get('/backup',[BackupController::class,'index'])->middleware('auth')->name('backup');
+    Route::get('/backup/create', [BackupController::class,'create'])->middleware('auth');
+    Route::get('/backup/download/{file_name}', [BackupController::class,'download'])->middleware('auth');
+    Route::get('/backup/delete/{file_name}', [BackupController::class,'delete'])->middleware('auth');
     /**
     * Configure
     */
