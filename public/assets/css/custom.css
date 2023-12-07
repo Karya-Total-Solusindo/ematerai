@@ -22,3 +22,46 @@
     color: #fff;
     padding-top: 20%;
 }
+
+
+
+/** Table 
+select.form-select-sm{
+        height: fit-content;
+    }
+    .input-group.input-sm>select{
+        /* padding-top: 0px;
+        top: -3px; */
+    }
+    .input-group.input-sm>input.form-control.daterange{
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+        height: fit-content !important; 
+    }
+    .input-group.input-sm>label{
+        height: fit-content;
+        padding-bottom: 4px;
+        padding-top: 4px;
+    }
+    .input-group.input-sm>label>svg{
+        /* height: fit-content; */
+         padding-bottom: 4px;
+        padding-top: 4px;
+    }
+    .daterangepicker.dropdown-menu{
+        border: solid 1.5px #f86343;
+    }
+    .daterangepicker_input>svg{
+        position: absolute;
+        top: 8px;
+        left: 9px;
+    }
+    .daterangepicker:after{
+        border-bottom: 6px solid #f86343;
+    }
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #f86343;
+    }
+    .select-per-page:hover{
+        idth: inherit !important;
+    }
