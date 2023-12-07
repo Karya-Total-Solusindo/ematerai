@@ -462,6 +462,24 @@ class SignAdapter
                 }else{
                     $__token = self::setToken($datas->id);
                 }
+                $dbug =[
+                    "certificatelevel"=> "NOT_CERTIFIED",
+                    'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
+                    "docpass"=> "",
+                    "jwToken"=> $datas->user->token,
+                    "location"=> "JAKARTA",
+                    "profileName"=> "emeteraicertificateSigner",
+                    "reason"=> "Ematerai Farpoint",
+                    "refToken"=> $datas->sn,
+                    "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
+                    "src"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
+                    'visLLX'=> $datas->x1, //$input['lower_left_x'] ?? '0',
+                    'visLLY'=> $datas->y1, //$input['lower_left_y'] ?? '0',
+                    'visURX'=> $datas->x2, //$input['upper_right_x'] ?? '0',
+                    'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
+                    'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
+                ];
+                return response()->json([$dbug,$datas]); 
                 $stemting = (string) Http::withHeaders([
                         'Content-Type' => 'application/json',
                         'Authorization' => 'Bearer ' . $datas->user->token,
