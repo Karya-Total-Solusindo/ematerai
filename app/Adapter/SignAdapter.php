@@ -451,7 +451,7 @@ class SignAdapter
             $Url = config('sign-adapter.API_STEMPTING');
             foreach ($arrayDocumentId as $id) {
                 $datas = Document::with('user','company','directory','pemungut')->find($id);
-                return response()->json($datas); 
+                //return response()->json($datas); 
                 if($datas->sn ==''){
                     //TODO - getSerial()
                     self::getSerial([$datas->id]);
