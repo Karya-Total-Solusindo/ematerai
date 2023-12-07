@@ -461,7 +461,7 @@ class SignAdapter
                 }
                 $stemting = (string) Http::withHeaders([
                         'Content-Type' => 'application/json',
-                        'Authorization' => 'Bearer ' . $__token,
+                        'Authorization' => 'Bearer ' . $datas->user->token,
                     ])->withBody(json_encode([
                         "certificatelevel"=> "NOT_CERTIFIED",
                         'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
