@@ -71,15 +71,15 @@
     </div>
     <div class="container-fluid py-4">
         <div class="row">
-            <div class="col-md-6">
+            <div class="col-md-12">
                 <div class="card">
                     <form role="form" method="POST" action={{ route('profile.update') }} enctype="multipart/form-data">
                         @csrf
-                        <div class="card-header pb-0">
+                        <div class="card-header ">
                             <div class="d-flex align-items-center">
                                 <h6 class="mb-0">USER INFORMATION</h6>
-                                <button type="button" onclick="edit()" id="btn-edit" class="btn btn-info btn-sm ms-auto">Edit&nbsp;&nbsp;<i class="fa fa-pen"></i></button>
-                                <button type="submit" class="btn btn-primary btn-sm ms-2" id="btn-save" style="display: none;">Save&nbsp;&nbsp;<i class="fa fa-save"></i></button>
+                                {{-- <button type="button" onclick="edit()" id="btn-edit" class="btn btn-info btn-sm ms-auto">Edit&nbsp;&nbsp;<i class="fa fa-pen"></i></button>
+                                <button type="submit" class="btn btn-primary btn-sm ms-2" id="btn-save" style="display: none;">Save&nbsp;&nbsp;<i class="fa fa-save"></i></button> --}}
                             </div>
                         </div>
                         <div class="card-body">
@@ -105,7 +105,7 @@
                     </form>
                 </div>
             </div>
-            <div class="col-md-6">
+            {{-- <div class="col-md-6">
                 <div class="card">
                     <form role="form" method="POST" action={{ route('profile.password') }}>
                         @csrf
@@ -119,7 +119,7 @@
                             </div>
                         </div>
                         <div class="card-body">
-                            {{-- <p class="text-uppercase text-sm">User Information</p> --}}
+                           
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="oldPassword" class="form-control-label">Old Password&nbsp;<span>*</span></label>
@@ -148,7 +148,7 @@
                         </div>
                     </form>
                 </div>
-            </div>
+            </div> --}}
         </div>
         {{-- @include('layouts.footers.auth.footer') --}}
     </div>

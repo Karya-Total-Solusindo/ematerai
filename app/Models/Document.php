@@ -65,18 +65,25 @@ class Document extends Model
         //     });  
         // });
         $query->when($filters['periode'] ?? false, function($query, $periode){
-            return $query->whereHas('directory', function($query) use ($periode) {
+            //return $query->where('document', function($query) use ($periode) {
                 $splitdate = explode('-',$periode);
-                $dateStart = date('Y-m-d', strtotime(str_replace('/', '-',$splitdate[0])));
-                $dateEnd = date('Y-m-d', strtotime(str_replace('/', '-',$splitdate[1])));
-                $query->where('user_id','=',Auth::user()->id)
+                $dateStart = date('Y-m-d 00:00:00', strtotime(str_replace('/', '-',$splitdate[0])));
+                $dateEnd = date('Y-m-d 23:59:59', strtotime(str_replace('/', '-',$splitdate[1])));
+                return    $query->where('user_id','=',Auth::user()->id)
                 ->whereBetween('updated_at',[$dateStart, $dateEnd])
                 ->orderBy('updated_at', 'desc');
-            });   
+            //});   
         });
 
     }
-
+    public function user()
+    {
+        return $this->belongsTo(User::class,'user_id','id','document')->withDefault();
+    }
+    public function pemungut()
+    {
+        return $this->belongsTo(Pemungut::class,'user_id','user_id','document')->withDefault();
+    }
     public function company()
     {
         // return $this->belongsTo(Company::class,'directories','id','company_id');
@@ -87,4 +94,9 @@ class Document extends Model
         // return $this->belongsTo(Company::class,'directories','id','company_id');
         return $this->belongsTo(Directory::class)->withDefault();
     }
+    // public function pemungut()
+    // {
+    //     // return $this->belongsTo(Company::class,'directories','id','company_id');
+    //     return $this->hasOneThrough(Document::class,Pemungut::class,'user_id','user_id','id','id')->withDefault('token');
+    // }
 }

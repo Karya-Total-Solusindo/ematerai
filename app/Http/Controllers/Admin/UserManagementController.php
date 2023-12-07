@@ -2,15 +2,18 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Adapter\SignAdapter;
 use App\Http\Controllers\Controller;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Spatie\Permission\Models\Role;
 use App\Models\User;
-use DB;
-use Hash;
+use App\Models\Pemungut;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\Crypt;
 
 class UserManagementController extends Controller
 {
@@ -65,8 +68,7 @@ class UserManagementController extends Controller
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
 
-        return redirect()->route('users.index')
-                        ->with('success','User created successfully');
+        return redirect()->route('users.index')->with('success','User created successfully');
     }
 
     /**
@@ -77,12 +79,14 @@ class UserManagementController extends Controller
      */
     public function show($id)
     {
-        $user = User::find($id);
+        //$user = User::find($id);
+        $user = User::with('pemungut')->find($id);
+        $pass = ($user->pemungut->p_password)? Crypt::decrypt($user->pemungut->p_password):'' ;
         if($user==null){
             return redirect()->route('users.index')
-                        ->with('error','User not Found!');
+                   ->with('error','User not Found!');
         }
-        return view('admin.users.show',compact('user'));
+        return view('admin.users.show',compact('user','pass'));
     }
 
     /**
@@ -95,8 +99,7 @@ class UserManagementController extends Controller
     {
         $user = User::find($id);
         if($user==null){
-            return redirect()->route('users.index')
-                        ->with('error','User not Found!');
+            return redirect()->route('users.index')->with('error','User not Found!');
         }
         $roles = Role::pluck('name','name')->all();
         $userRole = $user->roles->pluck('name','name')->all();
@@ -149,4 +152,34 @@ class UserManagementController extends Controller
                         ->with('success','User deleted successfully');
     }
 
+
+    //TODO service akun
+    public function setpemungut(Request $request){
+        $request->validate([
+            'user'=> 'required',
+            'username'=> 'required',
+            'password'=> 'same:confirm-password',
+        ]);
+        $input = $request->all();
+        $pemungut = Pemungut::updateOrCreate(['user_id'=>$input['user']],
+            [
+                'p_user'=> $input['username'],
+                'p_password'=> Crypt::encrypt($input['password'])
+            ]);
+        return redirect()->back()->with('success', 'Account saved successfully ');    
+    } 
+
+    public function checkpemungut(Request $request){
+        $request->validate([
+            'username'=> 'required',
+            'password'=> 'required',
+        ]);
+        $input = $request->all();
+        return SignAdapter::validUser($input['username'],$input['password']);
+    }
+    public function test(){
+        return SignAdapter::exeSreialStamp([1]);
+        //return SignAdapter::setToken(3);
+        return SignAdapter::getTokenUser([1]);
+    }
 }

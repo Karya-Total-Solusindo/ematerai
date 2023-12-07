@@ -8,7 +8,6 @@ use App\Models\Company;
 use App\Models\Directory;
 use App\Models\User;
 use App\Models\Document;
-use App\Models\Pemungut;
 use App\Models\Serialnumber;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Facades\Crypt;
@@ -28,37 +27,77 @@ class SignAdapter
      * ==============================
      */
     public static $minutes = 120;
-    static function setToken($id)
+    static function getToken()
     {
-        $data = Document::with('user','company','directory','pemungut')->find($id)->first();
         try{
             $Url = config('sign-adapter.API_LOGIN');
             $response = Http::withHeaders([
                 'Content-Type' => 'application/json'
             ])->withBody(json_encode([
-                'user' => $data->pemungut->p_user,
-                'password' => Crypt::decrypt($data->pemungut->p_password),
+                'user' => env('EMATRERAI_USER'),
+                'password' => env('EMATRERAI_PASSWORD'),
             ]))->post($Url);   
                 //$responseC = response($response);
                 //$responseC->withCookie(cookie('_token_ematerai',$response['token'], self::$minutes,'/'));
                 // return $responseC;
             if($response['message'] == 'success'){ 
-                $token = Pemungut::find($data->pemungut->id); 
-                $token->token = $response['token'];
-                $token->update();
-                $user = User::find($data->user->id); 
-                $user->ematerai_token = $response['token'];
-                $user->update();
-                return true;
+                return $response['token'];
             }else{
-                return false;
+                return $response['message'];
             }
         }catch(\Exception $e){
             return $e;
         }
         
     }
-    
+    /**  
+     * check validation accunt by admin
+     */
+    static function validUser(string $user, string $password)
+    {
+        try{
+            $Url = (string) config('sign-adapter.API_LOGIN');
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->withBody(json_encode([
+                'user' =>  $user,
+                'password' =>$password,
+            ]))->post($Url);   
+            $data = json_decode($response);    
+            if($response['message'] == 'success'){ 
+                return $data;
+            }else{
+                return $data;
+            }
+        }catch(\Exception $e){
+            return $e;
+        }
+        
+    }
+    /**  
+     * get user token 
+     */
+    static function getTokenUser()
+    {
+        try{
+            $Url = (string) config('sign-adapter.API_LOGIN');
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->withBody(json_encode([
+                'user' =>  Auth::user()->pemungut->p_user,
+                'password' => Crypt::decrypt(Auth::user()->pemungut->p_password),
+            ]))->post($Url);   
+            $data = json_decode($response);    
+            if($response['message'] == 'success'){ 
+                return $data;
+            }else{
+                return $data;
+            }
+        }catch(\Exception $e){
+            return $e;
+        }
+    }
+
     /**
      * API Jenis Document digunakan untuk mendapatkan 
      * list jenis dokumen yang digunakan untuk
@@ -191,23 +230,25 @@ class SignAdapter
 
     /**
      * disini method generated sigle Serial number
-     *  {
-     *     "isUpload": false,
-     *     "namadoc": "4b",
-     *     "namafile": "dok1.pdf",
-     *     "nilaidoc": "10000",
-     *     "namejidentitas": "KTP",
-     *     "noidentitas": "1251087201650003",
-     *     "namedipungut": "Santoso",
-     *     "snOnly": false,
-     *     "nodoc": "1",
-     *     "tgldoc": "2022-04-25"
-     *  }
+     * 
      */
     public static function getSerial(array $arrayDocumentId){
+        // {
+        //     "isUpload": false,
+        //     "namadoc": "4b",
+        //     "namafile": "dok1.pdf",
+        //     "nilaidoc": "10000",
+        //     "namejidentitas": "KTP",
+        //     "noidentitas": "1251087201650003",
+        //     "namedipungut": "Santoso",
+        //     "snOnly": false,
+        //     "nodoc": "1",
+        //     "tgldoc": "2022-04-25"
+        // }
+        
         $dataArray =[];    
         foreach ($arrayDocumentId as $id) {
-            $doc = Document::with('user','company','directory','pemungut')->find($id)->first();
+            $doc = Document::find($id);
             if($doc->sn ==''){
             
             }
@@ -217,12 +258,15 @@ class SignAdapter
                 "namadoc"=> "4b", //mand
                 "namafile"=>  $doc['filename'],  //mand
                 "nilaidoc"=> "10000", //op
+                // "namejidentitas"=> "KTP", //op
+                // "noidentitas"=> "1251087201650003", //op
+                // "namedipungut"=> "Santoso", //op
                 "snOnly"=> false, //mand
                 "nodoc"=> $doc['docnumber'], //mand
                 "tgldoc"=> $doc['created_at']->format('Y-m-d') //mand
             ];
             // get jwt Token
-            $__token = $doc->user->token;
+            $__token = self::getToken();
             // do generated SN
             $Url = config('sign-adapter.API_GENERATE_SERIAL_NUMBER');
             $requestAPI = (string) Http::withHeaders([
@@ -242,9 +286,9 @@ class SignAdapter
                 $dataSN =[
                    'sn' => $response['result']['sn'],
                    'image' => $response['result']['image'],
-                //    'namejidentitas'=> 'KTP',
-                //    'noidentitas'=> '1251087201650003',
-                //    'namedipungut'=> 'Santoso',
+                   'namejidentitas'=> 'KTP',
+                   'noidentitas'=> '1251087201650003',
+                   'namedipungut'=> 'Santoso',
                    'user_id' => 0,
                    'documet_id' =>  $doc['id'],
                 ];
@@ -278,6 +322,70 @@ class SignAdapter
         // $response = json_decode($data,true);
         return back()->with($response['message'],$response['result']['sn']);
         return response()->json($dataArray);
+    }
+
+    /** 
+     * execusi serial dan lakukan stamp
+    */
+    public static function exeSreialStamp(array $arrayDocumentId){
+        $dataArray =[];
+        try{
+             // do generated SN
+             $__token = '';
+             if(isset(Auth::user()->ematerai_token)){
+                 $__token = Auth::user()->ematerai_token;
+             }else{
+                 $__token =  self::getToken();
+             }
+            $Url = config('sign-adapter.API_STEMPTING');
+            foreach ($arrayDocumentId as $id) {
+            $serialdata = Document::find($id);
+            if($serialdata->sn ==''){
+               self::getSerial([$id]);
+            }
+            $datas = Document::find($id);
+            $stemting = (string) Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $__token,
+                ])->withBody(json_encode([
+                    "certificatelevel"=> "NOT_CERTIFIED",
+                    'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
+                    "docpass"=> "",
+                    "jwToken"=> $__token,
+                    "location"=> "JAKARTA",
+                    "profileName"=> "emeteraicertificateSigner",
+                    "reason"=> "Ematerai Farpoint",
+                    "refToken"=> $datas->sn,
+                    "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
+                    "src"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
+                    'visLLX'=> $datas->x1, //$input['lower_left_x'] ?? '0',
+                    'visLLY'=> $datas->y1, //$input['lower_left_y'] ?? '0',
+                    'visURX'=> $datas->x2, //$input['upper_right_x'] ?? '0',
+                    'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
+                    'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
+                ]))->post($Url)->getBody();
+                $response = json_decode($stemting,true);
+                    //Update status document jika stemting berhasil berhasil
+                        if($response['status']=='True'){
+                            $status = Document::find($id);
+                            $status->certificatelevel = 'CERTIFIED';
+                            $status->update();
+                        }else{
+                            $status = Document::find($id);
+                            $status->certificatelevel = 'FAILUR';
+                            $status->message = $response['errorMessage'];
+                            $status->update();
+                        }
+                        array_push($dataArray,$response);
+                        // return json_encode($response);
+                }
+                return response()->json($dataArray);    
+            }catch(\GuzzleHttp\Exception\RequestException $e){
+            // you can catch here 40X re
+            // sponse errors and 500 response errors
+                return back()->with($response['message'],'500 response errors');
+            }   
+            return back()->with($response['message'],'Success');
     }
 
 
@@ -378,124 +486,4 @@ class SignAdapter
         // dd($response);
         // dd('disini method generatedn bulk Serial number');
     }
-
-    /**  
-     * check validation accunt by admin
-     */
-    static function validUser(string $user, string $password)
-    {
-        try{
-            $Url = (string) config('sign-adapter.API_LOGIN');
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json'
-            ])->withBody(json_encode([
-                'user' =>  $user,
-                'password' =>$password,
-            ]))->post($Url);   
-            $data = json_decode($response);    
-            if($response['message'] == 'success'){ 
-                return $data;
-            }else{
-                return $data;
-            }
-        }catch(\Exception $e){
-            return $e;
-        }
-        
-    }
-    # ===================================================================
-    # Production 
-    # ===================================================================
-    /**  
-     * get user token 
-     * @id array id document
-     */
-    static function getTokenUser(array $id)
-    {
-        try{
-            $documents = Document::with('user','pemungut')->find($id)->first();
-            //return response()->json($documents->pemungut->p_password, 200);
-            $Url = (string) config('sign-adapter.API_LOGIN');
-            $response = Http::withHeaders([
-                'Content-Type' => 'application/json'
-            ])->withBody(json_encode([
-                'user' =>  $documents->pemungut->p_user,
-                'password' => Crypt::decrypt($documents->pemungut->p_password),
-            ]))->post($Url);   
-            $data = json_decode($response);    
-            if($response['message'] == 'success'){ 
-                return $data;
-            }else{
-                return $data;
-            }
-        }catch(\Exception $e){
-            return $e;
-        }
-    }
-
-    /** 
-     * execusi serial dan lakukan stamp
-    */
-    public static function exeSreialStamp(array $arrayDocumentId){
-        $dataArray =[];
-        try{
-             // check token user documen 
-             // do generated SN
-            $__token = '';
-            $Url = config('sign-adapter.API_STEMPTING');
-            foreach ($arrayDocumentId as $id) {
-            $datas = Document::with('user','company','directory','pemungut')->find($id)->first();
-            if($datas->sn ==''){
-               //TODO - getSerial()
-               self::getSerial([$datas->id]);
-            }
-             if(isset($datas->user->token)){
-                 $__token = $datas->user->token;
-             }else{
-                 $__token = self::setToken([$datas->id]);
-             }
-            $stemting = (string) Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $__token,
-                ])->withBody(json_encode([
-                    "certificatelevel"=> "NOT_CERTIFIED",
-                    'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
-                    "docpass"=> "",
-                    "jwToken"=> $__token,
-                    "location"=> "JAKARTA",
-                    "profileName"=> "emeteraicertificateSigner",
-                    "reason"=> "Ematerai Farpoint",
-                    "refToken"=> $datas->sn,
-                    "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
-                    "src"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
-                    'visLLX'=> $datas->x1, //$input['lower_left_x'] ?? '0',
-                    'visLLY'=> $datas->y1, //$input['lower_left_y'] ?? '0',
-                    'visURX'=> $datas->x2, //$input['upper_right_x'] ?? '0',
-                    'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
-                    'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
-                ]))->post($Url)->getBody();
-                $response = json_decode($stemting,true);
-                    //Update status document jika stemting berhasil berhasil
-                        if($response['status']=='True'){
-                            $status = Document::find($id);
-                            $status->certificatelevel = 'CERTIFIED';
-                            $status->update();
-                        }else{
-                            $status = Document::find($id);
-                            $status->certificatelevel = 'FAILUR';
-                            $status->message = $response['errorMessage'];
-                            $status->update();
-                        }
-                        array_push($dataArray,$response);
-                        // return json_encode($response);
-                }
-                return response()->json($dataArray);    
-            }catch(\GuzzleHttp\Exception\RequestException $e){
-            // you can catch here 40X re
-            // sponse errors and 500 response errors
-                return back()->with($response['message'],'500 response errors');
-            }   
-            return back()->with($response['message'],'Success');
-    }
-
 }

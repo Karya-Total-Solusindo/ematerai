@@ -70,8 +70,13 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::get('/roles/permissions', [App\Http\Controllers\Admin\RoleController::class,'permissions_create'])->middleware('auth')->name('permissions-create');
     Route::post('/roles/permissions', [App\Http\Controllers\Admin\RoleController::class,'permissions_store'])->middleware('auth')->name('permissions-store');
     Route::resource('/roles', RoleController::class);
-
-    Route::resource('/users', UserManagementController::class);
+    Route::group([ 'prefix' => 'manage'], function(){
+        Route::resource('/users', App\Http\Controllers\Admin\UserManagementController::class);
+        Route::post('/users/setpemungut', [App\Http\Controllers\Admin\UserManagementController::class,'setpemungut'])->name('setpemungut');
+        Route::post('/users/check', [App\Http\Controllers\Admin\UserManagementController::class,'checkpemungut'])->name('checkpemungut');
+        Route::get('/test', [App\Http\Controllers\Admin\UserManagementController::class,'test'])->name('test');
+        
+    });
     Route::get('/server/php', [App\Http\Controllers\Admin\ServerController::class,'phpinfo'])->middleware('auth')->name('phpinfo');
 
     /**

@@ -58,17 +58,29 @@ class LoginController extends Controller
                             // DEV
                             $API_LOGIN = 'https://backendservicestg.e-meterai.co.id/api/users/login';
                         }  
-                    $response_api = Http::withHeaders([
+                    try {
+                        //code...
+                        $response_api = Http::withHeaders([
                             'Content-Type' => 'application/json; charset=utf-8',
                         ])->withBody(json_encode([
                             'user' => env('EMATRERAI_USER'),
                             'password' => env('EMATRERAI_PASSWORD'),
                         ]))->post($API_LOGIN);
-                        if($response_api['message']=='success'){ 
-                            $e_token = User::find($user->id); 
-                            $e_token->ematerai_token = $response_api['token'];
-                            $e_token->update();
+                        // if(!$response_api->failed()){
+                        //     $response_api->post($API_LOGIN);
+                        // }
+                        if($response_api->successful()){
+                            if($response_api['message']=='success'){ 
+                                $e_token = User::find($user->id); 
+                                $e_token->ematerai_token = $response_api['token'];
+                                $e_token->update();
+                            }
+                            // dd($response_api['token']);
                         }
+                    } catch (\Exception $e) {
+                        //Execp $e;
+                    }
+                        // dd('los');
             return redirect()->intended('dashboard');
         }
         if(!Auth::validate($credentials)):

@@ -8,7 +8,6 @@ use Illuminate\Database\Eloquent\Model;
 class Serialnumber extends Model
 {
     use HasFactory;
-    use HasFactory;
     protected $table = 'serialnumber';
     protected $primaryKey = 'id';
     protected $fillable = [

@@ -17,7 +17,7 @@ class UserProfileController extends Controller
     {
         
         $attributes = $request->validate([
-            'email' => ['required', 'email', 'min:20', 'max:255',  Rule::unique('users')->ignore(auth()->user()->id),],
+            'email' => ['required', 'email', 'min:15', 'max:255',  Rule::unique('users')->ignore(auth()->user()->id),],
         ]);
 
        auth()->user()->update([

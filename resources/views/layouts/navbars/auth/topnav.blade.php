@@ -30,6 +30,7 @@
                     || Route::currentRouteName()=='document'
                     || Route::currentRouteName()=='directory.index' 
                     || Route::currentRouteName()=='directory.index' 
+                    || Route::currentRouteName()=='users.index' 
                     || Route::currentRouteName()=='document.index')
                     <form action="" method="get" class="mb-0 mt-2">
                         {{-- <div class="input-group mb-0">
