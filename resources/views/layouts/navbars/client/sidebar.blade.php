@@ -24,7 +24,7 @@
                     </a>
                     <ul class="submenu collapse rounded  {{ request()->segment(1) == 'manage' ? 'show' : '' }}">
                         <li><a class="nav-link rounded {{ request()->segment(2) == 'users' ? 'active' : '' }}" href="{{ route('users.index') }}">User </a></li>
-                        <li><a class="nav-link rounded {{ request()->segment(2) == 'users' ? 'active' : '' }}" href="{{ route('users.index') }}">Saldo</a></li>
+                        {{-- <li><a class="nav-link rounded {{ request()->segment(2) == 'users' ? 'active' : '' }}" href="{{ route('users.index') }}">Saldo</a></li> --}}
                     </ul>
                 </li>
                 {{-- <li class="nav-item has-submenu">
