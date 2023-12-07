@@ -497,9 +497,15 @@ class StempController extends Controller
         //             }
         //         }]
         //     ])->with('company')->orderBy('updated_at', 'desc')->paginate($per_page);
-        $datas = Document::with(['company','directory'])->paginate($per_page);    
+        $datas = Document::with(['company','directory'])
+                    ->where('certificatelevel','=','CERTIFIED')
+                    ->where('history','=','HISTORY')
+                    ->paginate($per_page);    
         if($request->input('company')){
-                $datas = Document::with(['company','directory'])->latest()->where('history','=','HISTORY')->filter(request()->all())->paginate($per_page);
+                $datas = Document::with(['company','directory'])->latest()
+                ->where('certificatelevel','=','CERTIFIED')
+                ->where('history','=','HISTORY')
+                ->filter(request()->all())->paginate($per_page);
             }
             return view("client.stemp.index", compact("datas","company","directory"));
         //}
