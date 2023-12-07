@@ -456,7 +456,6 @@ class SignAdapter
                     //TODO - getSerial()
                     self::getSerial([$datas->id]);
                 }
-                
 
                 if(isset($datas->user->token)){
                     $__token = $datas->user->token;
@@ -470,7 +469,7 @@ class SignAdapter
                         "certificatelevel"=> "NOT_CERTIFIED",
                         'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
                         "docpass"=> "",
-                        "jwToken"=> $__token,
+                        "jwToken"=> $datas->user->token,
                         "location"=> "JAKARTA",
                         "profileName"=> "emeteraicertificateSigner",
                         "reason"=> "Ematerai Farpoint",
