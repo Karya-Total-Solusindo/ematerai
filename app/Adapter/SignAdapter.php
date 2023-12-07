@@ -218,14 +218,14 @@ class SignAdapter
             $data = [
                 "isUpload"=> false, //mand
                 "namadoc"=> "4b", //mand
-                "namafile"=>  $doc['filename'],  //mand
+                "namafile"=>  $doc->filename,  //mand
                 "nilaidoc"=> "10000", //op
                 "namejidentitas"=>"KTP",
                 "noidentitas"=> "1251087201650003",
                 "namedipungut"=>"Santoso",
                 "snOnly"=> false, //mand
-                "nodoc"=> $doc['docnumber'], //mand
-                "tgldoc"=> $doc['created_at']->format('Y-m-d') //mand
+                "nodoc"=> $doc->docnumber, //mand
+                "tgldoc"=> $doc->created_at->format('Y-m-d') //mand
             ];
             // get jwt Token
             $__token = $doc->user->ematerai_token;
@@ -242,6 +242,7 @@ class SignAdapter
                 ->update(['message'=>$response['result']['err']]);
                 return back()->with($response['message'],$response['result']['err']);
             }
+            Log::info([$response,$data]);
             // return response()->json([$response,$data]);
             if($response['statusCode']=='00'){
                 // save serialnumber
@@ -454,7 +455,8 @@ class SignAdapter
                 //return response()->json($datas); 
                 if($datas->sn ==''){
                     //TODO - getSerial()
-                    self::getSerial([$datas->id]);
+                   $getSN = self::getSerial([$datas->id]);
+                   Log::info($getSN);
                 }
 
                 if($datas->user->ematerai_token!=null){

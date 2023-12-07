@@ -55,7 +55,7 @@
                                 </div>
                                 <div class="row">
                                     <div class="col-xs-12 col-sm-12 col-md-6 text-start">
-                                        <a href="{{route('users.index')}}" class="btn btn-dark">Back</a>
+                                        <a href="{{ URL::previous() }}" class="btn btn-dark">Back</a>
                                     </div>
                                     <div class="col-xs-12 col-sm-12 col-md-6 text-end">
                                         <button type="submit" class="btn btn-primary">Save</button>

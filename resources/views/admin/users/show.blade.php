@@ -108,7 +108,7 @@
                             
                             <div class="row">
                                 <div class="col-xs-12 col-sm-12 col-md-6">
-                                    <a class="btn btn-dark btn-sm ms-auto" href="{{ route('users.index') }}"> Back </a>
+                                    <a class="btn btn-dark btn-sm ms-auto" href="{{ URL::previous() }}"> Back </a>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6 text-end">
                                     <a type="submit" id="accunt-test" class="btn btn-sm btn-info">Validation</a>
@@ -133,11 +133,11 @@
                                 {{ $user->pemungut->p_user ?? '-' }}
                                 
                             </div>
-                            <div class="col-12">
+                            {{-- <div class="col-12">
                                 <strong>Password:</strong><br> 
                                {{ $pass ?? '-' }}
                                
-                            </div>
+                            </div> --}}
                             {{-- <div class="col-12">
                                 <strong>Nama Pemungut:</strong><br>
                                 {{ $user->pemungut->namedipungut ?? '-' }}

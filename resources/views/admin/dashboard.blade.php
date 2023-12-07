@@ -109,90 +109,53 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
-                    <div class="card-body p-3 mb-0">
-                        <div class="row mb-0">
-                            <div class="col-8 mb-0">
-                                <div class="numbers mb-0">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai</p>
-                                    <h5 class="font-weight-bolder mb-0">
-                                        {{-- {{rand(200000,900000)}}  --}}
-                                        {{ $datas['COUNT_MATERAI'] }}
-                                        <span style="font-size:3vh;"></span>
-                                    </h5>
-                                    {{-- <p class="mb-0"></p> --}}
-                                </div>
-                            </div>
-                            <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
-                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
-                    <div class="card-body p-3 mb-0">
-                        <div class="row mb-0">
-                            <div class="col-8 mb-0">
-                                <div class="numbers mb-0">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai Unused</p>
-                                    <h5 class="font-weight-bolder mb-0">
-                                        {{-- {{rand(200000,900000)}}  --}}
-                                        {{ $datas['COUNT_MATERAI_NOSTEMP'] }}
-                                        <span style="font-size:3vh;"></span>
-                                    </h5>
-                                </div>
-                            </div>
-                            <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
-                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+
             
         </div>
         <div class="row mt-4">
-            <div class="col-lg-7 mb-lg-0 mb-4">
+            <div class="col-lg-12 mb-lg-0 mb-4">
                 <div class="card z-index-2 h-100">
                     <div class="card-header pb-0 pt-3 bg-transparent">
-                        <h6 class="text-capitalize">Sales overview</h6>
-                        <p class="text-sm mb-0">
+                        <h6 class="text-capitalize">User overview</h6>
+                        {{-- <p class="text-sm mb-0">
                             <i class="fa fa-arrow-up text-success"></i>
                             <span class="font-weight-bold">4% more</span> in 2021
-                        </p>
+                        </p> --}}
                     </div>
                     <div class="card-body p-3">
-                        <div class="chart">
-                            <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
+                        <div class="table-responsive">
+                            <table class="table table-default">
+                                <tbody>
+                                    <tr>
+                                        <th>User</th>
+                                        <th>Email</th>
+                                        <th>Service Account</th>
+                                    </tr>
+                                    @foreach ($datas['USERS'] as $no => $s)
+                                    <tr class="">
+                                        <td scope="row">{{$s->username}}</td>
+                                        <td>{{$s->email}}</td>
+                                        <td>
+                                            @if($s->pemungut->p_user==null)
+                                            <a href="{{route('users.show',$s->id)}}" class="btn btn-sm btn-dark">Setting Account</a>
+                                            @else
+                                                {{ $s->pemungut->p_user }}
+                                            @endif
+                                        </td>
+                                    </tr>
+                                    @endforeach
+                                   
+                                </tbody>
+                            </table>
+                            {{ $datas['USERS']->links() }}
                         </div>
+                        {{-- <div class="chart">
+                            <canvas id="chart-line" class="chart-canvas" height="300"></canvas>
+                        </div> --}}
                     </div>
                 </div>
             </div>
-            <div class="col-lg-5">
-                <div class="card">
-                    <div class="card-body">
-                    <div class="table-responsive">
-                        <table class="table table-default">
-                            <tbody>
-                                <tr class="">
-                                    <td scope="row">R1C1</td>
-                                    <td>R1C2</td>
-                                    <td>R1C3</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-                    
-                </div>                   
-            </div>                   
+                             
             {{--  --}}
             {{-- <div class="col-lg-5">
                 <div class="card card-carousel overflow-hidden h-100 p-0">
