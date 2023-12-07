@@ -35,6 +35,9 @@
     .daterangepicker td.active, .daterangepicker td.active:hover {
         background-color: #f86343;
     }
+    .select-per-page:hover{
+        idth: inherit !important;
+    }
 </style>
 
 
@@ -48,6 +51,7 @@
             <div class="col text-end">
                 <form action="{{ route('exportSuccecc') }}" method="get">
                     <input type="hidden" name="status" value="CERTIFIED">
+                    <input type="hidden" name="data" value="HISTORY">
                     
                     {{-- <a href="{{ route("stamp.download") }}" id="btn-download" class="btn btn-sm btn-info" ><i class="fas fa-download"></i> DOWNLOAD</a> --}}
                     <a href="#download" id="btn-download" class="btn btn-sm btn-info" onclick="$('#download-success').submit();" ><i class="fas fa-download"></i> DOWNLOAD</a>
@@ -58,16 +62,16 @@
                 <form action="" method="get">
                     <div class="row">
                         <div class="col-md-12">
-                            <div class="input-group mb-0 input-sm mb-3">
-                                <label class="input-group-text" for="company">Company</label>
+                            {{-- <div class="input-group mb-0 input-sm mb-3"> --}}
+                                {{-- <label class="input-group-text" for="company">Company</label>
                                 <select required name="company" class="form-select form-select-sm" id="company">
                                   <option value="">Choose Company...</option>
                                   @foreach (App\Models\Company::where('user_id',Auth::user()->id)->get() as $com)
                                         <option @if($company==$com->id) selected @endif value="{{$com->id}}">{{$com->name}}</option>
                                   @endforeach
-                                </select>
+                                </select> --}}
                                 {{-- directory --}}
-                                <label class="input-group-text" for="inputGroupSelectDirectory">Directory</label>
+                                {{-- <label class="input-group-text" for="inputGroupSelectDirectory">Directory</label>
                                 <select disabled name="directory" class="form-select form-select-sm" id="inputGroupSelectDirectory">
                                   <option value="">Choose Directory...</option>
                                   @if(request()->has('company'))
@@ -79,14 +83,14 @@
                                           @endif
                                       @endforeach  
                                   @endif
-                                </select>
+                                </select> --}}
                                 {{-- periode --}}
-                                <label class="input-group-text" for="date-periode" title="Periode"> <i class="fas fa-calendar"></i></label>
-                                  <input type="text" class="form-control daterange" name="periode" id="date-periode" aria-describedby="helpId" placeholder="">
+                                {{-- <label class="input-group-text" for="date-periode" title="Periode"> <i class="fas fa-calendar"></i></label> --}}
+                                  {{-- <input type="text" class="form-control daterange" name="periode" id="date-periode" aria-describedby="helpId" placeholder=""> --}}
                                   {{-- button --}}
-                                  <button type="submit" class="btn btn-sm btn-primary">Filter</button>
-                                  <a href="{{ route('success') }}" class="btn btn-sm btn-dark"> Reset</a>
-                            </div>
+                                  {{-- <button type="submit" class="btn btn-sm btn-primary">Filter</button> --}}
+                                  {{-- <a href="{{ route('success') }}" class="btn btn-sm btn-dark"> Reset</a> --}}
+                            {{-- </div> --}}
                         </div>
                         {{-- <div class="col-md-3">
                             <div class="input-group mb-0 input-sm mb-3">
@@ -131,11 +135,50 @@
                 </ul>
             </div>
         @endif
+        <form action="" method="get">
+        <div class="w-auto input-group input-sm mb-0 ">
+            {{-- button --}}
+            <button type="submit" class="  btn btn-sm  btn-primary">Filter</button>
+            @if(request()->has('company'))
+            <a href="{{ route('success') }}" class=" btn btn-sm btn-sm bg-gradient-dark"> Reset</a>
+            @endif
+            <label class="input-group-text" for="per_page" title="Show Per Page">Show</label>
+            <select title="Show Per Page" name="view" id="per_page" class="select-per-page p-1  form-select form-select-sm">
+                <option @if(request()->input('view')==10) selected @endif value="10">10</option>
+                <option @if(request()->input('view')==50) selected @endif value="50">50</option>
+                <option @if(request()->input('view')==100) selected @endif value="100">100</option>
+                <option @if(request()->input('view')==500) selected @endif value="500">500</option>
+                <option @if(request()->input('view')=='ALL') selected @endif value="ALL">ALL</option>
+            </select>
+            <select title="Company" required name="company" class="w-auto p-1 form-select form-select-sm" id="company">
+                <option value="">Choose Company...</option>
+                @foreach (App\Models\Company::where('user_id',Auth::user()->id)->get() as $com)
+                      <option @if($company==$com->id) selected @endif value="{{$com->id}}">{{$com->name}}</option>
+                @endforeach
+            </select>
+            <select title="Directory" required disabled name="directory" class="w-auto px-3 py-1 form-select form-select-sm " id="inputGroupSelectDirectory">
+                <option value="">Choose Directory...</option>
+                @if(request()->has('company'))
+                    @foreach (App\Models\Directory::where('company_id','=',request()->input('company') )->get()  as $d)
+                      @if(request()->input('directory') == $d->id)
+                        <option  selected value="{{$d->id}}">{{$d->name}}</option>
+                        @else
+                        <option value="{{$d->id}}">{{$d->name}}</option>
+                        @endif
+                    @endforeach  
+                @endif
+              </select>
+              <input title="Date Interval" type="text" class="w-auto p-1 form-control daterange" name="periode" id="date-periode" aria-describedby="helpId" placeholder="">  
+            </form>
+        </div> 
             <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
+                    <form id="download-success" method="post" action="{{ route("stamp.download") }}">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" id="selectAll"></td>
+                            <th><input type="checkbox" name="all" id="selectAll"></td>
+                                <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                No</td>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Document</th>
                             {{-- <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">
@@ -154,20 +197,24 @@
                     </thead>
                     <tbody>
                         @if(request()->has('company'))
-                        <form id="download-success" method="post" action="{{ route("stamp.download") }}">
+                        
                             @csrf
-                            
-                                @if ($datas->count()) 
-                                    @foreach ($datas as $data)
+                            @if ($datas->count()) 
+                            @foreach ($datas as $key => $data)
                                     <tr>
-                                        <td><input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id=""></td>
+                                        <td class="align-middle text-center align-items-center"><input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id=""></td>
+                                        <td class="align-middle text-center align-items-center">
+                                            {{$key+1}}
+                                        </td>
                                         <td>
-                                            <div class="d-flex px-2 py-1 align-items-center">
+                                            <div class="d-flex mb-0 px-2  align-items-center">
                                                 <div>
                                                     <i class="fas fa-file-pdf"></i>
                                                 </div>
                                                 <div class="ms-4">
+                                                    <input type="hidden" data-name="directory" name="dir[]" value="{{$data->directory_id}}" id="{{$data->id}}">
                                                     <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6>
+                                                    {{-- <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6> --}}
                                                     {{-- <p class="text-xs text-secondary mb-0"><i class="ni ni-building"></i> {{ $data->company->name }} <i class="fas fa-folder-open"></i> {{ $data->directory->name }}</p> --}}
                                                 </div>
                                             </div>
@@ -213,14 +260,15 @@
                         </td>
                     </tr>
                     
-                        </form>
+                        
                     @endif
+                </form>
                     </tbody>   
                 </table>
             </div>
         </div>
         @if(request()->has('company'))
-        {{ $datas->links() }}
+        {{ $datas->appends(request()->input())->links() }}
         @endif
     </div>
 </div>
@@ -265,7 +313,7 @@
         @endif
         //get directory of company 
         $('#company').on('change',(e)=>{
-            let id = $(this).find(":selected").val();
+            let id = $('#company').find(":selected").val();
             const url = '{{URL::to("/document/directory/")}}/';
             e.preventDefault();
             console.log(id); 
