@@ -454,14 +454,18 @@ class StempController extends Controller
         $directory = null;
         $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
         //dd($per_page);
-        $datas = Document::with(['company','directory'])->paginate($per_page);
+        $datas = Document::with(['company','directory'])
+            ->where('certificatelevel','=','CERTIFIED')
+            ->paginate($per_page);
         if($request->getRequestUri()){
                 $company = $request->input('company');
                 $directory = $request->input('directory');
         }
         $user = Auth::user()->id;
         if($request->input('company')){
-            $datas = Document::with(['company','directory'])->latest()->filter(request()->all())->paginate($per_page);
+            $datas = Document::with(['company','directory'])->latest()
+            ->where('certificatelevel','=','CERTIFIED')
+            ->filter(request()->all())->paginate($per_page);
         }
         return view("client.stemp.index", compact("datas","company","directory"));
     }
