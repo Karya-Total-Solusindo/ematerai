@@ -45,10 +45,10 @@
                         </div> 
                         <span class="text-uppercase text-xs font-weight-bolder opacity-6">Server</span> 
                     </a>
-                    <ul class="submenu collapse rounded  {{ request()->segment(1) == 'manage' ? 'show' : '' }}">
-                        <li><a class="nav-link rounded {{ request()->segment(2) == 'log' ? 'active' : '' }}" href="{{route('log-viewer.index')}}"><i class="fas fa-folder pe-3" style="color: #f4645f;"></i> File Manager</a></li>
+                    <ul class="submenu collapse rounded  {{ request()->segment(1) == 'manage' ? 'show' : '' }} {{ request()->segment(1) == 'filemanager' ? 'show' : '' }}">
+                        <li><a class="nav-link rounded {{ request()->segment(1) == 'filemanager' ? 'active' : '' }}" href="{{route('filemanager')}}"><i class="fas fa-folder pe-3" style="color: #f4645f;"></i> File Manager</a></li>
                         <li><a class="nav-link rounded {{ request()->segment(2) == 'log' ? 'active' : '' }}" href="{{route('log-viewer.index')}}"><i class="fas fa-clipboard-list pe-3" style="color: #f4645f;"></i> Log System</a></li>
-                        <li><a class="nav-link rounded {{ request()->segment(2) == 'users' ? 'active' : '' }}" href="{{ route('users.index') }}"><i class="fas fa-database pe-3" style="color: #f4645f;"></i> Backup</a></li>
+                        <li><a class="nav-link rounded {{ request()->segment(2) == 'beckup' ? 'active' : '' }}" href="{{ route('users.index') }}"><i class="fas fa-database pe-3" style="color: #f4645f;"></i> Backup</a></li>
                     </ul>
                     
                 </li>    

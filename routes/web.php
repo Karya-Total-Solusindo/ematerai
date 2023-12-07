@@ -28,6 +28,7 @@ use App\Http\Controllers\UserProfileController;
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\Api\EmateraiController;
 use App\Http\Controllers\DocumentController;
+use App\Http\Controllers\Admin\FileManagerController;
 
 
 // Route::resource('/test', TestController::class);
@@ -75,8 +76,9 @@ Route::group(['middleware' => ['auth'],], function () {
         Route::post('/users/setpemungut', [App\Http\Controllers\Admin\UserManagementController::class,'setpemungut'])->name('setpemungut');
         Route::post('/users/check', [App\Http\Controllers\Admin\UserManagementController::class,'checkpemungut'])->name('checkpemungut');
         Route::get('/test', [App\Http\Controllers\Admin\UserManagementController::class,'test'])->name('test');
-        
     });
+    
+    Route::get('/filemanager', [FileManagerController::class,'index'])->middleware('auth')->name('filemanager');
     Route::get('/server/php', [App\Http\Controllers\Admin\ServerController::class,'phpinfo'])->middleware('auth')->name('phpinfo');
 
     /**

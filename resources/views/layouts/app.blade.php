@@ -3,6 +3,7 @@
 
 <head>
     <meta charset="utf-8" />
+    
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
     <link rel="apple-touch-icon" sizes="76x76" href="{{ asset('/img/apple-icon.png') }}">
     <link rel="icon" type="image/png" href="{{ asset('/img/favicon.png') }}">
@@ -51,7 +52,19 @@
     <link href="{{ asset('assets/css/sidebar-nav.css') }}" rel="stylesheet" />
     <!-- toastr css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    
+    @if(Route::currentRouteName() == 'filemanager')
+    <meta name="csrf-token" content="{{ csrf_token() }}">
+    {{-- file manager --}}
+
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.2/font/bootstrap-icons.min.css">
+    <link rel="stylesheet" href="{{ asset('vendor/file-manager/css/file-manager.css') }}">
+    <style>
+        .fm .fm-body{
+            height: 500px !important;
+            background-color: #e2e2e2;
+        }
+    </style>
+    @endif
     
      <style>
         @media screen and (max-width: 360px){

@@ -71,6 +71,7 @@ class HomeController extends Controller
                 ->paginate(5,['*'],'stemp_page')->setPageName('stemp_page'),
                 "NOT_STAMPTING" => Document::where('certificatelevel','<>','CERTIFIED')->orderBy('updated_at', 'desc')
                 ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
+                "USERS" => User::with('pemungut')->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
             ];
             return view('admin.dashboard', compact('datas'));
 
