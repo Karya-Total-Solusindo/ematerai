@@ -457,16 +457,17 @@ class SignAdapter
                     self::getSerial([$datas->id]);
                 }
 
-                if(isset($datas->user->token)){
-                    $__token = $datas->user->token;
+                if($datas->user->ematerai_token!=null){
+                    $__token = $datas->user->ematerai_token;
                 }else{
-                    $__token = self::setToken($datas->id);
+                    
+                    $__token = (self::setToken($datas->id))? $datas->user->ematerai_token:$datas->pemungut->token;
                 }
                 $dbug =[
                     "certificatelevel"=> "NOT_CERTIFIED",
                     'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
                     "docpass"=> "",
-                    "jwToken"=> $datas->user->token,
+                    "jwToken"=> $__token,
                     "location"=> "JAKARTA",
                     "profileName"=> "emeteraicertificateSigner",
                     "reason"=> "Ematerai Farpoint",
@@ -479,15 +480,15 @@ class SignAdapter
                     'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
                     'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
                 ];
-                return response()->json([$dbug,$datas]); 
+                //return response()->json([$dbug,$datas]); 
                 $stemting = (string) Http::withHeaders([
                         'Content-Type' => 'application/json',
-                        'Authorization' => 'Bearer ' . $datas->user->token,
+                        'Authorization' => 'Bearer ' . $__token,
                     ])->withBody(json_encode([
                         "certificatelevel"=> "NOT_CERTIFIED",
                         'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
                         "docpass"=> "",
-                        "jwToken"=> $datas->user->token,
+                        "jwToken"=> $__token,
                         "location"=> "JAKARTA",
                         "profileName"=> "emeteraicertificateSigner",
                         "reason"=> "Ematerai Farpoint",
