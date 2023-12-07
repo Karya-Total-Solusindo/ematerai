@@ -454,7 +454,8 @@ class SignAdapter
                 //TODO - getSerial()
                     self::getSerial($datas->id);
                 }
-                dd($datas);
+                return response()->json($datas); 
+
                 if(isset($datas->user->token)){
                     $__token = $datas->user->token;
                 }else{
