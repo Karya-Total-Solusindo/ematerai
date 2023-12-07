@@ -45,7 +45,10 @@ class AppServiceProvider extends ServiceProvider
         // Blade::component('alert', Alert::class);
         // Paginator::useBootstrapFour();
         LogViewer::auth(function ($request) {
-            return auth()->user()->hasRole('Admin');
+            return auth()->user()->hasRole('Admin') && $request->user() && in_array($request->user()->username, [
+                'Admin',
+            ]);
+            //return auth()->user()->hasRole('Admin');
             // return true to allow viewing the Log Viewer.
         });
     }
