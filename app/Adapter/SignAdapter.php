@@ -31,7 +31,7 @@ class SignAdapter
     public static $minutes = 120;
     static function setToken($id)
     {
-        $data = Document::with('user','company','directory','pemungut')->find($id)->first();
+        $data = Document::with('user','company','directory','pemungut')->find($id);
         try{
             $Url = config('sign-adapter.API_LOGIN');
             $response = Http::withHeaders([
@@ -209,7 +209,7 @@ class SignAdapter
     public static function getSerial(array $arrayDocumentId){
         $dataArray =[];    
         foreach ($arrayDocumentId as $id) {
-            $doc = Document::with('user','company','directory','pemungut')->find($id)->first();
+            $doc = Document::with('user','company','directory','pemungut')->find($id);
             if($doc==null){
                 Log::error('Document Not Exist, id: '.$id);
                 return response()->json(['status'=>'error','messega'=>'Document Not Exist'],404);
@@ -451,9 +451,9 @@ class SignAdapter
             $Url = config('sign-adapter.API_STEMPTING');
             foreach ($arrayDocumentId as $id) {
                 $datas = Document::with('user','company','directory','pemungut')->find($id);
-                //return response()->json($datas); 
+                return response()->json($datas); 
                 if($datas->sn ==''){
-                //TODO - getSerial()
+                    //TODO - getSerial()
                     self::getSerial([$datas->id]);
                 }
                 
