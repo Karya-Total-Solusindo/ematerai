@@ -219,6 +219,9 @@ class SignAdapter
                 "namadoc"=> "4b", //mand
                 "namafile"=>  $doc['filename'],  //mand
                 "nilaidoc"=> "10000", //op
+                "namejidentitas"=>"KTP",
+                "noidentitas"=> "1251087201650003",
+                "namedipungut"=>"Santoso",
                 "snOnly"=> false, //mand
                 "nodoc"=> $doc['docnumber'], //mand
                 "tgldoc"=> $doc['created_at']->format('Y-m-d') //mand
@@ -446,60 +449,60 @@ class SignAdapter
             $__token = '';
             $Url = config('sign-adapter.API_STEMPTING');
             foreach ($arrayDocumentId as $id) {
-            $datas = Document::with('user','company','directory','pemungut')->find($id)->first();
-            if($datas->sn ==''){
-               //TODO - getSerial()
-               self::getSerial([$datas->id]);
-            }
-             if(isset($datas->user->token)){
-                 $__token = $datas->user->token;
-             }else{
-                 $__token = self::setToken($datas->id);
-             }
-            $stemting = (string) Http::withHeaders([
-                    'Content-Type' => 'application/json',
-                    'Authorization' => 'Bearer ' . $__token,
-                ])->withBody(json_encode([
-                    "certificatelevel"=> "NOT_CERTIFIED",
-                    'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
-                    "docpass"=> "",
-                    "jwToken"=> $__token,
-                    "location"=> "JAKARTA",
-                    "profileName"=> "emeteraicertificateSigner",
-                    "reason"=> "Ematerai Farpoint",
-                    "refToken"=> $datas->sn,
-                    "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
-                    "src"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
-                    'visLLX'=> $datas->x1, //$input['lower_left_x'] ?? '0',
-                    'visLLY'=> $datas->y1, //$input['lower_left_y'] ?? '0',
-                    'visURX'=> $datas->x2, //$input['upper_right_x'] ?? '0',
-                    'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
-                    'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
-                ]))->post($Url)->getBody();
-                
-                $response = json_decode($stemting,true);
-                 
-                    //Update status document jika stemting berhasil berhasil
-                        if($response['status']=='True'){
-                            $status = Document::find($id);
-                            $status->certificatelevel = 'CERTIFIED';
-                            $status->update();
-                        }else{
-                            $status = Document::find($id);
-                            $status->certificatelevel = 'FAILUR';
-                            $status->message = $response['errorMessage'];
-                            $status->update();
-                        }
-                        array_push($dataArray,$response);
-                        // return json_encode($response);
+                $datas = Document::with('user','company','directory','pemungut')->find($id)->first();
+                if($datas->sn ==''){
+                //TODO - getSerial()
+                    self::getSerial($datas->id);
                 }
-                return response()->json($dataArray);    
-            }catch(\GuzzleHttp\Exception\RequestException $e){
+                if(isset($datas->user->token)){
+                    $__token = $datas->user->token;
+                }else{
+                    $__token = self::setToken($datas->id);
+                }
+                $stemting = (string) Http::withHeaders([
+                        'Content-Type' => 'application/json',
+                        'Authorization' => 'Bearer ' . $__token,
+                    ])->withBody(json_encode([
+                        "certificatelevel"=> "NOT_CERTIFIED",
+                        'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
+                        "docpass"=> "",
+                        "jwToken"=> $__token,
+                        "location"=> "JAKARTA",
+                        "profileName"=> "emeteraicertificateSigner",
+                        "reason"=> "Ematerai Farpoint",
+                        "refToken"=> $datas->sn,
+                        "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
+                        "src"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename,
+                        'visLLX'=> $datas->x1, //$input['lower_left_x'] ?? '0',
+                        'visLLY'=> $datas->y1, //$input['lower_left_y'] ?? '0',
+                        'visURX'=> $datas->x2, //$input['upper_right_x'] ?? '0',
+                        'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
+                        'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
+                    ]))->post($Url)->getBody();
+                    
+                    $response = json_decode($stemting,true);
+                    
+                            //Update status document jika stemting berhasil berhasil
+                            if($response['status']=='True'){
+                                $status = Document::find($id);
+                                $status->certificatelevel = 'CERTIFIED';
+                                $status->update();
+                            }else{
+                                $status = Document::find($id);
+                                $status->certificatelevel = 'FAILUR';
+                                $status->message = $response['errorMessage'];
+                                $status->update();
+                            }
+                            array_push($dataArray,$response);
+                            // return json_encode($response);
+            }
+            return response()->json($dataArray);    
+        }catch(\GuzzleHttp\Exception\RequestException $e){
             // you can catch here 40X re
             // sponse errors and 500 response errors
                 return back()->with($response['message'],'500 response errors');
-            }   
-            return back()->with($response['message'],'Success');
+        }   
+        return back()->with($response['message'],'Success');
     }
 
 }
