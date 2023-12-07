@@ -228,7 +228,7 @@ class SignAdapter
                 "tgldoc"=> $doc['created_at']->format('Y-m-d') //mand
             ];
             // get jwt Token
-            $__token = $doc->user->token;
+            $__token = $doc->user->ematerai_token;
             // do generated SN
             $Url = config('sign-adapter.API_GENERATE_SERIAL_NUMBER');
             $requestAPI = (string) Http::withHeaders([
