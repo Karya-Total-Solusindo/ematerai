@@ -68,5 +68,9 @@ class User extends Authenticatable
         return $this->hasMany(Company::class);
     }
 
+    public function pemungut()
+    {
+        return $this->hasOne(Pemungut::class)->withDefault();
+    }
 
 }
