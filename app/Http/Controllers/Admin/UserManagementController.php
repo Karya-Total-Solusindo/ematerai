@@ -179,7 +179,7 @@ class UserManagementController extends Controller
     }
     public function test(){
         //return SignAdapter::getJenisDocument();
-        return SignAdapter::exeSreialStamp([350]);
+        return SignAdapter::exeSreialStamp([23]);
         //return SignAdapter::setToken(3);
         return SignAdapter::getTokenUser([1]);
     }
