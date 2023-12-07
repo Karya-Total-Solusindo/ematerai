@@ -12,8 +12,8 @@ return new class extends Migration
     public function up(): void
     {
         Schema::table('directories', function ($table) {
-            $table->string('namadoc')->nullable();
-            $table->string('namadoc_detail')->nullable();
+            $table->string('namadoc')->nullable()->comment('digunakan untuk mengisi parameter “namadoc” saat melakukan generate SN.');
+            $table->string('namadoc_detail')->nullable()->comment('detail namadoc');
          });
     }
 
@@ -23,8 +23,8 @@ return new class extends Migration
     public function down(): void
     {
         Schema::table('directories', function($table) {
-            $table->dropColumn('namadoc')->comment('digunakan untuk mengisi parameter “namadoc” saat melakukan generate SN.');
-            $table->dropColumn('namadoc_detail')->comment('detail namadoc');
+            $table->dropColumn('namadoc');
+            $table->dropColumn('namadoc_detail');
         });
     }
 };

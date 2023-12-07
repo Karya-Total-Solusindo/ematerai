@@ -17,9 +17,9 @@ return new class extends Migration
             $table->id();
             $table->string('sn');
             $table->text('image');
-            $table->string('namejidentitas');
-            $table->string('noidentitas');
-            $table->string('namedipungut');
+            $table->string('namejidentitas')->nullable();
+            $table->string('noidentitas')->nullable();
+            $table->string('namedipungut')->nullable();
             $table->set('use',[1,0])->default(0);
             $table->unsignedBigInteger('user_id')->nullable();
             $table->unsignedBigInteger('documet_id')->nullable();
