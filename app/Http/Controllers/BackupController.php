@@ -57,7 +57,7 @@ class BackupController extends Controller{
     }
 
     public function download($file_name) {
-        $file = config('laravel-backup.backup.name') .'/Backup_folder_name/'. $file_name;
+        $file = config('laravel-backup.backup.name') .'/'.env('APP_NAME').'/'. $file_name;
         $disk = Storage::disk(config('laravel-backup.backup.destination.disks'));
 
         if ($disk->exists($file)) {
@@ -77,9 +77,9 @@ class BackupController extends Controller{
     }
 
      public function delete($file_name){
-          $disk = Storage::disk(config('laravel-backup.backup.destination.disks')[0]);
-          if ($disk->exists(config('laravel-backup.backup.name') . '/Backup_folder_name/' . $file_name)) {
-               $disk->delete(config('laravel-backup.backup.name') . '/Backup_folder_name/' . $file_name);
+          $disk = Storage::disk(config('laravel-backup.backup.destination.disks'));
+          if ($disk->exists(config('laravel-backup.backup.name') . '/'.env('APP_NAME').'/' . $file_name)) {
+               $disk->delete(config('laravel-backup.backup.name') . '/'.env('APP_NAME').'/' . $file_name);
                session()->flash('delete', 'Successfully deleted backup!');
                return redirect()->back();
           } else {
