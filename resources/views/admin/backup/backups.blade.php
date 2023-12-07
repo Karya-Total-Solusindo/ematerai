@@ -14,21 +14,21 @@
         <div class="col-xs-12">
                 @if ( Session::has('success') )
                     <div class="alert alert-success alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <a type="button" class="close" data-dismiss="alert">&times;</a>
                         {{ Session::get('success') }}
                     </div>
                     @endif
 
                     @if ( Session::has('update') )
                     <div class="alert alert-success alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <a type="button" class="close" data-dismiss="alert">&times;</a>
                         {{ Session::get('update') }}
                     </div>
                     @endif
 
                     @if ( Session::has('delete') )
                     <div class="alert alert-danger alert-dismissible">
-                        <button type="button" class="close" data-dismiss="alert">&times;</button>
+                        <a type="button" class="close" data-dismiss="alert">&times;</a>
                         {{ Session::get('delete') }}
                     </div>
                 @endif
