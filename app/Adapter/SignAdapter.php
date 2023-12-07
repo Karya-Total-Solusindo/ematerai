@@ -453,7 +453,7 @@ class SignAdapter
                 $datas = Document::with('user','company','directory','pemungut')->find($id)->first();
                 if($datas->sn ==''){
                 //TODO - getSerial()
-                    self::getSerial($datas->id);
+                    self::getSerial([$datas->id]);
                 }
                 return response()->json($datas); 
 
