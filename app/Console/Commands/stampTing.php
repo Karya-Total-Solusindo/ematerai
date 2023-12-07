@@ -38,8 +38,9 @@ class stampTing extends Command
         foreach($inprogress as $item){
             array_push($arrayId,$item->id);
             Log::info('Dociment id :'.$item->id.' '.$item->source);     
-        $appsing = SignAdapter::exeSreialStamp([$item->id]);
-        Log::info($appsing); 
+            $appsing = SignAdapter::exeSreialStamp([$item->id]);
+            Log::info($appsing); 
+            Log::info($arrayId); 
         }
         Log::info($inprogress); 
        

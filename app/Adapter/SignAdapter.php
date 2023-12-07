@@ -3,6 +3,7 @@ namespace App\Adapter;
 
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Http\Response;
 use App\Models\Company;
 use App\Models\Directory;
@@ -68,7 +69,8 @@ class SignAdapter
     public static function getJenisDocument()
     {
         try{
-            $__token = self::getToken();
+            $user = Auth::user()->pemungut->token;
+            $__token = $user; //self::getToken();
             $Url = config('sign-adapter.API_JENIS_DOCUMENT');
             $requestAPI = (string) Http::withHeaders([
                 'Content-Type' => 'application/json',
@@ -452,7 +454,7 @@ class SignAdapter
              if(isset($datas->user->token)){
                  $__token = $datas->user->token;
              }else{
-                 $__token = self::setToken([$datas->id]);
+                 $__token = self::setToken($datas->id);
              }
             $stemting = (string) Http::withHeaders([
                     'Content-Type' => 'application/json',
@@ -474,7 +476,9 @@ class SignAdapter
                     'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
                     'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
                 ]))->post($Url)->getBody();
+                
                 $response = json_decode($stemting,true);
+                 
                     //Update status document jika stemting berhasil berhasil
                         if($response['status']=='True'){
                             $status = Document::find($id);
