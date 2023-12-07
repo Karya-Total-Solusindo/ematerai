@@ -78,8 +78,8 @@
                                 <div class="form-group">
                                     <div class="mb-3">
                                     <label for="username" class="form-label"><strong>Username:</strong></label>
-                                    <input type="text" required
-                                        class="form-control" minlength="6" value={{(env('APP_DEBUG')==true)? env('EMATRERAI_USER'):''}} name="username" id="username" aria-describedby="helpId" placeholder="">
+                                    {{-- <input type="text" required class="form-control" minlength="6" value={{(env('APP_DEBUG')==true) ?? env('EMATRERAI_USER')}} name="username" id="username" aria-describedby="helpId" placeholder=""> --}}
+                                    <input type="text" required class="form-control" minlength="6" value="" name="username" id="username" aria-describedby="helpId" placeholder="">
                                         <span></span>  
                                         <small id="helpId" class="form-text text-muted">Account Peruri</small>
                                     </div>
@@ -90,7 +90,8 @@
                                     <div class="mb-3">
                                         <label for="password" class="form-label"><strong>Password:</strong></label>
                                         <input type="password" required minlength="6"
-                                        class="form-control" name="password" value={{(env('APP_DEBUG')==true)? env('EMATRERAI_PASSWORD'):''}} id="password" aria-describedby="helpId" placeholder="">
+                                        {{-- class="form-control" name="password" value="{{(env('APP_DEBUG')==true)? env('EMATRERAI_PASSWORD')}}" id="password" aria-describedby="helpId" placeholder=""> --}}
+                                        class="form-control" name="password" value="" id="password" aria-describedby="helpId" placeholder="">
                                             <span></span>  
                                         </div>
                                 </div>
