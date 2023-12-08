@@ -7,7 +7,7 @@ $HOST_SIGN_ADAPTER = $PROTOCOL.$HOST.':'.$PORT;
 if(env('SIGN_ADAPTER_PORT')==''){
     $HOST_SIGN_ADAPTER = $PROTOCOL.$HOST;      
 }
-if(env('APP_ENV')=='productions'){
+if(env('APP_ENV')=='production'){
     return [
         // E-meterai Production Access On Premise Service
         'API_LOGIN' => 'https://backendservice.e-meterai.co.id/api/users/login',

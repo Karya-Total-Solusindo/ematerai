@@ -95,7 +95,7 @@
                         @endforeach  
                     @endif
                   </select>
-                  <input title="Date Interval" type="text" class="w-auto p-1 form-control daterange" name="periode" id="date-periode" aria-describedby="helpId" placeholder="">  
+                  <input title="Date Interval" type="text" class="w-auto p-1 form-control daterange" @if(request()->get('periode')) value="{{ request()->get('periode') }}" @endif  name="periode" id="date-periode" aria-describedby="helpId" placeholder="">  
                   {{-- button --}}
                 <button type="submit" class="  btn btn-sm  btn-primary">Filter</button>
                 @if(request()->has('company'))
@@ -129,11 +129,21 @@
                     <tbody>
                         <form id="download-success" method="post" action="{{ route("stamp.trash") }}">
                             @csrf
-                            @if ($datas->count()) 
+                            @if ($datas) 
                                 @foreach ($datas as $key=> $data)
                                 <tr>
                                     {{-- <td><input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id=""></td> --}}
-                                    <td class="align-middle text-sm text-center"> {{$key+1}}</td>
+                                    <td class="align-middle text-sm text-center"> 
+                                        @if (request()->has('page'))
+                                                @if(request()->input('page')>1)
+                                                    {{ ($datas->perPage() * $datas->currentPage())+($key+1)}}
+                                                @else
+                                                    {{$key+1}}
+                                                @endif
+                                            @else
+                                            {{$key+1}}
+                                            @endif
+                                    </td>
                                     <td>
                                         <div class="d-flex mb-0 align-items-center">
                                             <div>
@@ -183,7 +193,9 @@
                 </table>
             </div>
         </div>
+        @if ($datas) 
         {{ $datas->links() }}
+        @endif
     </div>
 </div>
 
@@ -191,22 +203,36 @@
 <script id="js-success">
     $(document).ready(function(){
         //daterangepicker
-        var firstDayOfMonth = function() {
-            return 1;
-        };
-        var d = new Date();
-        var currMonth = d.getMonth();
-        var currYear = d.getFullYear();
-        var startDate = new Date(currYear,currMonth,firstDayOfMonth());
-        $('.daterange').daterangepicker({
-            "alwaysShowCalendars": true,
-            "startDate": startDate,
-            "autoApply": true,
-            "opens": "left",
-            locale: {
-                format: 'DD/MM/YYYY'
-            },
-        });
+        @if(request()->get('periode'))
+            $('.daterange').daterangepicker({
+                "alwaysShowCalendars": true,
+                "autoApply": true,
+                "opens": "left",
+                locale: {
+                    format: 'DD/MM/YYYY'
+                },
+            });
+        @else
+            var firstDayOfMonth = function() {
+                return 1;
+            };
+            var d = new Date();
+            var currMonth = d.getMonth();
+            var currYear = d.getFullYear();
+            var startDate = new Date(currYear,currMonth,firstDayOfMonth());
+            var getInput = "{{ request()->get('periode') }}";
+            $('.daterange').daterangepicker({
+                "alwaysShowCalendars": true,
+                "startDate": startDate,
+                "endDate": d,
+                "autoApply": true,
+                "opens": "left",
+                locale: {
+                    format: 'DD/MM/YYYY'
+                },
+            });
+        
+        @endif
         //end daterange
 
         //DOWNLOAD ACTION

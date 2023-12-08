@@ -177,7 +177,7 @@
                     <form id="download-success" method="post" action="{{ route("stamp.download") }}">
                     <thead>
                         <tr>
-                            <th><input type="checkbox" name="all" id="selectAll"></td>
+                            <th><input type="checkbox" name="all[]" id="selectAll"></td>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 No</td>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
@@ -198,14 +198,24 @@
                     </thead>
                     <tbody>
                         @if(request()->has('company'))
-                        
                             @csrf
                             @if ($datas->count()) 
                             @foreach ($datas as $key => $data)
+                            @if ($data->certificatelevel == "CERTIFIED") 
+                            
                                     <tr>
                                         <td class="align-middle text-center align-items-center"><input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id=""></td>
                                         <td class="align-middle text-center align-items-center">
+                                            @if (request()->has('page'))
+                                                @if(request()->input('page')>1)
+                                                    {{ ($datas->perPage() * $datas->currentPage())+($key+1)}}
+                                                @else
+                                                    {{$key+1}}
+                                                @endif
+                                            @else
                                             {{$key+1}}
+                                            @endif
+
                                         </td>
                                         <td>
                                             <div class="d-flex mb-0 px-2  align-items-center">
@@ -213,7 +223,6 @@
                                                     <i class="fas fa-file-pdf"></i>
                                                 </div>
                                                 <div class="ms-4">
-                                                    <input type="hidden" data-name="directory" name="dir[]" value="{{$data->directory_id}}" id="{{$data->id}}">
                                                     <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6>
                                                     {{-- <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6> --}}
                                                     {{-- <p class="text-xs text-secondary mb-0"><i class="ni ni-building"></i> {{ $data->company->name }} <i class="fas fa-folder-open"></i> {{ $data->directory->name }}</p> --}}
@@ -227,7 +236,9 @@
                                             {{ $data->directory->name }}
                                         </td>
                                         <td class="align-middle text-center">
-                                            <span class="badge badge-sm  bg-gradient-success">{{ $data->certificatelevel ?? 'NOT_CERTIFIED' }}</span>
+                                            <span class="badge badge-sm  bg-gradient-success">
+                                                {{ $data->certificatelevel ?? ''}}
+                                            </span>
                                             {{-- {{ App\Models\Document::where('directory_id',$data->id)->count() ?? 0 }} --}}
                                         </td>
                                         <td class="align-middle text-center">
@@ -245,6 +256,7 @@
                                             </a> --}}
                                         </td>
                                     </tr>
+                                    @endif
                                     @endforeach
                                     
                                 @else
@@ -354,6 +366,7 @@
              $(document).ready(function (e) {
                 $('#selectAll').prop('checked', false);
                 $('#btnGetSN').prop('disabled', true);
+                var dir = $('#inputGroupSelectDirectory').find(":selected").val();
                 // $('#btnGetSN').hide();
                 $('#selectAll').on('change',(e)=>{
                     let checkAll = $('#selectAll').is(':checked');
@@ -362,8 +375,10 @@
                     if(checkAll==true){
                         $('.chechList').prop('checked', true);
                         $('#btnGetSN').show();
+                        $('#selectAll').val(dir);
                     }else{
                         $('.chechList').prop('checked', false);
+                        $('#selectAll').val(null);
                     }
                     
                     if($('.chechList:checked').length >= 1){
@@ -372,12 +387,13 @@
                     }else{
                         $('#btnGetSN').prop('disabled', true);
                     }
-                    // console.log(checkAll,numberNotChecked,chechListChecked);
+                    // console.log(dir,checkAll,$('#selectAll').val(),numberNotChecked,chechListChecked);
                 });
 
 
                 // checkbox 
                 $('.table').on('change','.chechList',(e)=>{
+                    let checkAll = $('#selectAll').is(':checked');
                     var chechListNotChecked = $('input.chechList:not(":checked")').length;
                     var chechListChecked = $('input.chechList:checked').length;
                     // console.info('chechList click');
@@ -389,10 +405,12 @@
                     }
                     if(chechListNotChecked == 0){
                         $('#selectAll').prop('checked', true);
+                        $('#selectAll').val(dir);
                     }else{
                         $('#selectAll').prop('checked', false);
+                        $('#selectAll').val(null);
                     } 
-                    // console.log(chechListChecked,chechListNotChecked);
+                    // console.log(dir,checkAll,$('#selectAll').val(),chechListChecked,chechListNotChecked);
                 });
 
             });    

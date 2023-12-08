@@ -30,25 +30,16 @@ class stampTing extends Command
      */
     public function handle()
     { 
-        // $channel = Log::build([
-        //     'driver' => 'single',
-        //     'path' => storage_path('logs/ematerai.log'),
-        // ]);
-           
-        
-        //Log::info("Cron is working fine!"); 
         $inprogress = Document::select('id')
         ->where('certificatelevel','=','INPROGRESS')
         ->orWhere('certificatelevel','=','FAILUR')->get();
         $arrayId =[];
         foreach($inprogress as $item){
-            array_push($arrayId,$item->id);
-            //Log::info(['Dociment id :'=> $item->id,$item->source,$channel]);     
+            array_push($arrayId,$item->id);     
             $appsing = SignAdapter::exeSreialStamp([$item->id]);
             Log::info([$arrayId,$appsing]); 
         }
         Log::info([$inprogress]); 
-        //Log::stack(['slack', $channel])->info('Something happened!');
        
     }
 }

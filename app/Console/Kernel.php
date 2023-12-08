@@ -15,7 +15,8 @@ class Kernel extends ConsoleKernel
         // $schedule->command('inspire')->hourly();
         // $schedule->command('inspire')->everySecond();
         //run prosess stampting
-        $schedule->command('cron:stamp-ting')->everyFifteenMinutes();
+        //$schedule->command('cron:stamp-ting')->everyFifteenMinutes();
+        $schedule->command('cron:stamp-ting')->everyMinute();
     }
 
     /**

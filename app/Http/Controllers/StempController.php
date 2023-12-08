@@ -454,17 +454,23 @@ class StempController extends Controller
         $directory = null;
         $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
         //dd($per_page);
+        $user = Auth::user()->id;
         $datas = Document::with(['company','directory'])
             ->where('certificatelevel','=','CERTIFIED')
+            ->whereNotIn('history',['HISTORY','DELETED'])
+            ->orWhereNull('history')
             ->paginate($per_page);
         if($request->getRequestUri()){
                 $company = $request->input('company');
                 $directory = $request->input('directory');
         }
-        $user = Auth::user()->id;
+        
         if($request->input('company')){
             $datas = Document::with(['company','directory'])->latest()
             ->where('certificatelevel','=','CERTIFIED')
+            ->whereNotIn('history',['HISTORY','DELETED'])
+            ->orWhereNull('history')
+            // ->orWhere('history','!=','DELETED')
             ->filter(request()->all())->paginate($per_page);
         }
         return view("client.stemp.index", compact("datas","company","directory"));
@@ -479,70 +485,24 @@ class StempController extends Controller
         $company = null;
         $directory = null;
         $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
+        $user = Auth::user()->id;
         if($request->getRequestUri()){
                 $company = $request->input('company');
                 $directory = $request->input('directory');
         }
-        $user = Auth::user()->id;
-        // if (($s = $request->s)) {
-        //     $datas =  Document::where([
-        //         [function ($query) use ($request) {
-        //             if (($s = $request->s)) {
-        //                 $query->orWhere('filename', 'LIKE', '%' . $s . '%')
-        //                 //->Where('certificatelevel','=','HISTORY')
-        //                 ->Where('history','=','HISTORY')
-        //                 ->Where('user_id','=',Auth::user()->id)
-        //                 ->orderBy('updated_at', 'desc')
-        //                     ->get();
-        //             }
-        //         }]
-        //     ])->with('company')->orderBy('updated_at', 'desc')->paginate($per_page);
-        $datas = Document::with(['company','directory'])
-                    ->where('certificatelevel','=','CERTIFIED')
-                    ->where('history','=','HISTORY')
-                    ->paginate($per_page);    
+        
+        // $datas = Document::with(['company','directory'])
+        //             ->where('certificatelevel','=','CERTIFIED')
+        //             ->where('history','=','HISTORY')
+        //             ->paginate(10);
+        $datas = false;  
         if($request->input('company')){
                 $datas = Document::with(['company','directory'])->latest()
                 ->where('certificatelevel','=','CERTIFIED')
                 ->where('history','=','HISTORY')
                 ->filter(request()->all())->paginate($per_page);
-            }
-            return view("client.stemp.index", compact("datas","company","directory"));
-        //}
-        // if($c = $request->company || $d = $request->directory || $r = $request->periode) {
-        //     // dd($c = $request->company, $d = $request->directory, $r = $request->periode);
-        //     // dd('filter');
-        //     //filter company directory daterange
-        //     $datas =  Document::where([
-        //         [function ($query) use ($request) {
-        //             if ($c = $request->company || $d = $request->directory) {
-        //                 $d = $request->directory;
-        //                 $query->Where('company_id','=',$c)
-        //                 ->Where('directory_id','=',$d)
-        //                 // ->Where('certificatelevel','=','HISTORY')
-        //                 ->Where('history','=','HISTORY')
-        //                 ->Where('user_id','=',Auth::user()->id)
-        //                 ->orderBy('updated_at', 'desc')
-        //                     ->get();
-        //             }
-        //         }]
-        //     ])->with('company')->orderBy('updated_at', 'desc')->paginate($per_page);
-        //     return view("client.stemp.index", compact("datas","company","directory"));
-        // }
-       
-        //     $datas =  Document::with('company')
-        //     ->where('user_id','=',Auth::user()->id)
-        //     // ->where('certificatelevel','=','HISTORY')
-        //     ->Where('history','=','HISTORY')
-        //     ->orderBy('updated_at', 'desc')
-        //     ->paginate($per_page);
-        //         $company = null;
-        //         $directory = null;
-        //     if($request->getRequestUri()){
-        //             $company = $request->input('company');
-        //             $directory = $request->input('directory');
-        //     }
-        //     return view("client.stemp.index", compact("datas","company","directory"));
+        }
+        return view("client.stemp.index", compact("datas","company","directory"));
     }
 
     // ditampilkan ke modal view
@@ -646,57 +606,107 @@ class StempController extends Controller
         }
 
         public function download(Request $request){
-            $dir_id = $request->dir;
+            // \DB::enableQueryLog();
+            $request->validate([
+                'doc' => 'required',
+            ]);
+            // dd($request->all);
+            $dir_id = $request->all;
             $doc_id = $request->doc;
             if($request->all){
                 //all
-                $all = Document::whereIn('directory_id',$dir_id)->where('user_id','=',Auth::user()->id)->get();
+                $all = Document::whereIn('directory_id',$request->all)
+                ->where(function ($query){
+                    $query->whereNotIn('history',['HISTORY','DELETED'])
+                    ->orWhereNull('history');
+                })
+                ->where('certificatelevel','=','CERTIFIED')
+                ->where('user_id','=',Auth::user()->id)->get();
             }else{
                 //by select
-                $all = Document::whereIn('id',$doc_id)->where('user_id','=',Auth::user()->id)->get();
+                $all = Document::whereIn('id',$doc_id)
+                ->where(function ($query){
+                    $query->whereNotIn('history',['HISTORY','DELETED'])
+                    ->orWhereNull('history');
+                })
+                ->where('certificatelevel','=','CERTIFIED')
+                ->where('user_id','=',Auth::user()->id)->get();
             }
+            // dd(\DB::getRawQueryLog());
             //$all = Document::whereIn('id',$doc_id)->where('user_id','=',Auth::user()->id)->get();
-
-            $explode = explode('/',$all);
-           
-            $company = str_replace('\\','',$explode[2]);
-            $document = str_replace('\\','',$explode[3]);
-            $zip_file = str_replace(' ','_','ematerai_'.date('Ymd').'_'.$company.'_'.$document.'.zip'); // Name of our archive to download
+            try {
+                $explode = explode('/',$all);
             
-            $zip = new \ZipArchive();
-            $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+                $company = str_replace('\\','',$explode[2]);
+                $document = str_replace('\\','',$explode[3]);
+                $zip_file = str_replace(' ','_','ematerai_'.date('YmdHi').'_'.$company.'_'.$document.'.zip'); // Name of our archive to download
+                
+                $zip = new \ZipArchive();
+                $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+                
 
-            $_DIRECTORY = 'app/public/docs/'.$company.'/'.$document.'/in/';
-            //$RESULT_DIRECTORY=  $company.'/'.$document.'/';
-            $path = storage_path($_DIRECTORY);
-            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-           foreach($all as $doc){
-               foreach ($files as $name => $file)
-               {
-                   if (!$file->isDir()) {
-                       $filePath     = $file->getRealPath();
-                       // extracting filename with substr/strlen
-                       // $relativePath = 'company/' . substr($filePath, strlen($path) + 1);
-                       $relativePath = $company.'/'.$document.'/' . substr($filePath, strlen($path) + 1);
-                       // $notrelativePath = 'company/' . substr($filePath, strlen($path) + 1);
-                       // $notrelativePath = $_DIRECTORY . substr($filePath, strlen($path) + 1);
-                       // dd($filePath,$file->getfilename(),$doc->filename);
-                       if($file->getfilename()==$doc->filename){
-                            $zip->addFile($filePath, $relativePath);
-                            //update status setelahdidownload
-                            $status = Document::find($doc->directory_id);
-                            //if success stem and download
-                            $status->certificatelevel = 'HISTORY'; 
-                            $status->history = 'HISTORY'; 
-                            $status->message = $zip_file;
-                            $status->update();
-                       }
-                       // $zip->addFile($filePath, $notrelativePath);
-                   }
-               }
-           }
-            $zip->close();
-            return response()->download($zip_file);
+                $_DIRECTORY = '/app/public/docs/'.$company.'/'.$document.'/out/';
+                $_DIRBECKUP = '/public/docs/'.$company.'/'.$document.'/backup/';
+                //$RESULT_DIRECTORY=  $company.'/'.$document.'/';
+                $path = storage_path($_DIRECTORY);
+                $path_backup = Storage::path($_DIRBECKUP);
+                $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+                $resultFile=[];
+                $resultFileId=[];
+            foreach($all as $doc){
+                foreach ($files as $name => $file)
+                {
+                    if (!$file->isDir()) {
+                        $filePath     = $file->getRealPath();
+                        // extracting filename with substr/strlen
+                        // $relativePath = 'company/' . substr($filePath, strlen($path) + 1);
+                        $relativePathDirectory = $company.'/'.$document.'/';
+                        $relativePath = $company.'/'.$document.'/' . substr($filePath, strlen($path) + 1);
+                        // $notrelativePath = 'company/' . substr($filePath, strlen($path) + 1);
+                        // $notrelativePath = $_DIRECTORY . substr($filePath, strlen($path) + 1);
+                        // dd($filePath,$file->getfilename(),$doc->filename);
+                        if($file->getfilename()==$doc->filename){
+                                $relIn = $relativePathDirectory.'in/'.$file->getfilename();
+                                $relOut = $relativePathDirectory.'out/'.$file->getfilename();
+                                $relBackup = $relativePathDirectory.'backup/'.$file->getfilename();
+                                //dd(Storage::disk('document')->exists($relOut),Storage::disk('document')->exists($relIn),Storage::disk('document')->exists($relBackup));
+                                array_push($resultFile,$file->getfilename());
+                                array_push($resultFileId,$doc->id);
+                                //\DB::enableQueryLog();
+                                //update status setelahdidownload
+                                $status = Document::find($doc->id);
+                                //if success stem and download
+                                //$status->certificatelevel = 'HISTORY'; 
+                                $status->history = 'HISTORY'; 
+                                $status->message = $zip_file;
+                                $status->update();
+                                //dd($filePath, $relativePath);
+                                //dd(\DB::getQueryLog());
+                                $zip->addFile($filePath, $relativePath);
+                        }
+                    }
+                }
+            }
+                $zip->close();
+                self::moveAafterDownload($relativePathDirectory.'out/', $relativePathDirectory.'backup/', $resultFile, $resultFileId);
+                return response()->download($zip_file);
+            } catch (\Throwable $th) {
+                //throw $th;
+                \Log::error('Download Failed, file found.  '. $th->getMessage());
+                return redirect()->back()->with('error','Download Failed, file not found.');
+                // dd($th->getMessage());
+            }
+        }
+
+        /**
+         * Backup file disk 'document' storage/app/public/ docs/{company}/{directory}/
+         */
+        public function moveAafterDownload($from,$to, array $files, array $docId){
+            // After zip move /out/filename.pdf to /backup/filename.pdf
+            foreach($files as $key => $file){
+                Storage::disk('document')->move($from.$file, $to.'STAMP/STAMP_'.date('YmdH').'_'.$docId[$key].'_'.$file);
+                \Illuminate\Support\Facades\Log::info('move backup '.$from.$file.' '.$to.$file);
+            }
         }
 
 

@@ -30,6 +30,8 @@ class Document extends Model
         'certificatelevel',
         'namadoc',
         'namadoc_detail',
+        'history',
+        'message',
 
     ];
 

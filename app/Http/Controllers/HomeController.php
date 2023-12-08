@@ -16,6 +16,7 @@ use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
 use Spatie\Permission\Traits\HasRoles;
 use Coduo\PHPHumanizer\NumberHumanizer;
+use Illuminate\Support\Facades\Log;
 
 class HomeController extends Controller
 {
@@ -42,21 +43,24 @@ class HomeController extends Controller
         # role admin
         //$role_admin = User::role('Superadmin','Admin')->get();
         //$role_admin = Auth::user()->hasRole('Admin');
-
         if(Auth::user()->hasRole('Admin')){
-            
-            $Url = config('sign-adapter.API_CHECK_SALDO');
-            $requestAPI = (string) Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
-            ])->post($Url);
-            $response = json_decode($requestAPI,true)['result'];
-            // dd($response);
-            if(isset($response['status'])){
-                if($response['status']=='00'){
-                    $saldo = $response['saldo'];
-                    $notstamp = $response['notstamp']; 
+            try {
+                $Url = config('sign-adapter.API_CHECK_SALDO');
+                $requestAPI = (string) Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
+                ])->post($Url);
+                $response = json_decode($requestAPI,true)['result'];
+                // dd($response);
+                if(isset($response['status'])){
+                    if($response['status']=='00'){
+                        $saldo = $response['saldo'];
+                        $notstamp = $response['notstamp']; 
+                    }
                 }
+            }catch (\Exception $e) {
+                //throw $th;
+                Log::error($e->getMessage());
             }
 
             $datas =[
@@ -106,6 +110,7 @@ class HomeController extends Controller
                 }    
             } catch (\Exception $e) {
                 //throw $th;
+                Log::error($e->getMessage());
             }
             $datas =[
                 "COUNT_MATERAI" => $saldo,

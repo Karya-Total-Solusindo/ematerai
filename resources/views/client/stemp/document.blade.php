@@ -107,7 +107,7 @@
                                         Detail 
                                     </a> --}}
                                     @if($data->certificatelevel == 'FAILUR')
-                                        <a href="#edit" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" ><i class="fas fa-pencil"></i> Edit</a>
+                                        {{-- <a href="#edit" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" ><i class="fas fa-pencil"></i> Edit</a> --}}
                                     @endif
                                     @if($data->sn != '')
                                         {{-- <a href="{{ route('process',$data->id)}}" class="btn btn-s btn-primary text-white font-weight-bold text-xs view" ><i class="fas fa-stamp"></i> Stamp Materai</a> --}}
