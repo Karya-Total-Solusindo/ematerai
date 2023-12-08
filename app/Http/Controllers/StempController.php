@@ -457,11 +457,13 @@ class StempController extends Controller
         $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
         //dd($per_page);
         $user = Auth::user()->id;
-        $datas = Document::with(['company','directory'])
-            ->where('certificatelevel','=','CERTIFIED')
-            ->whereNotIn('history',['HISTORY','DELETED'])
-            ->orWhereNull('history')
-            ->paginate($per_page);
+        $datas = Document::with(['company','directory'])->latest()
+            ->where(function ($query){
+                $query->whereNotIn('history',['HISTORY','DELETED'])
+                ->orWhereNull('history');
+            })->where('certificatelevel','=','CERTIFIED')
+            ->where('user_id','=',Auth::user()->id)
+            ->filter(request()->all())->paginate($per_page);
         if($request->getRequestUri()){
                 $company = $request->input('company');
                 $directory = $request->input('directory');
@@ -469,10 +471,11 @@ class StempController extends Controller
         
         if($request->input('company')){
             $datas = Document::with(['company','directory'])->latest()
-            ->where('certificatelevel','=','CERTIFIED')
-            ->whereNotIn('history',['HISTORY','DELETED'])
-            ->orWhereNull('history')
-            // ->orWhere('history','!=','DELETED')
+            ->where(function ($query){
+                $query->whereNotIn('history',['HISTORY','DELETED'])
+                ->orWhereNull('history');
+            })->where('certificatelevel','=','CERTIFIED')
+            ->where('user_id','=',Auth::user()->id)
             ->filter(request()->all())->paginate($per_page);
         }
         return view("client.stemp.index", compact("datas","company","directory"));
