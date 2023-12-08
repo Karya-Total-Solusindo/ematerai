@@ -30,10 +30,10 @@ class stampTing extends Command
      */
     public function handle()
     { 
-        $channel = Log::build([
-            'driver' => 'single',
-            'path' => storage_path('logs/ematerai.log'),
-        ]);
+        // $channel = Log::build([
+        //     'driver' => 'single',
+        //     'path' => storage_path('logs/ematerai.log'),
+        // ]);
            
         
         //Log::info("Cron is working fine!"); 
@@ -45,10 +45,10 @@ class stampTing extends Command
             array_push($arrayId,$item->id);
             //Log::info(['Dociment id :'=> $item->id,$item->source,$channel]);     
             $appsing = SignAdapter::exeSreialStamp([$item->id]);
-            Log::info([$arrayId,$appsing,$channel]); 
+            Log::info([$arrayId,$appsing]); 
         }
-        Log::info([$inprogress,$channel]); 
-        Log::stack(['slack', $channel])->info('Something happened!');
+        Log::info([$inprogress]); 
+        //Log::stack(['slack', $channel])->info('Something happened!');
        
     }
 }
