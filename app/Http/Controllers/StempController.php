@@ -101,6 +101,7 @@ class StempController extends Controller
         $user = Auth::user()->id;
         $request['directory_id'] = $directory_id;
         $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])
+        ->Where('certificatelevel','<>', 'NEW')
         ->Where('certificatelevel','<>', 'CERTIFIED')
         ->Where('certificatelevel','<>', 'INPROGRESS')
         ->Where('certificatelevel','<>', 'HISTORY')

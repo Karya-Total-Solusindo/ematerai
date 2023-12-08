@@ -147,11 +147,24 @@ class DocumentController extends Controller
      *  certificatelevel
     */
     public function setInProgres(Request $request){
+        
+        $document_all = $request->post('all');
         $document_id = $request->post('doc');
         // dd($document_id);
         $countSuccess = 0; 
         $CountError = 0; 
-        foreach ($document_id as $id) {
+        if($request->post('all')){
+                $document = Document::where('directory_id',$document_all)
+                ->update(['certificatelevel' => 'INPROGRESS']);
+                if($document){
+                    $countSuccess++;
+                }else{
+                    $CountError++;
+                }
+                // dd($request->all());
+        }else{
+            // dd($request->all());
+            foreach ($document_id as $id) {
                 $document = Document::where('id',$id)
                 ->update(['certificatelevel' => 'INPROGRESS']);
                 if($document){
@@ -159,8 +172,8 @@ class DocumentController extends Controller
                 }else{
                     $CountError++;
                 }
-
             }
+        }
         return redirect()->back()->with('success','The document was successfully sent in the processing queue.<br> 
         Success: '.$countSuccess.'<br> Failed: '.$CountError);        
     }

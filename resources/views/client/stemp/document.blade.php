@@ -52,7 +52,7 @@
                             <tr>
                                 @if($directory->count()>0)
                                     @if($directory->template==1)
-                                    <td><input type="checkbox" id="selectAll"></td>
+                                    <td><input type="checkbox" name="all" value="{{$directory->id}}" id="selectAll"></td>
                                     @endif
                                 @endif
                                 <th class="text-uppercase text-start text-secondary text-xxs font-weight-bolder opacity-7">
@@ -74,7 +74,7 @@
                         </thead>
                         <tbody>
                             @if($datas->count()>0)
-                            @foreach ($datas  as $k =>  $data)
+                            @foreach ($datas  as $key =>  $data)
                             <tr>
                                 @if($data->directory->template==1)    
                                 <td>
@@ -84,7 +84,15 @@
                                 </td>
                                 @endif
                                 <td class="align-middle text-center">
-                                    {{ $k+1 }}
+                                    @if (request()->has('page'))
+                                    @if(request()->input('page')>1)
+                                        {{ ($datas->perPage() * $datas->currentPage())+($key+1)}}
+                                    @else
+                                        {{$key+1}}
+                                    @endif
+                                @else
+                                {{$key+1}}
+                                @endif
                                 </td>
                                 <td>
                                     <div class="align-middle text-sm">
