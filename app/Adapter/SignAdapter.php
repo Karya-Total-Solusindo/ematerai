@@ -44,9 +44,11 @@ class SignAdapter
                 //$responseC->withCookie(cookie('_token_ematerai',$response['token'], self::$minutes,'/'));
                 // return $responseC;
             if($response['message'] == 'success'){ 
+                //on table pemungut
                 $token = Pemungut::find($data->pemungut->id); 
                 $token->token = $response['token'];
                 $token->update();
+                //on table user
                 $user = User::find($data->user->id); 
                 $user->ematerai_token = $response['token'];
                 $user->update();
@@ -209,11 +211,13 @@ class SignAdapter
     public static function getSerial(array $arrayDocumentId){
         $dataArray =[];    
         foreach ($arrayDocumentId as $id) {
+            
             $doc = Document::with('user','company','directory','pemungut')->find($id);
             if($doc==null){
                 Log::error('Document Not Exist, id: '.$id);
                 return response()->json(['status'=>'error','messega'=>'Document Not Exist'],404);
             }
+            Log::info('GET SERIAL NUMBER '.$id.' '.$doc->source);
             $desPath = '/docs/'.strtoupper($doc->company->name).'/'.strtoupper($doc->directory->name);
             $data = [
                 "isUpload"=> false, //mand
@@ -240,9 +244,9 @@ class SignAdapter
             if($response['statusCode'] != '00'){
                 Document::where('id', $id)
                 ->update(['message'=>$response['result']['err']]);
-                return back()->with($response['message'],$response['result']['err']);
+                Log::info('SERIAL NUMBER '.__LINE__.' '.$response['result']['err']);
+                //return back()->with($response['message'],$response['result']['err']);
             }
-            Log::info([$response,$data]);
             // return response()->json([$response,$data]);
             if($response['statusCode']=='00'){
                 // save serialnumber
@@ -271,10 +275,12 @@ class SignAdapter
                 Storage::disk('public')->put($path, base64_decode($image));
                 Document::where('id', $id)
                 ->update(['sn'=>$sn,'spesimenPath' => $desPath."/spesimen/".$sn.".png"]);
+                Log::info('GET SERIAL NUMBER SUCCESS '.$id.' '.$doc->source);
             }else{
                 $status = Document::find($id);
                 $status->certificatelevel = 'FAILUR';
                 $status->update();
+                Log::error('GET SERIAL NUMBER FAILUR');
                 //$status = Document::find($id);
                 //$status->update();
                 //$type = 'application/json';
@@ -283,7 +289,7 @@ class SignAdapter
             array_push($dataArray,$response);
         }
         // $response = json_decode($data,true);
-        return back()->with($response['message'],$response['result']['sn']);
+        //return back()->with($response['message'],$response['result']['sn']);
         return response()->json($dataArray);
     }
 
@@ -439,24 +445,47 @@ class SignAdapter
             return $e;
         }
     }
-
+    static function getToken(array $id)
+    {
+        try{
+            $documents = Document::with('user','pemungut')->find($id)->first();
+            //return response()->json($documents->pemungut->p_password, 200);
+            $Url = (string) config('sign-adapter.API_LOGIN');
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json'
+            ])->withBody(json_encode([
+                'user' =>  $documents->pemungut->p_user,
+                'password' => Crypt::decrypt($documents->pemungut->p_password),
+            ]))->post($Url);   
+            $data = json_decode($response);    
+            if($response['message'] == 'success'){ 
+                return $data;
+            }else{
+                return $data;
+            }
+        }catch(\Exception $e){
+            return $e;
+        }
+    }
     /** 
      * execusi serial dan lakukan stamp
     */
     public static function exeSreialStamp(array $arrayDocumentId){
         $dataArray =[];
-        try{
+       try{
              // check token user documen 
              // do generated SN
             $__token = '';
             $Url = config('sign-adapter.API_STEMPTING');
             foreach ($arrayDocumentId as $id) {
                 $datas = Document::with('user','company','directory','pemungut')->find($id);
+                $relativePathIn = $datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename;
+                $relativePathBackup = $datas->company->name.'/'.$datas->directory->name.'/backup/'.'IN_'.date('YmdH').$id.'_'.$datas->filename;
                 //return response()->json($datas); 
                 if($datas->sn ==''){
                     //TODO - getSerial()
-                   $getSN = self::getSerial([$datas->id]);
-                   Log::info($getSN);
+                    Log::info('STAMP GET SN: '.$datas->id.' '.$datas->source);
+                    return self::getSerial([$datas->id]);
                 }
 
                 if($datas->user->ematerai_token!=null){
@@ -508,14 +537,19 @@ class SignAdapter
                     
                             //Update status document jika stemting berhasil berhasil
                             if($response['status']=='True'){
-                                $status = Document::find($id);
-                                $status->certificatelevel = 'CERTIFIED';
-                                $status->update();
+                                if(Storage::disk('document')->move($relativePathIn,$relativePathBackup)){
+                                    $status = Document::find($id);
+                                    $status->certificatelevel = 'CERTIFIED';
+                                    $status->update();
+                                }
+                                Log::info('Move IN backup '.$relativePathIn.' to '.$relativePathBackup);
+                                //Storage::disk('document')->move($relativePathIn,$relativePathBackup);
                             }else{
                                 $status = Document::find($id);
                                 $status->certificatelevel = 'FAILUR';
                                 $status->message = $response['errorMessage'];
                                 $status->update();
+                                Log::error('STAMPE FAILUR: '.$id);
                             }
                             array_push($dataArray,$response);
                             // return json_encode($response);
@@ -524,9 +558,12 @@ class SignAdapter
         }catch(\GuzzleHttp\Exception\RequestException $e){
             // you can catch here 40X re
             // sponse errors and 500 response errors
-                return back()->with($e,'500 response errors');
+            Log::error($e->getMessage());
+            return back()->with($e,'500 response errors');
         }   
         return back()->with($response['message'],'Success');
     }
+
+
 
 }
