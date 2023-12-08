@@ -101,11 +101,11 @@ class StempController extends Controller
         $user = Auth::user()->id;
         $request['directory_id'] = $directory_id;
         $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])
-        ->Where('certificatelevel','<>', 'NEW')
-        ->Where('certificatelevel','<>', 'CERTIFIED')
-        ->Where('certificatelevel','<>', 'INPROGRESS')
-        ->Where('certificatelevel','<>', 'HISTORY')
-        ->Where('certificatelevel','<>', 'DELETED')
+        ->Where('certificatelevel','=', 'NEW')
+        // ->Where('certificatelevel','<>', 'CERTIFIED')
+        // ->Where('certificatelevel','<>', 'INPROGRESS')
+        // ->Where('certificatelevel','<>', 'HISTORY')
+        // ->Where('certificatelevel','<>', 'DELETED')
         ->orderBy('updated_at', 'desc')->paginate(50);
         if (($s = $request->s)) {
             $datas = Document::where([
@@ -122,10 +122,11 @@ class StempController extends Controller
                 ])
                 ->Where('user_id', $user)
                 ->Where('directory_id', $request->directory_id)
-                ->Where('certificatelevel','<>', 'CERTIFIED')
-                ->Where('certificatelevel','<>', 'INPROGRESS')
-                ->Where('certificatelevel','<>', 'HISTORY')
-                ->Where('certificatelevel','<>', 'DELETED')
+                ->Where('certificatelevel','=', 'NEW')
+                // ->here('certificatelevel','<>', 'CERTIFIED')
+                // ->Where('certificatelevel','<>', 'INPROGRESS')
+                // ->Where('certificatelevel','<>', 'HISTORY')
+                // ->Where('certificatelevel','<>', 'DELETED')
                 ->orderBy('updated_at', 'desc')->paginate(10);
         }
         $directory = Directory::find(['id',$directory_id])->where('user_id',$user)->first();
