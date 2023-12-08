@@ -648,13 +648,15 @@ class StempController extends Controller
         public function download(Request $request){
             $dir_id = $request->dir;
             $doc_id = $request->doc;
-            if($request->all){
-                //all
-                $all = Document::whereIn('directory_id',$dir_id)->where('user_id','=',Auth::user()->id)->get();
-            }else{
-                //by select
-                $all = Document::whereIn('id',$doc_id)->where('user_id','=',Auth::user()->id)->get();
-            }
+            // if($request->all){
+            //     //all
+            //     $all = Document::whereIn('directory_id',$dir_id)->where('user_id','=',Auth::user()->id)->get();
+            // }else{
+            //     //by select
+            //     $all = Document::whereIn('id',$doc_id)->where('user_id','=',Auth::user()->id)->get();
+            // }
+            $all = Document::whereIn('id',$doc_id)->where('user_id','=',Auth::user()->id)->get();
+
             $explode = explode('/',$all);
            
             $company = str_replace('\\','',$explode[2]);
