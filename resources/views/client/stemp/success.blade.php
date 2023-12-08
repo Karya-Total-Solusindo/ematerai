@@ -201,7 +201,7 @@
                             @csrf
                             @if ($datas->count()) 
                             @foreach ($datas as $key => $data)
-                            @if ($data->certificatelevel == "CERTIFIED") 
+                            {{-- @if ($data->certificatelevel == "CERTIFIED")  --}}
                             
                                     <tr>
                                         <td class="align-middle text-center align-items-center"><input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id=""></td>
@@ -256,7 +256,7 @@
                                             </a> --}}
                                         </td>
                                     </tr>
-                                    @endif
+                                    {{-- @endif --}}
                                     @endforeach
                                     
                                 @else
