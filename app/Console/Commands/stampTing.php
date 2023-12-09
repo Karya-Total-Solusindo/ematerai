@@ -32,6 +32,7 @@ class stampTing extends Command
     { 
         $inprogress = Document::select('id')
         ->where('certificatelevel','=','INPROGRESS')
+        ->orWhere('certificatelevel','=','NOT_CERTIFIED')
         ->orWhere('certificatelevel','=','FAILUR')->get();
         $arrayId =[];
         foreach($inprogress as $item){
