@@ -27,6 +27,23 @@
                 </ul>
             </div>
         @endif
+            <form action="get">
+                    <div class="w-auto input-group input-sm mb-0 ">
+                    <div class="mb-3">
+                        <label for="" class="form-label">Show</label>
+                        <select
+                            class="form-select form-select-lg"
+                            name=""
+                            id=""
+                        >
+                            <option selected>Select one</option>
+                            <option value="">New Delhi</option>
+                            <option value="">Istanbul</option>
+                            <option value="">Jakarta</option>
+                        </select>
+                    </div>
+                </div>
+            </form>
             <div class="table-responsive p-0">
                 <table class="table align-items-center mb-0">
                     <thead>
@@ -120,7 +137,7 @@
              $(document).ready(function (e) {
                 $('#selectAll').prop('checked', false);
                 $('#btnGetSN').addClass('disabled');
-                // $('#btnGetSN').hide();
+                $('#btnGetSN').hide();
                 $('#selectAll').on('change',(e)=>{
                     let checkAll = $('#selectAll').is(':checked');
                     var numberNotChecked = $('input:checkbox:not(":checked")').length;

@@ -480,7 +480,7 @@ class SignAdapter
             foreach ($arrayDocumentId as $id) {
                 $datas = Document::with('user','company','directory','pemungut')->find($id);
                 $relativePathIn = $datas->company->name.'/'.$datas->directory->name.'/in/'.$datas->filename;
-                $relativePathBackup = $datas->company->name.'/'.$datas->directory->name.'/backup/'.'IN_'.date('YmdH').$id.'_'.$datas->filename;
+                $relativePathBackup = $datas->company->name.'/'.$datas->directory->name.'/backup/'.$id.'_BACKUP_'.$datas->filename;
                 //return response()->json($datas); 
                 if($datas->sn ==''){
                     //TODO - getSerial()
@@ -534,13 +534,15 @@ class SignAdapter
                     ]))->post($Url)->getBody();
                     
                     $response = json_decode($stemting,true);
-                    
                             //Update status document jika stemting berhasil berhasil
                             if($response['status']=='True'){
                                 if(Storage::disk('document')->move($relativePathIn,$relativePathBackup)){
                                     $status = Document::find($id);
                                     $status->certificatelevel = 'CERTIFIED';
                                     $status->update();
+                                    $serialUsed = Serialnumber::where('sn','=',$datas->sn);
+                                    $serialUsed->use = '1';
+                                    $serialUsed->update();
                                 }
                                 Log::info('Move IN backup '.$relativePathIn.' to '.$relativePathBackup);
                                 //Storage::disk('document')->move($relativePathIn,$relativePathBackup);

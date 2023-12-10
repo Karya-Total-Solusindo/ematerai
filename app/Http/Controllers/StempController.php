@@ -507,7 +507,8 @@ class StempController extends Controller
                 ->where('history','=','HISTORY')
                 ->filter(request()->all())->paginate($per_page);
         }
-        return view("client.stemp.index", compact("datas","company","directory"));
+        $filePath = asset('/storage/docs/');
+        return view("client.stemp.index", compact("datas","company","directory","filePath"));
     }
 
     // ditampilkan ke modal view
@@ -709,7 +710,7 @@ class StempController extends Controller
         public function moveAafterDownload($from,$to, array $files, array $docId){
             // After zip move /out/filename.pdf to /backup/filename.pdf
             foreach($files as $key => $file){
-                Storage::disk('document')->move($from.$file, $to.'STAMP/STAMP_'.date('YmdH').'_'.$docId[$key].'_'.$file);
+                Storage::disk('document')->move($from.$file, $to.'STAMP/'.$docId[$key].'_STAMP_'.$file);
                 \Illuminate\Support\Facades\Log::info('move backup '.$from.$file.' '.$to.$file);
             }
         }

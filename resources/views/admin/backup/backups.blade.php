@@ -3,7 +3,7 @@
     @include('layouts.navbars.auth.topnav', ['title' => 'Stemp'])
     <div class="card">
         <div class="card-body">
-            <h3><i class="fas fa-database"></i> Database Backups</h3>
+            <h3><i class="fas fa-database"></i> Database Backup</h3>
         <div class="row">
             <div class="col-xs-12 clearfix">
                 <form action="{{ url('backup/create') }}" method="GET" class="add-new-backup" enctype="multipart/form-data" id="CreateBackupForm">

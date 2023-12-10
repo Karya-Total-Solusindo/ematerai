@@ -213,7 +213,8 @@ min-height: 300px;
               var dt = new Date();
               var time = Math.ceil(dt.getTime()/1000);
               if(dev==false){
-                  return time+'_'+file.name;
+                  return file.name;
+                  // return time+'_'+file.name;
               }
               return file.name;
           },
