@@ -34,7 +34,7 @@
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Mail </th>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7 ps-2">Role </th>
                                 <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Create Date</th>
-                                <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action</th>
+                                {{-- <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7"> Action</th> --}}
                             </tr>
                         </thead>
                         <tbody>
@@ -73,14 +73,14 @@
                                     <td class="align-middle text-center text-sm">
                                         <p class="text-sm font-weight-bold mb-0">  {{ Carbon\Carbon::parse($user->created_at)->format('d/m/Y') }}  </p>
                                     </td>
-                                    <td class="align-middle text-end">
-                                        <div class="d-flex px-3 py-1 justify-content-center align-items-center">
-                                            <a href="{{ route('users.show',$user->id) }}" class="text-sm font-weight-bold px-auto mb-0">Service Account</a>
-                                            <a href="{{ route('users.edit',$user->id) }}" class="text-sm font-weight-bold mx-auto mb-0">Edit</a>
+                                    {{-- <td class="align-middle text-end"> --}}
+                                        {{-- <div class="d-flex px-3 py-1 justify-content-center align-items-center"> --}}
+                                            {{-- <a href="{{ route('users.show',$user->id) }}" class="text-sm font-weight-bold px-auto mb-0">Service Account</a> --}}
+                                            {{-- <a href="{{ route('users.edit',$user->id) }}" class="text-sm font-weight-bold mx-auto mb-0">Edit</a> --}}
                                             {{-- <a href="{{ URL::to('/users/'.$user->id.'/edit') }}" class="text-sm font-weight-bold mb-0">Edit</a> --}}
-                                            <p class="text-sm font-weight-bold mb-0 ps-2">Delete</p>
-                                        </div>
-                                    </td>
+                                            {{-- <p class="text-sm font-weight-bold mb-0 ps-2">Delete</p> --}}
+                                        {{-- </div> --}}
+                                    {{-- </td> --}}
                                 </tr>
                             @endforeach
                         </tbody>
