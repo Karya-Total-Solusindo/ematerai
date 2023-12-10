@@ -27,6 +27,7 @@ yarn-error.log
 /public/phpmyadmin
 /public/*.zip
 /public/.*
+/public/split
 /local_resouce
 /.env.*
 /lang/*
