@@ -366,6 +366,8 @@
              $(document).ready(function (e) {
                 $('#selectAll').prop('checked', false);
                 $('#btnGetSN').prop('disabled', true);
+                $('#btn-download').addClass('disabled');
+                $('#btn-download').hide();
                 var dir = $('#inputGroupSelectDirectory').find(":selected").val();
                 // $('#btnGetSN').hide();
                 $('#selectAll').on('change',(e)=>{
@@ -375,17 +377,25 @@
                     if(checkAll==true){
                         $('.chechList').prop('checked', true);
                         $('#btnGetSN').show();
+                        $('#btn-download').removeClass('disabled');
+                        $('#btn-download').show();
                         $('#selectAll').val(dir);
                     }else{
                         $('.chechList').prop('checked', false);
+                        $('#btn-download').addClass('disabled');
+                        $('#btn-download').hide();
                         $('#selectAll').val(null);
                     }
                     
                     if($('.chechList:checked').length >= 1){
                         $('#btnGetSN').prop('disabled', false);
+                        $('#btn-download').removeClass('disabled');
+                        $('#btn-download').show();
                         $('#btnGetSN').show();
                     }else{
+                        $('#btn-download').addClass('disabled');
                         $('#btnGetSN').prop('disabled', true);
+                        $('#btn-download').hide();
                     }
                     // console.log(dir,checkAll,$('#selectAll').val(),numberNotChecked,chechListChecked);
                 });
@@ -399,8 +409,12 @@
                     // console.info('chechList click');
                     if($('.chechList:checked').length >= 1){
                         $('#btnGetSN').prop('disabled', false);
+                        $('#btn-download').removeClass('disabled');
+                        $('#btn-download').show();
                         $('#btnGetSN').show();
                     }else{
+                        $('#btn-download').addClass('disabled');
+                        $('#btn-download').hide();
                         $('#btnGetSN').prop('disabled', true);
                     }
                     if(chechListNotChecked == 0){

@@ -6,15 +6,11 @@
                 <h4 class="card-title"><i class="ni ni-paper-diploma"></i>  Processing Failed</h4> 
             </div>
             <div class="col text-end">
-                <div class="d-flex ">
-                    <button @class(['btn me-5 btn-sm btn-info align-items-right', 'font-bold' => true]) class="btn btn-sm btn-info" id="btnGetSN" onclick="$('#execute').submit();"><i class="fas fa-qrcode"></i> Execute Materai</button>
-                    
                     <form action="{{ route('exportSuccecc') }}" method="get">
+                        <a @class(['disabled btn btn-sm btn-info align-items-right', 'font-bold' => true])  class="disabled btn btn-sm btn-info" id="btnGetSN" onclick="$('#execute').submit();"><i class="fas fa-qrcode"></i> Execute Materai</a>
                         <input type="hidden" name="status" value="FAILUR">
                         <button type="submit" class="btn btn-sm btn-success"><i class="fas fa-file-excel"></i> Export Excel</button>
                     </form>
-
-                </div>
                 {{-- <a class="btn btn-info" href="{{ route('exportSuccecc') }}" onclick="alert(on dev)">Export File</a> --}}
                 {{-- <a @class(['btn btn-primary', 'font-bold' => true]) href="{{ route('directory.index') }}"> Create</a> --}}
             </div>
@@ -115,7 +111,7 @@
         //load data
              $(document).ready(function (e) {
                 $('#selectAll').prop('checked', false);
-                $('#btnGetSN').prop('disabled', true);
+                $('#btnGetSN').addClass('disabled');
                 // $('#btnGetSN').hide();
                 $('#selectAll').on('change',(e)=>{
                     let checkAll = $('#selectAll').is(':checked');
@@ -123,16 +119,21 @@
                     var chechListChecked = $('input.chechList:checked').length;
                     if(checkAll==true){
                         $('.chechList').prop('checked', true);
+                        $('#btnGetSN').removeClass('disabled');
                         $('#btnGetSN').show();
                     }else{
+                        $('#btnGetSN').hide();
                         $('.chechList').prop('checked', false);
                     }
                     
                     if($('.chechList:checked').length >= 1){
                         $('#btnGetSN').prop('disabled', false);
+                        $('#btnGetSN').removeClass('disabled');
                         $('#btnGetSN').show();
                     }else{
+                        $('#btnGetSN').addClass('disabled');
                         $('#btnGetSN').prop('disabled', true);
+                        $('#btnGetSN').hide();
                     }
                     // console.log(checkAll,numberNotChecked,chechListChecked);
                 });
@@ -144,10 +145,14 @@
                     var chechListChecked = $('input.chechList:checked').length;
                     // console.info('chechList click');
                     if($('.chechList:checked').length >= 1){
+                        $('#btnGetSN').removeClass('disabled');
+                        $('#btnGetSN').show();
                         $('#btnGetSN').prop('disabled', false);
                         $('#btnGetSN').show();
                     }else{
+                        $('#btnGetSN').addClass('disabled');
                         $('#btnGetSN').prop('disabled', true);
+                        $('#btnGetSN').hide();
                     }
                     if(chechListNotChecked == 0){
                         $('#selectAll').prop('checked', true);

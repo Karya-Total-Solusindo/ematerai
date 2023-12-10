@@ -116,7 +116,7 @@ min-height: 300px;
         </div>
         <div class="text-end col-md-6">
           {{ $directorys->companyName }} / <b>{{ $directorys->name }}</b>
-          <a class="btn btn-sm btn-danger" href="{{ url()->previous() }}"> Close  </a>
+          {{-- <a class="btn btn-sm btn-danger" href="{{ route('document',$directorys->id) }}"> Close  </a> --}}
         </div>
       </div>
         <div class="row justify-content-center align-items-center g-2">
@@ -149,7 +149,7 @@ min-height: 300px;
                 </span>
               </div>
               <div class="col-6 text-end mb-0">
-                  <a class="btn btn-sm btn-danger" href="{{ url()->previous() }}"> Close  </a>
+                  <a class="btn btn-sm btn-danger" href="{{ route('document',$directorys->id) }}"> Close  </a>
               </div>
           </div>
       </div>

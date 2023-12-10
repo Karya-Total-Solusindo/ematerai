@@ -26,7 +26,10 @@ if(env('APP_ENV')=='production'){
         'API_CHECK_SALDO_PEMUNGUT' => 'https://backendservice.e-meterai.co.id/sale/saldo-scm?idLoc=[idPemungut]&db=true',
         //idPemungut didapat dari response API Login pada response body “Id” dengan “description”:“PEMUNGUT”
         'API_UPDATE_DATA_STEMTING' => 'https://stampv2.e-meterai.co.id/stamping/update-data/[SerialNumber]',
+        
         //Serial Number dengan status NOT-STAMP yang telah tergenerate, dan akan diupdate
+        //API Check List Serial Number Not Stamp digunakan untuk melihat daftar serial number yang sudah
+        //di stamp (STAMP) maupun yang belum di stamp (NOTSTAMP) beserta detail informasinya.
         'API_CHECK_DAFTAR_SN' => 'https://stampv2.e-meterai.co.id/chanel/sale/stamp/ext/[UserID]',
     ];
 }else{
