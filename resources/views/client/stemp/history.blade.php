@@ -147,11 +147,17 @@
                                     <td>
                                         <div class="d-flex mb-0 align-items-center">
                                             <div>
-                                                <i class="fas fa-file-pdf"></i>
+                                                @if(Storage::disk('document')->exists($data->company->name.'/'.$data->directory->name.'/backup/STAMP/'.$data->id.'_STAMP_'.$data->filename))
+                                                    <i class="fas fa-file-pdf" title="{{$data->id}}"></i>
+                                                @else
+                                                    <i class="fas fa-file-pdf" style="color:red;" title="File Not Exists, , try asking the administrator about this file {{$data->id}}"></i>
+                                                    <span style="color:red; font-size:8px;">Not Exists</span>
+                                                @endif
                                             </div>
                                             <div class="ms-4">
-                                                {{-- <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6> --}}
-                                                <h6 class="mb-0 text-sm">{{ $data->filename }}</h6>
+                                                <h6 class="mb-0 text-sm">
+                                                    <a target="_blank" href="{{ $filePath.'/'.$data->company->name.'/'.$data->directory->name.'/backup/STAMP/'.$data->id.'_STAMP_'.$data->filename ?? '#' }}" title="click show detail">{{ $data->filename }}</a>
+                                                </h6>
                                             </div>
                                         </div>
                                     </td>

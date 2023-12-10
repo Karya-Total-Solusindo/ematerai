@@ -137,7 +137,6 @@
         @endif
         <form action="" method="get">
         <div class="w-auto input-group input-sm mb-0 ">
-            
             <label class="input-group-text" for="per_page" title="Show Per Page">Show</label>
             <select title="Show Per Page" name="view" id="per_page" class="select-per-page p-1  form-select form-select-sm">
                 <option @if(request()->input('view')==10) selected @endif value="10">10</option>
@@ -218,10 +217,16 @@
                                         <td>
                                             <div class="d-flex mb-0 px-2  align-items-center">
                                                 <div>
-                                                    <i class="fas fa-file-pdf"></i>
+                                                    @if(Storage::disk('document')->exists($data->company->name.'/'.$data->directory->name.'/out/'.$data->filename))
+                                                    <i class="fas fa-file-pdf" title="{{$data->id}}"></i>
+                                                @else
+                                                    <i class="fas fa-file-pdf" style="color:red;" title="File Not Exists, , try asking the administrator about this file {{$data->id}}"></i>
+                                                    <span style="color:red; font-size:8px;">Not Exists</span>
+                                                @endif
                                                 </div>
                                                 <div class="ms-4">
-                                                    <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6>
+                                                    <h6 class="mb-0 text-sm">{{ $data->filename }}</h6>
+                                                    {{-- <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6> --}}
                                                     {{-- <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6> --}}
                                                     {{-- <p class="text-xs text-secondary mb-0"><i class="ni ni-building"></i> {{ $data->company->name }} <i class="fas fa-folder-open"></i> {{ $data->directory->name }}</p> --}}
                                                 </div>
@@ -244,7 +249,7 @@
                                         </td>
                                         <td class="align-middle text-end">
                                             <a target="_blank" href=" {{ asset('storage/docs/'.$data->company->name.'/'.$data->directory->name.'/out/'.$data->filename) }}" class="text-primary font-weight-bold text-xs"
-                                                data-toggle="tooltip" data-original-title="Edit Download">
+                                                data-toggle="tooltip" data-original-title="Preview">
                                                 <span class="badge badge-sm bg-gradient-success"><i class="fas fa-eye"></i> View</span>
                                             </a>
                                         
