@@ -90,7 +90,7 @@ return [
      *
      * [] - no restrictions
      */
-    'allowFileTypes'    => ['pdf','png'],
+    'allowFileTypes'    => ['pdf','png','zip'],
 
     /**
      * Show / Hide system files and folders
