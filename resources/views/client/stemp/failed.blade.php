@@ -63,7 +63,15 @@
                                 <input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
                             </td>
                             <td class="align-middle text-center" style="border-bottom-width: 0px !important;">
-                                {{ $num+1 }} {{-- <i class="fas fa-file-pdf"></i> --}}
+                                @if (request()->has('page'))
+                                @if(request()->input('page')>1)
+                                    {{ ($datas->perPage() * $datas->currentPage())+($num+1)}}
+                                @else
+                                    {{$num+1}}
+                                @endif
+                            @else
+                            {{$num+1}}
+                            @endif
                             </td>
                             <td class="align-middle text-sm text-left" style="border-bottom-width: 0px !important;">
                                 <h6 class="mb-0 text-sm"><a href="{{ route('stemp.show',$data->id) }}" title="click show detail">{{ $data->filename }}</a></h6>

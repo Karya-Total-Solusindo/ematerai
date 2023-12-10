@@ -202,7 +202,6 @@
                             @if ($datas->count()) 
                             @foreach ($datas as $key => $data)
                             {{-- @if ($data->certificatelevel == "CERTIFIED")  --}}
-                            
                                     <tr>
                                         <td class="align-middle text-center align-items-center"><input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id=""></td>
                                         <td class="align-middle text-center align-items-center">
@@ -215,7 +214,6 @@
                                             @else
                                             {{$key+1}}
                                             @endif
-
                                         </td>
                                         <td>
                                             <div class="d-flex mb-0 px-2  align-items-center">
