@@ -99,39 +99,41 @@ class StempController extends Controller
     public function document($directory_id, Request $request)
     {
         $user = Auth::user()->id;
+        $company = null;
+        $directory = null;
+        $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
         $request['directory_id'] = $directory_id;
-        $datas = Document::where(['user_id'=>$user,'directory_id'=> $directory_id])
+        $datas = Document::with(['company','directory'])->latest()
+        ->where(['user_id'=>$user,'directory_id'=> $directory_id])
         ->Where('certificatelevel','=', 'NEW')
-        // ->Where('certificatelevel','<>', 'CERTIFIED')
-        // ->Where('certificatelevel','<>', 'INPROGRESS')
-        // ->Where('certificatelevel','<>', 'HISTORY')
-        // ->Where('certificatelevel','<>', 'DELETED')
-        ->orderBy('updated_at', 'desc')->paginate(50);
+        ->where('user_id','=',Auth::user()->id)
+        ->orderBy('updated_at', 'desc')->paginate($per_page);
         if (($s = $request->s)) {
-            $datas = Document::where([
-                [function ($query) use ($request) {
-                    if (($s = $request->s)) {
-                        $user = Auth::user()->id;
-                        $query
-                        ->orWhere('filename', 'LIKE', '%' . $s . '%')
-                        ->orWhere('sn', 'LIKE', '%' . $s . '%')
-                        ->orderBy('updated_at', 'desc')
-                        ->get();
-                    }
-                }]
-                ])
-                ->Where('user_id', $user)
-                ->Where('directory_id', $request->directory_id)
-                ->Where('certificatelevel','=', 'NEW')
-                // ->here('certificatelevel','<>', 'CERTIFIED')
-                // ->Where('certificatelevel','<>', 'INPROGRESS')
-                // ->Where('certificatelevel','<>', 'HISTORY')
-                // ->Where('certificatelevel','<>', 'DELETED')
-                ->orderBy('updated_at', 'desc')->paginate(10);
+            $datas = Document::with(['company','directory'])->latest()
+            ->where(function ($query){
+                $query->whereNotIn('history',['HISTORY','DELETED'])
+                ->orWhereNull('history');
+            })->where('certificatelevel','=','NEW')
+            ->Where('filename', 'LIKE', '%' . $s . '%')
+            ->where('user_id','=',Auth::user()->id)
+            ->orderBy('updated_at', 'desc')
+            ->filter(request()->all())->paginate($per_page);
         }
+
+        if($request->input('view')){
+            $datas = Document::with(['company','directory'])->latest()
+            ->where(function ($query){
+                $query->whereNotIn('history',['HISTORY','DELETED'])
+                ->orWhereNull('history');
+            })->where('certificatelevel','=','NEW')
+            ->where('user_id','=',Auth::user()->id)
+            ->filter(request()->all())->paginate($per_page);
+        }
+       
         $directory = Directory::find(['id',$directory_id])->where('user_id',$user)->first();
         if($directory){
             return view("client.stemp.index", compact("datas","directory"));
+            // return view("client.stemp.index", compact("datas","company","directory"));
         }
         return redirect()->route('company')->with('error', 'Directory not found!');
     }
@@ -389,7 +391,6 @@ class StempController extends Controller
                     return json_encode($response);
             }catch(\GuzzleHttp\Exception\RequestException $e){
             // you can catch here 40X response errors and 500 response errors
-             
             }      
     }
     public function progress(Request $request)
@@ -422,27 +423,37 @@ class StempController extends Controller
      */
     public function failed(Request $request)
     {
+        $company = null;
+        $directory = null;
+        $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
         $user = Auth::user()->id;
-        if (($s = $request->s)) {
-            $datas =  Document::where([
-                [function ($query) use ($request) {
-                    if (($s = $request->s)) {
-                        $query->orWhere('filename', 'LIKE', '%' . $s . '%')
-                        ->Where('certificatelevel','=','FAILUR')
-                        ->Where('user_id','=',Auth::user()->id)
-                        ->orderBy('updated_at', 'desc')
-                            ->get();
-                    }
-                }]
-            ])->with('company')->orderBy('updated_at', 'desc')->paginate(50);
-        }else{
-            $datas =  Document::with('company')
-            ->where('user_id','=',Auth::user()->id)
-            ->where('certificatelevel','=','FAILUR')
-            ->orderBy('updated_at', 'desc')
-            ->paginate(50);
+        if($request->getRequestUri()){
+            $company = $request->input('company');
+            $directory = $request->input('directory');
         }
-        return view("client.stemp.index", compact("datas"));
+        
+        $datas = Document::with(['company','directory'])->latest()
+            ->where(function ($query){
+                $query->whereNotIn('history',['HISTORY','DELETED'])
+                ->orWhereNull('history');
+            })->where('certificatelevel','=','FAILUR')
+            ->where('user_id','=',Auth::user()->id)
+            ->filter(request()->all())->paginate(10);
+        if($request->getRequestUri()){
+                $company = $request->input('company');
+                $directory = $request->input('directory');
+        }
+        
+        if($request->input('company')){
+            $datas = Document::with(['company','directory'])->latest()
+            ->where(function ($query){
+                $query->whereNotIn('history',['HISTORY','DELETED'])
+                ->orWhereNull('history');
+            })->where('certificatelevel','=','FAILUR')
+            ->where('user_id','=',Auth::user()->id)
+            ->filter(request()->all())->paginate($per_page);
+        }
+        return view("client.stemp.index", compact("datas","company","directory"));
     }
 
 
@@ -467,6 +478,17 @@ class StempController extends Controller
         if($request->getRequestUri()){
                 $company = $request->input('company');
                 $directory = $request->input('directory');
+        }
+
+        if (($s = $request->s)) {
+            $datas = Document::with(['company','directory'])->latest()
+            ->where(function ($query){
+                $query->whereNotIn('history',['HISTORY','DELETED'])
+                ->orWhereNull('history');
+            })->where('certificatelevel','=','CERTIFIED')
+            ->Where('filename', 'LIKE', '%' . $s . '%')
+            ->where('user_id','=',Auth::user()->id)
+            ->filter(request()->all())->paginate($per_page);
         }
         
         if($request->input('company')){
@@ -500,11 +522,16 @@ class StempController extends Controller
         //             ->where('certificatelevel','=','CERTIFIED')
         //             ->where('history','=','HISTORY')
         //             ->paginate(10);
-        $datas = false;  
+            $datas = $datas = Document::with(['company','directory'])->latest()
+            ->where('certificatelevel','=','CERTIFIED')
+            ->where('history','=','HISTORY')
+            ->where('user_id','=',Auth::user()->id)
+            ->filter(request()->all())->paginate($per_page); 
         if($request->input('company')){
                 $datas = Document::with(['company','directory'])->latest()
                 ->where('certificatelevel','=','CERTIFIED')
                 ->where('history','=','HISTORY')
+                ->where('user_id','=',Auth::user()->id)
                 ->filter(request()->all())->paginate($per_page);
         }
         $filePath = asset('/storage/docs/');

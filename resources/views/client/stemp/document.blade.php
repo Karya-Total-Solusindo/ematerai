@@ -8,7 +8,47 @@
     height: 120% !important;
 }
 </style>
-
+<style>
+    select.form-select-sm{
+        height: fit-content;
+    }
+    .input-group.input-sm>select{
+        /* padding-top: 0px;
+        top: -3px; */
+    }
+    .input-group.input-sm>input.form-control.daterange{
+        padding-top: 4px !important;
+        padding-bottom: 4px !important;
+        height: fit-content !important; 
+    }
+    .input-group.input-sm>label{
+        height: fit-content;
+        padding-bottom: 4px;
+        padding-top: 4px;
+    }
+    .input-group.input-sm>label>svg{
+        /* height: fit-content; */
+         padding-bottom: 4px;
+        padding-top: 4px;
+    }
+    .daterangepicker.dropdown-menu{
+        border: solid 1.5px #f86343;
+    }
+    .daterangepicker_input>svg{
+        position: absolute;
+        top: 8px;
+        left: 9px;
+    }
+    .daterangepicker:after{
+        border-bottom: 6px solid #f86343;
+    }
+    .daterangepicker td.active, .daterangepicker td.active:hover {
+        background-color: #f86343;
+    }
+    .select-per-page:hover{
+        idth: inherit !important;
+    }
+</style>
 
 <div class="card">
     {{-- <img class="card-img-top" src="https://picsum.photos/200/10/?blur" alt="Card image cap"> --}}
@@ -32,7 +72,7 @@
                     {{-- @endif --}}
                     @endif
                     <a @class(['btn me-5 btn-sm btn-primary', 'font-bold' => true]) href="{{ route('document.create', $directory->id) }}"> Upload</a>
-                    <a @class(['btn ms-5 btn-sm btn-dark', 'font-bold' => true]) href="{{ route('company') }}"> Back</a>
+                    <a @class(['btn me-5 btn-sm btn-dark', 'font-bold' => true]) href="{{ route('company') }}"> Back</a>
                 </div>
                 <div class="col-4 text-end">
                     <a @class(['btn ms-5 btn-sm btn-danger', 'font-bold' => true]) href="#" onclick="alert('on dev')"> Delete</a> 
@@ -41,12 +81,48 @@
             {{-- <p class="card-text">Text</p> --}}
         </div>
         <div class="card-body px-0 pt-0 pb-2">
+            <form action="" method="get">
+                <div class="w-auto input-group input-sm mb-0 ">
+                    <label class="input-group-text" for="per_page" title="Show Per Page">Show</label>
+                    <select title="Show Per Page" name="view" id="per_page" class="select-per-page p-1  form-select form-select-sm">
+                        <option @if(request()->input('view')=='ALL') selected @endif value="ALL">ALL</option>
+                        <option @if(request()->input('view')==10) selected @endif value="10">10</option>
+                        <option @if(request()->input('view')==50) selected @endif value="50">50</option>
+                        <option @if(request()->input('view')==100) selected @endif value="100">100</option>
+                        <option @if(request()->input('view')==500) selected @endif value="500">500</option>
+                    </select>
+                    {{-- <select title="Company" required name="company" class="w-auto p-1 form-select form-select-sm" id="company">
+                        <option value="">Choose Company...</option>
+                        @foreach (App\Models\Company::where('user_id',Auth::user()->id)->get() as $com)
+                            <option @if($company==$com->id) selected @endif value="{{$com->id}}">{{$com->name}}</option>
+                        @endforeach
+                    </select>
+                    <select title="Directory" required disabled name="directory" class="w-auto px-3 py-1 form-select form-select-sm " id="inputGroupSelectDirectory">
+                        <option value="">Choose Directory...</option>
+                        @if(request()->has('company'))
+                            @foreach (App\Models\Directory::where('company_id','=',request()->input('company') )->get()  as $d)
+                            @if(request()->input('directory') == $d->id)
+                                <option  selected value="{{$d->id}}">{{$d->name}}</option>
+                                @else
+                                <option value="{{$d->id}}">{{$d->name}}</option>
+                                @endif
+                            @endforeach  
+                        @endif
+                    </select> --}}
+                    <input title="Date Interval" type="text" class="w-auto p-1 form-control daterange" @if(request()->get('periode')) value="{{ request()->get('periode') }}" @endif  name="periode" id="date-periode" aria-describedby="helpId" placeholder="">  
+                    {{-- button --}}
+                    <button type="submit" class="  btn btn-sm  btn-primary">Filter</button>
+                    @if(request()->has('view'))
+                    <a href="{{ route('document',$directory->id) }}" class=" btn btn-sm btn-sm bg-gradient-dark"> Reset</a>
+                    @endif
+                </form>
+            </div> 
             <div class="table-responsive p-0">
                 {{-- Show data with template --}}
                     {{-- <form id="execute" action="{{ route('getSerialNumber') }}" method="POST"> --}}
                         {{-- Update status to INPROGRES --}}
                     <form id="execute" action="{{ route('setInProgres') }}" method="POST"> 
-                        {{-- <form id="execute" action="{{ route('stampExecute') }}" method="POST">  --}}
+                        {{-- <form id="execute" action="{{ route('stampExecute') }}" method="POST">  --}}    
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
@@ -143,7 +219,9 @@
             </div>
         </div>
         <hr class="horizontal dark">
-        {{ $datas->links() }}
+        @if(request()->has('view'))
+        {{ $datas->appends(request()->input())->links() }}
+        @endif
 
         @env('local')
             {{$directory->template}}
@@ -197,9 +275,36 @@
 {{-- Javascript --}}
 @once  
     @pushOnce('js')
+    
         <script type="text/javascript">
         //load data
              $(document).ready(function (e) {
+                //daterangepicker
+        var firstDayOfMonth = function() {
+            return 1;
+        };
+        var d = new Date();
+        var currMonth = d.getMonth();
+        var currYear = d.getFullYear();
+        @if(request()->has('periode'))
+            var startDate = "{{explode('-',request()->input('periode'))[0] ?? 'new Date(currYear,currMonth,firstDayOfMonth()'}}";
+            var endDate = "{{explode('-',request()->input('periode'))[1] ?? 'new Date()'}}";
+        @else
+            var startDate = new Date(currYear,currMonth,firstDayOfMonth());
+            var endDate = new Date();
+        @endif
+        $('.daterange').daterangepicker({
+            "alwaysShowCalendars": true,
+            "startDate": startDate,
+            "endDate": endDate,
+            "autoApply": true,
+            "opens": "left",
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+        });
+        //end daterange
+
                 $('#selectAll').prop('checked', false);
                 $('#btnGetSN').prop('disabled', true);
                 // $('#btnGetSN').hide();

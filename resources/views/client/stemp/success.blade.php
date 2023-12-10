@@ -166,7 +166,7 @@
               <input title="Date Interval" type="text" class="w-auto p-1 form-control daterange" name="periode" id="date-periode" aria-describedby="helpId" placeholder="">  
               {{-- button --}}
             <button type="submit" class="  btn btn-sm  btn-primary">Filter</button>
-            @if(request()->has('company'))
+            @if(request()->has('company') || request()->has('s'))
             <a href="{{ route('success') }}" class=" btn btn-sm btn-sm bg-gradient-dark"> Reset</a>
             @endif
             </form>
@@ -196,7 +196,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        @if(request()->has('company'))
+                        @if(request()->has('company') || request()->has('s'))
                             @csrf
                             @if ($datas->count()) 
                             @foreach ($datas as $key => $data)
@@ -283,7 +283,7 @@
                 </table>
             </div>
         </div>
-        @if(request()->has('company'))
+        @if(request()->has('company') || request()->has('s'))
         {{ $datas->appends(request()->input())->links() }}
         @endif
     </div>
@@ -298,10 +298,17 @@
         var d = new Date();
         var currMonth = d.getMonth();
         var currYear = d.getFullYear();
-        var startDate = new Date(currYear,currMonth,firstDayOfMonth());
+        @if(request()->has('periode'))
+            var startDate = "{{explode('-',request()->input('periode'))[0] ?? 'new Date(currYear,currMonth,firstDayOfMonth()'}}";
+            var endDate = "{{explode('-',request()->input('periode'))[1] ?? 'new Date()'}}";
+        @else
+            var startDate = new Date(currYear,currMonth,firstDayOfMonth());
+            var endDate = new Date();
+        @endif
         $('.daterange').daterangepicker({
             "alwaysShowCalendars": true,
             "startDate": startDate,
+            "endDate": endDate,
             "autoApply": true,
             "opens": "left",
             locale: {

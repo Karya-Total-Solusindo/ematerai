@@ -66,41 +66,40 @@
                 </ul>
             </div>
         @endif
-        <form action="" method="get">
-            <div class="w-auto input-group input-sm mb-0 ">
-                
-                <label class="input-group-text" for="per_page" title="Show Per Page">Show</label>
-                <select title="Show Per Page" name="view" id="per_page" class="select-per-page p-1  form-select form-select-sm">
-                    <option @if(request()->input('view')==10) selected @endif value="10">10</option>
-                    <option @if(request()->input('view')==50) selected @endif value="50">50</option>
-                    <option @if(request()->input('view')==100) selected @endif value="100">100</option>
-                    <option @if(request()->input('view')==500) selected @endif value="500">500</option>
-                    <option @if(request()->input('view')=='ALL') selected @endif value="ALL">ALL</option>
-                </select>
-                <select title="Company" required name="company" class="w-auto p-1 form-select form-select-sm" id="company">
-                    <option value="">Choose Company...</option>
-                    @foreach (App\Models\Company::where('user_id',Auth::user()->id)->get() as $com)
-                          <option @if($company==$com->id) selected @endif value="{{$com->id}}">{{$com->name}}</option>
-                    @endforeach
-                </select>
-                <select title="Directory" required disabled name="directory" class="w-auto px-3 py-1 form-select form-select-sm " id="inputGroupSelectDirectory">
-                    <option value="">Choose Directory...</option>
+            <form action="" method="get">
+                <div class="w-auto input-group input-sm mb-0 ">
+                    <label class="input-group-text" for="per_page" title="Show Per Page">Show</label>
+                    <select title="Show Per Page" name="view" id="per_page" class="select-per-page p-1  form-select form-select-sm">
+                        <option @if(request()->input('view')==10) selected @endif value="10">10</option>
+                        <option @if(request()->input('view')==50) selected @endif value="50">50</option>
+                        <option @if(request()->input('view')==100) selected @endif value="100">100</option>
+                        <option @if(request()->input('view')==500) selected @endif value="500">500</option>
+                        <option @if(request()->input('view')=='ALL') selected @endif value="ALL">ALL</option>
+                    </select>
+                    <select title="Company" required name="company" class="w-auto p-1 form-select form-select-sm" id="company">
+                        <option value="">Choose Company...</option>
+                        @foreach (App\Models\Company::where('user_id',Auth::user()->id)->get() as $com)
+                            <option @if($company==$com->id) selected @endif value="{{$com->id}}">{{$com->name}}</option>
+                        @endforeach
+                    </select>
+                    <select title="Directory" required disabled name="directory" class="w-auto px-3 py-1 form-select form-select-sm " id="inputGroupSelectDirectory">
+                        <option value="">Choose Directory...</option>
+                        @if(request()->has('company'))
+                            @foreach (App\Models\Directory::where('company_id','=',request()->input('company') )->get()  as $d)
+                            @if(request()->input('directory') == $d->id)
+                                <option  selected value="{{$d->id}}">{{$d->name}}</option>
+                                @else
+                                <option value="{{$d->id}}">{{$d->name}}</option>
+                                @endif
+                            @endforeach  
+                        @endif
+                    </select>
+                    <input title="Date Interval" type="text" class="w-auto p-1 form-control daterange" @if(request()->get('periode')) value="{{ request()->get('periode') }}" @endif  name="periode" id="date-periode" aria-describedby="helpId" placeholder="">  
+                    {{-- button --}}
+                    <button type="submit" class="  btn btn-sm  btn-primary">Filter</button>
                     @if(request()->has('company'))
-                        @foreach (App\Models\Directory::where('company_id','=',request()->input('company') )->get()  as $d)
-                          @if(request()->input('directory') == $d->id)
-                            <option  selected value="{{$d->id}}">{{$d->name}}</option>
-                            @else
-                            <option value="{{$d->id}}">{{$d->name}}</option>
-                            @endif
-                        @endforeach  
+                    <a href="{{ route('history') }}" class=" btn btn-sm btn-sm bg-gradient-dark"> Reset</a>
                     @endif
-                  </select>
-                  <input title="Date Interval" type="text" class="w-auto p-1 form-control daterange" @if(request()->get('periode')) value="{{ request()->get('periode') }}" @endif  name="periode" id="date-periode" aria-describedby="helpId" placeholder="">  
-                  {{-- button --}}
-                <button type="submit" class="  btn btn-sm  btn-primary">Filter</button>
-                @if(request()->has('company'))
-                <a href="{{ route('success') }}" class=" btn btn-sm btn-sm bg-gradient-dark"> Reset</a>
-                @endif
                 </form>
             </div>
             <div class="table-responsive p-0">
@@ -127,6 +126,7 @@
                         </tr>
                     </thead>
                     <tbody>
+                        @if(request()->has('company'))
                         <form id="download-success" method="post" action="{{ route("stamp.trash") }}">
                             @csrf
                             @if ($datas) 
@@ -150,8 +150,10 @@
                                                 @if(Storage::disk('document')->exists($data->company->name.'/'.$data->directory->name.'/backup/STAMP/'.$data->id.'_STAMP_'.$data->filename))
                                                     <i class="fas fa-file-pdf" title="{{$data->id}}"></i>
                                                 @else
-                                                    <i class="fas fa-file-pdf" style="color:red;" title="File Not Exists, , try asking the administrator about this file {{$data->id}}"></i>
-                                                    <span style="color:red; font-size:8px;">Not Exists</span>
+                                                    <i class="fas fa-file-pdf" title="{{$data->id}}"></i>
+
+                                                    {{-- <i class="fas fa-file-pdf" style="color:red;" title="File Not Exists, , try asking the administrator about this file {{$data->id}}"></i>
+                                                    <span style="color:red; font-size:8px;">Not Exists</span> --}}
                                                 @endif
                                             </div>
                                             <div class="ms-4">
@@ -188,19 +190,28 @@
                                 </tr>
                                 @endforeach
                             @else
+                                <tr>
+                                    <td colspan="7" class="text-center pt-5 align-middle text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                        <h5>Certified data is still empty</h5>
+                                    </td>
+                                </tr>
+                            @endif
+                        </form>
+                        @else
                         <tr>
                             <td colspan="7" class="text-center pt-5 align-middle text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 <h5>Certified data is still empty</h5>
                             </td>
                         </tr>
-                    @endif
-                        </form>
+                    @endif    
                     </tbody>   
                 </table>
             </div>
         </div>
         @if ($datas) 
-        {{ $datas->links() }}
+        @if(request()->has('company'))
+        {{ $datas->appends(request()->input())->links() }}
+        @endif
         @endif
     </div>
 </div>
@@ -209,36 +220,29 @@
 <script id="js-success">
     $(document).ready(function(){
         //daterangepicker
-        @if(request()->get('periode'))
-            $('.daterange').daterangepicker({
-                "alwaysShowCalendars": true,
-                "autoApply": true,
-                "opens": "left",
-                locale: {
-                    format: 'DD/MM/YYYY'
-                },
-            });
+        var firstDayOfMonth = function() {
+            return 1;
+        };
+        var d = new Date();
+        var currMonth = d.getMonth();
+        var currYear = d.getFullYear();
+        @if(request()->has('periode'))
+            var startDate = "{{explode('-',request()->input('periode'))[0] ?? 'new Date(currYear,currMonth,firstDayOfMonth()'}}";
+            var endDate = "{{explode('-',request()->input('periode'))[1] ?? 'new Date()'}}";
         @else
-            var firstDayOfMonth = function() {
-                return 1;
-            };
-            var d = new Date();
-            var currMonth = d.getMonth();
-            var currYear = d.getFullYear();
             var startDate = new Date(currYear,currMonth,firstDayOfMonth());
-            var getInput = "{{ request()->get('periode') }}";
-            $('.daterange').daterangepicker({
-                "alwaysShowCalendars": true,
-                "startDate": startDate,
-                "endDate": d,
-                "autoApply": true,
-                "opens": "left",
-                locale: {
-                    format: 'DD/MM/YYYY'
-                },
-            });
-        
+            var endDate = new Date();
         @endif
+        $('.daterange').daterangepicker({
+            "alwaysShowCalendars": true,
+            "startDate": startDate,
+            "endDate": endDate,
+            "autoApply": true,
+            "opens": "left",
+            locale: {
+                format: 'DD/MM/YYYY'
+            },
+        });
         //end daterange
 
         //DOWNLOAD ACTION
