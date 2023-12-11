@@ -15,7 +15,7 @@
                                         {{ $datas['COUNT_DOCUMENT'] }}
                                         <span style="font-size:3vh;">sheet</span>
                                     </h5>
-                                    <p class="mb-0">
+                                    <p class="mb-0" style="font-size: 12px;">
                                         {{-- <span class="text-success text-sm font-weight-bolder">+55%</span> --}}
                                         since yesterday
                                     </p>
@@ -41,7 +41,7 @@
                                         {{$datas['NOT_STAMPED']}}
                                         <span style="font-size:3vh;">sheet</span>
                                     </h5>
-                                    <p class="mb-0">
+                                    <p class="mb-0" style="font-size: 12px;">
                                         {{-- <span class="text-success text-sm font-weight-bolder">+5%</span> than last month --}}
                                         since last quarter
                                     </p>
@@ -67,7 +67,7 @@
                                         {{ $datas['COUNT_FAILUR'] }}
                                         <span style="font-size:3vh;">sheet</span>
                                     </h5>
-                                    <p class="mb-0">
+                                    <p class="mb-0" style="font-size: 12px;">
                                         {{-- <span class="text-success text-sm font-weight-bolder">+3%</span> --}}
                                         since last quarter
                                     </p>
@@ -94,7 +94,7 @@
                                         {{ $datas['COUNT_SUCCESS'] }}
                                         <span style="font-size:3vh;">sheet</span>
                                     </h5>
-                                    <p class="mb-0">
+                                    <p class="mb-0" style="font-size: 12px;">
                                         {{-- <span class="text-danger text-sm font-weight-bolder">-2%</span> --}}
                                         since last quarter
                                     </p>

@@ -593,50 +593,50 @@ class StempController extends Controller
          * Select array id document to download
          * and update ststus SUCCESS_DOWNLOAD to show menu history
          */
-        public function downloadOld(Request $request){
-            $dir_id = $request->doc;
-            $all = Document::whereIn('id',$dir_id)->where('user_id','=',Auth::user()->id)->get();
-            $explode = explode('/',$all);
+        // public function downloadOld(Request $request){
+        //     $dir_id = $request->doc;
+        //     $all = Document::whereIn('id',$dir_id)->where('user_id','=',Auth::user()->id)->get();
+        //     $explode = explode('/',$all);
            
-            $company = str_replace('\\','',$explode[2]);
-            $document = str_replace('\\','',$explode[3]);
-            $zip_file = str_replace(' ','_','ematerai_'.date('Ymd').'_'.$company.'_'.$document.'.zip'); // Name of our archive to download
+        //     $company = str_replace('\\','',$explode[2]);
+        //     $document = str_replace('\\','',$explode[3]);
+        //     $zip_file = str_replace(' ','_','ematerai_'.date('Ymd').'_'.$company.'_'.$document.'.zip'); // Name of our archive to download
             
-            $zip = new \ZipArchive();
-            $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
+        //     $zip = new \ZipArchive();
+        //     $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
 
-            $_DIRECTORY = 'app/public/docs/'.$company.'/'.$document.'/in/';
-            //$RESULT_DIRECTORY=  $company.'/'.$document.'/';
-            $path = storage_path($_DIRECTORY);
-            $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-           foreach($all as $doc){
-               foreach ($files as $name => $file)
-               {
-                   if (!$file->isDir()) {
-                       $filePath     = $file->getRealPath();
-                       // extracting filename with substr/strlen
-                       // $relativePath = 'company/' . substr($filePath, strlen($path) + 1);
-                       $relativePath = $company.'/'.$document.'/' . substr($filePath, strlen($path) + 1);
-                       // $notrelativePath = 'company/' . substr($filePath, strlen($path) + 1);
-                       // $notrelativePath = $_DIRECTORY . substr($filePath, strlen($path) + 1);
-                       // dd($filePath,$file->getfilename(),$doc->filename);
-                       if($file->getfilename()==$doc->filename){
-                            $zip->addFile($filePath, $relativePath);
-                            //update status setelahdidownload
-                            $status = Document::find($doc->id);
-                            //if success stem and download
-                            // $status->certificatelevel = 'HISTORY'; 
-                            $status->history = 'HISTORY'; 
-                            $status->message = $zip_file;
-                            $status->update();
-                       }
-                       // $zip->addFile($filePath, $notrelativePath);
-                   }
-               }
-           }
-            $zip->close();
-            return response()->download($zip_file);
-        }
+        //     $_DIRECTORY = 'app/public/docs/'.$company.'/'.$document.'/in/';
+        //     //$RESULT_DIRECTORY=  $company.'/'.$document.'/';
+        //     $path = storage_path($_DIRECTORY);
+        //     $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
+        //    foreach($all as $doc){
+        //        foreach ($files as $name => $file)
+        //        {
+        //            if (!$file->isDir()) {
+        //                $filePath     = $file->getRealPath();
+        //                // extracting filename with substr/strlen
+        //                // $relativePath = 'company/' . substr($filePath, strlen($path) + 1);
+        //                $relativePath = $company.'/'.$document.'/' . substr($filePath, strlen($path) + 1);
+        //                // $notrelativePath = 'company/' . substr($filePath, strlen($path) + 1);
+        //                // $notrelativePath = $_DIRECTORY . substr($filePath, strlen($path) + 1);
+        //                // dd($filePath,$file->getfilename(),$doc->filename);
+        //                if($file->getfilename()==$doc->filename){
+        //                     $zip->addFile($filePath, $relativePath);
+        //                     //update status setelahdidownload
+        //                     $status = Document::find($doc->id);
+        //                     //if success stem and download
+        //                     // $status->certificatelevel = 'HISTORY'; 
+        //                     $status->history = 'HISTORY'; 
+        //                     $status->message = $zip_file;
+        //                     $status->update();
+        //                }
+        //                // $zip->addFile($filePath, $notrelativePath);
+        //            }
+        //        }
+        //    }
+        //     $zip->close();
+        //     return response()->download($zip_file);
+        // }
 
         public function download(Request $request){
             // \DB::enableQueryLog();
