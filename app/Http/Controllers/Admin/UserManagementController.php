@@ -32,9 +32,18 @@ class UserManagementController extends Controller
      */
     public function index(Request $request){
         $users = User::orderBy('id','DESC')->paginate(5);
-        return view('admin.users.user',compact('users'))
+        if($s = $request->s){
+            $users = User::with('pemungut')->latest()
+            ->where('username','like','%'.$s.'%')
+            ->orWhere('email','like','%'.$s.'%')
+            ->orderBy('created_at', 'desc')
+            // ->filter(request()->all())
+            ->paginate(10);
+        }
 
-            ->with('i', ($request->input('page', 1) - 1) * 5);
+        return view('admin.users.user',compact('users'));
+
+            // ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**

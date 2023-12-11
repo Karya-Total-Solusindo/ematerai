@@ -87,6 +87,9 @@
                     </table>
                 </div>
             </div>
+            <div class="card-footer mx-2">
+                {{ $users->appends(request()->input())->links() }}
+            </div>
         </div>
     </div>
 </div> @endsection
