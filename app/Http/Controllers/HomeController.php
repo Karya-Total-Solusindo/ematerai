@@ -36,7 +36,7 @@ class HomeController extends Controller
      *
      * @return \Illuminate\View\View
      */
-    public function index()
+    public function index(Request $request)
     {
         $saldo = 0;
         $notstamp = 0;
@@ -62,7 +62,20 @@ class HomeController extends Controller
                 //throw $th;
                 Log::error($e->getMessage());
             }
-
+            $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
+            $users = User::with('pemungut')
+            ->where('active','=',1)
+            ->paginate(10);
+            // ->paginate($per_page);
+            // ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page');
+            if($s = $request->s){
+                $users = User::with('pemungut')->latest()
+                ->where('username','like','%'.$s.'%')
+                ->orWhere('email','like','%'.$s.'%')
+                ->orderBy('created_at', 'desc')
+                // ->filter(request()->all())
+                ->simplePaginate(10);
+            }
             $datas =[
                 "COUNT_MATERAI" => $saldo,
                 "COUNT_MATERAI_NOSTEMP" => $notstamp,
@@ -75,9 +88,9 @@ class HomeController extends Controller
                 ->paginate(5,['*'],'stemp_page')->setPageName('stemp_page'),
                 "NOT_STAMPTING" => Document::where('certificatelevel','<>','CERTIFIED')->orderBy('updated_at', 'desc')
                 ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
-                "USERS" => User::with('pemungut')->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
+                // "USERS" => $users,
             ];
-            return view('admin.dashboard', compact('datas'));
+            return view('admin.dashboard', compact('datas','users'));
 
         }else{
            // // user
