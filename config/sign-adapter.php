@@ -8,6 +8,7 @@ if(env('SIGN_ADAPTER_PORT')==''){
     $HOST_SIGN_ADAPTER = $PROTOCOL.$HOST;      
 }
 if(env('APP_ENV')=='production'){
+    //PRODUCTION
     return [
         // E-meterai Production Access On Premise Service
         'API_LOGIN' => 'https://backendservice.e-meterai.co.id/api/users/login',
@@ -33,6 +34,7 @@ if(env('APP_ENV')=='production'){
         'API_CHECK_DAFTAR_SN' => 'https://stampv2.e-meterai.co.id/chanel/sale/stamp/ext/[UserID]',
     ];
 }else{
+    //STAGING
     return [
         // E-meterai Staging Access On Premise Service
         'API_LOGIN' => 'https://backendservicestg.e-meterai.co.id/api/users/login',

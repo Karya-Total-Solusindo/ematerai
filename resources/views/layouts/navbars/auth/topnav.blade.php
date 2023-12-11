@@ -19,7 +19,9 @@
                 Stamp
                 @else
                 {{ $title }}
-            @endif {{ (env('APP_DEBUG')==true)? Route::currentRouteName():'' }}</h6>
+            @endif 
+            {{ (env('APP_DEBUG')==false)? Route::currentRouteName():'' }}
+        </h6>
         </nav>
         <div class="collapse navbar-collapse mt-sm-0 mt-2 me-md-0 me-sm-4" id="navbar">
 
@@ -31,6 +33,7 @@
                     || Route::currentRouteName()=='directory.index' 
                     || Route::currentRouteName()=='directory.index' 
                     || Route::currentRouteName()=='users.index' 
+                    || Route::currentRouteName()=='home' 
                     || Route::currentRouteName()=='document.index')
                     <form action="" method="get" class="mb-0 mt-2">
                         {{-- <div class="input-group mb-0">
