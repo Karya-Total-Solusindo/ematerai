@@ -28,6 +28,7 @@ return new class extends Migration
             $table->string('postal')->nullable();
             $table->text('about')->nullable();
             $table->text('ematerai_token')->nullable();
+            $table->set('active',[1,0])->default(0);
             $table->rememberToken();
             $table->timestamps();
         });
