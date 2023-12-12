@@ -133,9 +133,13 @@ min-height: 300px;
               <input type="hidden" name="dokumen_height" value={{  $directorys->height }}>
               <input type="hidden" name="dokumen_width" value={{  $directorys->width }}>
               <input type="hidden" name="dokumen_page" value={{  $directorys->page }}>
-              <center>
+              <div class="dz-default dz-message">
+                <i class="fas fa-cloud-arrow-up" style="font-size:12em;"></i><br>
+                <button class="dz-button" type="button">Click or Drop files here to upload</button>
+              </div>
+              {{-- <center>
                 <i class="fas fa-cloud-arrow-up" style="font-size:12em;"></i>
-              </center>
+              </center> --}}
           </form>   
         </div>
         {{-- footer --}}
