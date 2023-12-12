@@ -96,7 +96,7 @@
                                                 <li>
                                                     <a class="dropdown-item" href="{{ route('users.edit',$user->id) }}?active=true"><i class="fas fa-pencil"></i> User Edit</a>
                                                 </li>
-                                                @if($user->id >=3 )
+                                                @if($user->id >=2 )
                                                 <li>
                                                     <a class="dropdown-item" href="{{ route('users.show',$user->id) }}?active=false"><i class="fas fa-circle-nodes"></i>  Service Accunt</a>
                                                 </li>
