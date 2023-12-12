@@ -161,23 +161,19 @@
                                 @endif
                                 <td class="align-middle text-center">
                                     @if (request()->has('page'))
-                                    @if(request()->input('page')>1)
-                                        {{ ($datas->perPage() * $datas->currentPage())+($key+1)}}
+                                        @if(request()->input('page')>1)
+                                            {{ ($datas->perPage() * $datas->currentPage())+($key+1)}}
+                                        @else
+                                            {{$key+1}}
+                                        @endif
                                     @else
-                                        {{$key+1}}
+                                    {{$key+1}}
                                     @endif
-                                @else
-                                {{$key+1}}
-                                @endif
                                 </td>
-                                <td>
-                                    <div class="align-middle text-sm">
-                                        <div class="">
-                                            <h6 class="p-0">
-                                                <a target="_blank" href="{{ route('stemp.show',$data->id) }}">{{ $data->filename }}</a>
-                                            </h6>
-                                        </div>
-                                    </div>
+                                <td class="align-middle text-sm">
+                                    <h6 class="mb-0">
+                                        <a target="_blank" title="Click to show file" class="mb-0" href="{{ asset('storage'.$data->source) }}">{{ $data->filename }}</a>
+                                    </h6>
                                 </td>
                                 <td class="align-middle text-sm">
                                     {{ $data->sn ?? 'NOT_CERTIFIED' }}
