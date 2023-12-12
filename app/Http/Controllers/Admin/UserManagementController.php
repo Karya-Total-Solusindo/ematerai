@@ -139,7 +139,7 @@ class UserManagementController extends Controller
             $input = Arr::except($input,array('password'));
         }
         $user = User::find($id);
-        if($user->id >=3 ){
+        if($user->id >=2 ){
             $user->update($input);
         }else{
             // if admin change Admin
