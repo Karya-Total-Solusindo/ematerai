@@ -25,8 +25,11 @@ class AuthServiceProvider extends ServiceProvider
     {
         //
         Gate::define('viewLogViewer', function (?User $user) {
-
-            return $user->hasRole('Admin') === true;
+            if($user->hasRole('Admin') === true){
+                return $user->hasRole('Admin') === true;
+            }else{
+                abort(401);
+            }
             //dd($user->hasRole('Admin'));
             // return true if the user is allowed access to the Log Viewer
         });
