@@ -19,21 +19,21 @@ class DatabaseSeeder extends Seeder
     {
         #TODO insert PermissionTableSeeder Data
         $this->call([
-           // PermissionTableSeeder::class,
+            PermissionTableSeeder::class,
         ]);
 
-        $sadmin = User::create([
-            'username' => 'superadmin',
-            'firstname' => 'Super',
-            'lastname' => 'Admin',
-            'email' => 'superadmin@test.com',
-            'password' => 'secret',
-        ]);
+        // $sadmin = User::create([
+        //     'username' => 'superadmin',
+        //     'firstname' => 'Super',
+        //     'lastname' => 'Admin',
+        //     'email' => 'superadmin@test.com',
+        //     'password' => 'secret',
+        // ]);
 
-        $role = Role::create(['name' => 'Superadmin']);
-        $permissions = Permission::pluck('id','id')->all();
-        $role->syncPermissions($permissions);
-        $sadmin->assignRole([$role->id]);
+        // $role = Role::create(['name' => 'Superadmin']);
+        // $permissions = Permission::pluck('id','id')->all();
+        // $role->syncPermissions($permissions);
+        // $sadmin->assignRole([$role->id]);
 
         $admin = User::create([
             'username' => 'admin',
@@ -41,6 +41,7 @@ class DatabaseSeeder extends Seeder
             'lastname' => 'Admin',
             'email' => 'admin@test.com',
             'password' => 'secret',
+            'active' => '1',
         ]);
 
         $role = Role::create(['name' => 'Admin']);
