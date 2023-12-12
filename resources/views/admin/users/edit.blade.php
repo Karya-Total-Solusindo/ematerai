@@ -30,36 +30,43 @@
                                 <div class="col-xs-12 col-sm-12 col-md-6">
                                     <div class="form-group">
                                         <strong>Password:</strong> 
-                                        <input type="text" class="form-control" name="password" id="u_password" minlength="6" aria-describedby="helpId" placeholder="">
+                                        <input type="password" class="form-control" name="password" id="u_password" minlength="6" aria-describedby="helpId" placeholder="Password">
                                         <span></span>  
                                     </div>
                                 </div>
                                 <div class="col-xs-12 col-sm-12 col-md-6">
                                     <div class="form-group">
-                                        <strong>Confirm Password:</strong> {!! Form::password('confirm-password', array('id'=>'c_password','placeholder' => 'Confirm Password','class' => 'form-control')) !!}
+                                        <strong>Confirm Password:</strong> 
+                                        <input type="password" class="form-control" name="confirm-password" id="c_password" minlength="6" aria-describedby="helpId" placeholder="Confirm Password">
+                                        {{-- {!! Form::password('confirm-password', array('id'=>'c_password','placeholder' => 'Confirm Password','class' => 'form-control')) !!} --}}
                                         <span></span>  
                                     </div>
                                 </div>
-                                <div class="col-xs-12 col-sm-12 col-md-6">
-                                    <div class="form-group">
-                                        <strong>Role:</strong> 
-                                        {!! Form::select('roles[]', ['Client'=>'Client','Admin'=>'Admin'],$userRole, array('class' => 'form-control')) !!}
+                                @if($user->id >= 3 )
+                                    <div class="col-xs-12 col-sm-12 col-md-6">
+                                        <div class="form-group">
+                                            <strong>Role:</strong> 
+                                            {!! Form::select('roles[]', ['Client'=>'Client','Admin'=>'Admin'],$userRole, array('class' => 'form-control')) !!}
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-6">
-                                    <div class="form-group">
-                                        <strong>Active:</strong>
-                                    <select name="active" id="active" class="form-control">
-                                        @if($user->active == 0)
-                                        <option value="0">none</option>
-                                        @else
-                                        <option value="1">active</option>
-                                        @endif
-                                        <option value="0">none</option>
-                                        <option value="1">active</option>
-                                    </select>
+                                    <div class="col-xs-12 col-sm-12 col-md-6">
+                                        <div class="form-group">
+                                            <strong>Active:</strong>
+                                        <select name="active" id="active" class="form-control">
+                                            @if($user->active == 0)
+                                            <option value="0">none</option>
+                                            @else
+                                            <option value="1">active</option>
+                                            @endif
+                                            <option value="0">none</option>
+                                            <option value="1">active</option>
+                                        </select>
+                                        </div>
                                     </div>
-                                </div>
+                                @else
+                                <input type="hidden" name="roles[]" value="Admin">    
+                                <input type="hidden" name="active" value="1">    
+                                @endif    
                                
                                     <div class="col-xs-12 col-sm-12 col-md-6 text-start">
                                         <a href="{{ URL::previous() }}" class="btn btn-dark">Back</a>

@@ -138,13 +138,19 @@ class UserManagementController extends Controller
         }else{
             $input = Arr::except($input,array('password'));
         }
-
         $user = User::find($id);
-        $user->update($input);
+        if($user->id >=3 ){
+            $user->update($input);
+        }else{
+            // if admin change Admin
+            $input['active'] = 1;
+            $input['roles'][0] = 'Admin';
+            //dd($input);
+            $user->update($input);
+        }
+
         DB::table('model_has_roles')->where('model_id',$id)->delete();
-
         $user->assignRole($request->input('roles'));
-
         return redirect()->route('users.index')
                         ->with('success','User updated successfully');
     }
@@ -157,6 +163,10 @@ class UserManagementController extends Controller
         ]);
         $active = User::find($input['id']);
         $active->active = $input['active'] ;
+        if($active->id <= 2){
+            return redirect()->route('users.index')
+            ->with('error',"Action Not Allowed!");
+        }
         $active->update();
         if($input['active']==1){
             return redirect()->route('users.index')

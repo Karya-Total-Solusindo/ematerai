@@ -96,17 +96,11 @@
                                                 <li>
                                                     <a class="dropdown-item" href="{{ route('users.edit',$user->id) }}?active=true"><i class="fas fa-pencil"></i> User Edit</a>
                                                 </li>
+                                                @if($user->id >=3 )
                                                 <li>
                                                     <a class="dropdown-item" href="{{ route('users.show',$user->id) }}?active=false"><i class="fas fa-circle-nodes"></i>  Service Accunt</a>
                                                 </li>
                                                 <li><hr class="dropdown-divider"></li>
-                                                {{-- <li><a class="dropdown-item"> Access Status</a></li> --}}
-                                                {{-- <li>
-                                                    <form class="dropdown-item" action="" method="post">
-                                                        @csrf
-                                                        <button class="dropdown-item" type="submit" name="active" value="1"> active</button>
-                                                    </form>
-                                                </li> --}}
                                                 <li>
                                                     <form class="dropdown-item" action="{{route('users.active')}}" method="post">
                                                         @csrf
@@ -121,6 +115,7 @@
                                                     <button class="dropdown-item text-danger" type="submit" name="active" value="0"><i class="fas fa-user-shield"></i>  Block</button>
                                                 </form>
                                                 </li>
+                                                @endif
                                             </ul>
                                         </div>
                                         {{-- <div class="align-middle text-center text-sm"> --}}
