@@ -41,7 +41,10 @@ class LoginController extends Controller
 
 
         $login = $request->input('username');
-        $user = User::with('pemungut')->where('email', $login)->orWhere('username', $login)->first();
+        $user = User::with('pemungut')
+        ->where('active', '1')
+        ->where('email', $login)
+        ->orWhere('username', $login)->first();
         
         if (!$user) {
             return redirect()->back()->withErrors(['username' => 'Invalid login credentials']);

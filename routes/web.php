@@ -76,6 +76,7 @@ Route::group(['middleware' => ['auth'],], function () {
         Route::resource('/users', App\Http\Controllers\Admin\UserManagementController::class);
         Route::post('/users/setpemungut', [App\Http\Controllers\Admin\UserManagementController::class,'setpemungut'])->name('setpemungut');
         Route::post('/users/check', [App\Http\Controllers\Admin\UserManagementController::class,'checkpemungut'])->name('checkpemungut');
+        Route::post('/users/active', [App\Http\Controllers\Admin\UserManagementController::class,'active'])->name('users.active');
         Route::get('/test', [App\Http\Controllers\Admin\UserManagementController::class,'test'])->name('test');
     });
 

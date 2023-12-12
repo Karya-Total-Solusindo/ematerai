@@ -37,20 +37,6 @@ class Document extends Model
 
     //TODO Filter
     public function scopefilter($query, array $filters){
-        // $query->when($filters['s'] ?? false, function($query, $s){
-        //     return $query->where('filename','like','%'.$s.'%')
-        //                 ->where('user_id','=',Auth::user()->id)
-        //                 ->orderBy('updated_at', 'desc');
-        //                  //->whereBetween('updated_at', )
-        //                 //  ->orWhere('company','like','%'.$s.'%');   
-        // });
-        // $query->when($filters['company'] ?? false, function($query, $company){
-        //     return $query->whereHas('company', function($query) use ($company) {
-        //         $query->where('id', $company)
-        //         ->where('user_id','=',Auth::user()->id)
-        //         ->orderBy('updated_at', 'desc');
-        //     });  
-        // });
         $query->when($filters['directory'] ?? false, function($query, $directory){
             return $query->whereHas('directory', function($query) use ($directory){
                 $query->where('id', $directory)
@@ -58,14 +44,7 @@ class Document extends Model
                 ->orderBy('updated_at', 'desc');
             });  
         });
-        // $query->when(($filters['company'] ?? false) && ($filters['directory'] ?? false), function($query, $company, $directory){
-        //     return $query->whereHas('company', function($query) use ($company,$directory){
-        //         $query->where('company', $company)
-        //         ->where('directory', $directory)
-        //         ->where('user_id','=',Auth::user()->id)
-        //         ->orderBy('updated_at', 'desc');
-        //     });  
-        // });
+
         $query->when($filters['periode'] ?? false, function($query, $periode){
             //return $query->where('document', function($query) use ($periode) {
                 $splitdate = explode('-',$periode);

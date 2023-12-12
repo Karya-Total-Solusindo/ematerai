@@ -31,19 +31,17 @@ class UserManagementController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-        $users = User::orderBy('id','DESC')->paginate(5);
+        $users = User::orderBy('id','DESC')->latest()
+        ->filter(request()->all())->paginate(10)->onEachSide(0);;
         if($s = $request->s){
             $users = User::with('pemungut')->latest()
             ->where('username','like','%'.$s.'%')
             ->orWhere('email','like','%'.$s.'%')
             ->orderBy('created_at', 'desc')
-            // ->filter(request()->all())
-            ->paginate(10);
+            ->filter(request()->all())->paginate(10)->onEachSide(0);
+            // ->paginate(10);
         }
-
         return view('admin.users.user',compact('users'));
-
-            // ->with('i', ($request->input('page', 1) - 1) * 5);
     }
 
     /**
@@ -68,11 +66,13 @@ class UserManagementController extends Controller
             'username' => 'required',
             'email' => 'required|email|unique:users,email',
             'password' => 'required|same:confirm-password',
-            'roles' => 'required'
+            'roles' => 'required',
+            'active' => 'required'
         ]);
 
         $input = $request->all();
         $input['password'] = Hash::make($input['password']);
+        //$input['active'] = 1;
 
         $user = User::create($input);
         $user->assignRole($request->input('roles'));
@@ -128,7 +128,8 @@ class UserManagementController extends Controller
             'username' => 'required',
             'email' => 'required|email|unique:users,email,'.$id,
             'password' => 'same:confirm-password',
-            'roles' => 'required'
+            'roles' => 'required',
+            'active' => 'required'
         ]);
 
         $input = $request->all();
@@ -147,7 +148,24 @@ class UserManagementController extends Controller
         return redirect()->route('users.index')
                         ->with('success','User updated successfully');
     }
-
+    public function active(Request $request)
+    {
+        $input = $request->all();
+        $this->validate($request, [
+            'id' => 'required',
+            'active' => 'required',
+        ]);
+        $active = User::find($input['id']);
+        $active->active = $input['active'] ;
+        $active->update();
+        if($input['active']==1){
+            return redirect()->route('users.index')
+            ->with('success',"User ".$active->username." Active successfully");
+        }else{
+            return redirect()->route('users.index')
+            ->with('success',"User ".$active->username." Block successfully");
+        }
+    }
     /**
      * Remove the specified resource from storage.
      *
@@ -158,7 +176,7 @@ class UserManagementController extends Controller
     {
         User::find($id)->delete();
         return redirect()->route('users.index')
-                        ->with('success','User deleted successfully');
+            ->with('success','User Delete successfully');
     }
 
 

@@ -106,18 +106,11 @@
                                     </div>
                                 </div>
                             </div>
-                            
-                            <div class="row">
-                                <div class="col-xs-12 col-sm-12 col-md-6">
+                            <div class="col-xs-12 col-sm-12 col-md-12">
                                     <a class="btn btn-dark btn-sm ms-auto" href="{{ URL::previous() }}"> Back </a>
-                                </div>
-                                <div class="col-xs-12 col-sm-12 col-md-6 text-end">
                                     <a type="submit" id="accunt-test" class="btn btn-sm btn-info">Validation</a>
-                                    <button type="submit" class="btn btn-sm btn-primary">Save</button>
-                                </div>
-                                
+                                    <button type="submit" class="float-end btn btn-sm btn-primary">Save</button>
                             </div>
-                            
                         </div>
                     </form> 
                 </div>
@@ -180,9 +173,8 @@
                           $('#response').show();   
                      },success:function(data){  
                           console.log('data.message',data.message);
-                        //   obj = $.parseJSON(data);
-                          $('form').trigger("reset");  
-                         
+                            //obj = $.parseJSON(data);
+                            //$('form').trigger("reset");  
                           if(data.message=='success'){
                             $('#response').html('<br><center><p class="text-success">Validated</p></center>');
                           $('#response').show();  
@@ -193,7 +185,7 @@
                             $('#response').html('<br><center><p class="text-danger">Invalid Account...</p></center>');
                             $('#response').show(); 
                             toastr["error"]("Login Failed <br> Code : "+ data.message +"<br>Message : "+ data.result, "Failed");
-                            window.location.href = '#';
+                            //window.location.href = '#';
                           }
                           setTimeout(function(){  
                                $('#response').fadeOut("slow");  
@@ -214,8 +206,6 @@
                      } 
                     });
             });
-
-
 
             $('#password, #confirm-password').on('keyup', function () {
             if ($('#password').val() == $('#confirm-password').val()) {

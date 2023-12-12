@@ -116,13 +116,31 @@
             <div class="col-lg-12 mb-lg-0 mb-4">
                 <div class="card z-index-2 h-100">
                     <div class="card-header pb-0 pt-3 bg-transparent">
-                        <h6 class="text-capitalize">User overview</h6>
-                        {{-- <p class="text-sm mb-0">
-                            <i class="fa fa-arrow-up text-success"></i>
-                            <span class="font-weight-bold">4% more</span> in 2021
-                        </p> --}}
+                    <div class="row mb-0">
+                        <div class="col-md-9 mb-0">     
+                                <h6 class="text-capitalize">User overview</h6>
+                        </div>
+                        <div class="col-md-3 mb-0 ">
+                            <div class="dropdown dropdown-menu-end mb-0">
+                                <button class="btn btn-primarys btn-sm dropdown-toggle" type="button" id="dropdownMenuButton1" data-bs-toggle="dropdown" aria-expanded="false">
+                                  Select By 
+                                </button>
+                                <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
+                                  <li>
+                                    <a class="dropdown-item" href="{{ route('home') }}?active=true">Active</a>
+                                  </li>
+                                  <li>
+                                    <a class="dropdown-item" href="{{ route('home') }}?active=false">Non Active</a>
+                                  </li>
+                                  <li><hr class="dropdown-divider"></li>
+                                  <li><a class="dropdown-item" href="{{ route('home') }}">Show All Users </a></li>
+                                </ul>
+                            </div>
+                        </div>
                     </div>
+                </div>
                     <div class="card-body p-3">
+                        
                         <div class="table-responsive">
                             <table class="table table-default">
                                 <tbody>
@@ -133,13 +151,35 @@
                                     </tr>
                                     @foreach ($users as $no => $s)
                                     <tr class="">
-                                        <td scope="row">{{$s->username}}</td>
-                                        <td>{{$s->email}}</td>
                                         <td>
-                                            @if($s->pemungut->p_user==null)
-                                            <a href="{{route('users.show',$s->id)}}" class="btn btn-sm btn-dark">Setting Account</a>
+                                            @if($s->active == 0 )
+                                            <span class="text-danger">
+                                                <i class="fas fa-shield-halved"></i> {{$s->username}} 
+                                            </span>
                                             @else
-                                                {{ $s->pemungut->p_user }}
+                                            {{$s->username}}
+                                            @endif
+                                            
+                                            
+                                        </td>
+                                        <td>
+                                            @if($s->active == 0 )
+                                            <span class="text-danger">
+                                                {{$s->email}} 
+                                            </span>
+                                            @else
+                                                {{$s->email}}
+                                            @endif
+                                        </td>
+                                        <td>
+                                            @if($s->active == 1 )
+                                                @if($s->pemungut->p_user==null)
+                                                <a href="{{route('users.show',$s->id)}}" class="btn btn-sm btn-dark">Setting Account</a>
+                                                @else
+                                                    {{ $s->pemungut->p_user }}
+                                                @endif
+                                            @else
+                                                <a href="{{route('users.edit',$s->id)}}" class="btn btn-sm btn-danger">User Non Active</a>
                                             @endif
                                         </td>
                                     </tr>

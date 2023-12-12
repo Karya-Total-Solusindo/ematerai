@@ -28,6 +28,15 @@
                     {{-- </ul> --}}
                 </li>
                 {{-- <li class="nav-item has-submenu">
+                    <a class="nav-link rounded border-0 mt-0 d-flex align-items-center {{ request()->segment(2) == 'roles' ? 'active' : '' }}" {{ request()->segment(1) == 'roles' ? 'show' : '' }}" href="{{ route('roles.index') }}"> 
+                        <div class="ps-0 mb-0">
+                           
+                            <i class="fas fa-shield-halved pe-3" style="color: #f4645f;"></i>
+                        </div> 
+                        <span class="text-uppercase text-xs font-weight-bolder opacity-6">Role Manager </span> 
+                    </a>
+                </li> --}}
+                {{-- <li class="nav-item has-submenu">
                     <a class="nav-link rounded border-0 mt-0 d-flex align-items-center {{ request()->segment(1) == 'manage' ? 'show' : '' }}" href="#"> 
                         <div class="ps-0 mb-0">
                             <i class="fa fa-database pe-3" style="color: #f4645f;"></i>

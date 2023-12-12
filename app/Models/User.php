@@ -29,7 +29,8 @@ class User extends Authenticatable
         'city',
         'country',
         'postal',
-        'about'
+        'about',
+        'active'
     ];
 
     /**
@@ -71,6 +72,30 @@ class User extends Authenticatable
     public function pemungut()
     {
         return $this->hasOne(Pemungut::class)->withDefault();
+    }
+
+    public function scopefilter($query, array $filters){
+        $query->when($filters['active'] ?? false, function($query, $active){
+            // return $query->where('active', function($query) use ($active){
+                if($active=='true'){
+                    return    $query->where('active','1');
+                }else{
+                    return    $query->where('active','0');
+                }
+            // });  
+        });
+
+        // $query->when($filters['periode'] ?? false, function($query, $periode){
+        //     //return $query->where('document', function($query) use ($periode) {
+        //         $splitdate = explode('-',$periode);
+        //         $dateStart = date('Y-m-d 00:00:00', strtotime(str_replace('/', '-',$splitdate[0])));
+        //         $dateEnd = date('Y-m-d 23:59:59', strtotime(str_replace('/', '-',$splitdate[1])));
+        //         return    $query->where('user_id','=',Auth::user()->id)
+        //         ->whereBetween('updated_at',[$dateStart, $dateEnd])
+        //         ->orderBy('updated_at', 'desc');
+        //     //});   
+        // });
+
     }
 
 }

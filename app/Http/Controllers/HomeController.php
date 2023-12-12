@@ -63,18 +63,14 @@ class HomeController extends Controller
                 Log::error($e->getMessage());
             }
             $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
-            $users = User::with('pemungut')
-            ->where('active','=',1)
-            ->paginate(10);
-            // ->paginate($per_page);
-            // ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page');
+            $users = User::with('pemungut')->latest()
+            ->filter(request()->all())->paginate(10)->onEachSide(0);
             if($s = $request->s){
                 $users = User::with('pemungut')->latest()
                 ->where('username','like','%'.$s.'%')
                 ->orWhere('email','like','%'.$s.'%')
                 ->orderBy('created_at', 'desc')
-                // ->filter(request()->all())
-                ->simplePaginate(10);
+                ->filter(request()->all())->paginate(10)->onEachSide(0);
             }
             $datas =[
                 "COUNT_MATERAI" => $saldo,
@@ -92,7 +88,7 @@ class HomeController extends Controller
             ];
             return view('admin.dashboard', compact('datas','users'));
 
-        }else{
+        }else if(Auth::user()->hasRole('Client')){
            // // user
             // $datas =[
             //     'COUNT_DOCUMENT' => NumberHumanizer::metricSuffix(Document::where(['user_id'=> Auth::user()->id])->count()??0),
@@ -139,6 +135,12 @@ class HomeController extends Controller
                 ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
             ];
             return view('pages.dashboard', compact('datas'));
+        }else{
+            
+            //dd(Auth::user(),Auth::user()->hasRole('Client'));
+            //return Auth::user()->hasRole('Client');
+            //norule
+            return abort(404);
         }
         
     }
