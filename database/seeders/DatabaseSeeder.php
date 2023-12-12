@@ -19,7 +19,7 @@ class DatabaseSeeder extends Seeder
     {
         #TODO insert PermissionTableSeeder Data
         $this->call([
-            PermissionTableSeeder::class,
+           // PermissionTableSeeder::class,
         ]);
 
         $sadmin = User::create([
