@@ -136,12 +136,12 @@ class UserManagementController extends Controller
 
         $input = $request->all();
         if(!empty($input['password'])){
-            $input['password'] = Hash::make($input['password']);
+            $input['password'] = $input['password'];
         }else{
             $input = Arr::except($input,array('password'));
         }
         $user = User::find($id);
-        if($user->id >=2 ){
+        if($user->username != 'admin'){
             $user->update($input);
         }else{
             // if admin change Admin
