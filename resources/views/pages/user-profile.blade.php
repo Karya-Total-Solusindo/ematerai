@@ -62,16 +62,31 @@
             let saveDisplay = 'block';
             let clsRemove = 'btn-info';
             let clsadd = 'btn-dark';
-
+            let save = document.getElementById("btn-save-change");
             let fields = document.getElementsByClassName('password-change');
-            for (var i = 0; i < fields.length; i++) {
-                fields[i].disabled = setDisable;
+            
+            console.log(save.style.dispaly);
+            if(edit==true){
+                document.getElementById("btn-edit-change").classList.remove('btn-dark')
+                document.getElementById("btn-edit-change").classList.add('btn-info');
+                document.getElementById("btn-edit-change").classList.remove();
+                document.getElementById("btn-edit-change").innerHTML = 'Change&nbsp;&nbsp;<i class="fa fa-lock"></i>';
+                document.getElementById("btn-save-change").style.display = 'none';
+                setDisable = true;
+                edit = false;
+            }else{
+                
+                document.getElementById("btn-edit-change").classList.remove(clsRemove)
+                document.getElementById("btn-edit-change").classList.add(clsadd);
+                document.getElementById("btn-edit-change").classList.remove();
+                document.getElementById("btn-edit-change").innerHTML = editText;
+                document.getElementById("btn-save-change").style.display = saveDisplay;
+                edit = true;
             }
-            document.getElementById("btn-edit-change").classList.remove(clsRemove)
-            document.getElementById("btn-edit-change").classList.add(clsadd);
-            document.getElementById("btn-edit-change").classList.remove();
-            document.getElementById("btn-edit-change").innerHTML = editText;
-            document.getElementById("btn-save-change").style.display = saveDisplay;
+            for (var i = 0; i < fields.length; i++) {
+                    fields[i].disabled = setDisable;
+                }
+            
         }
         
         function showpass(){
