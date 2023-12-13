@@ -169,6 +169,17 @@ min-height: 300px;
           </div>
         </span>
 
+        <div class="mb-3">
+          <label for="" class="form-label">Search</label>
+          <input
+            type="text"
+            class="form-control"
+            id="filter"
+            aria-describedby="helpId"
+            placeholder="Search upload results"
+          />
+        </div>
+
         <div class="dropzoner dropzone-previews" id="dropzoner2" style="opacity: 0; max-height: 500px; overflow-x: auto;">
             <div class="dz-preview dz-file-preview" id="template">  
               <!-- template for images -->
@@ -386,7 +397,17 @@ min-height: 300px;
           // }
 };
 </script>
-
+<script>
+  $( document ).ready(function() {
+    $("#filter").on("keyup", function() {
+          var value = $(this).val().toLowerCase();
+          $("#dropzoner2 .dz-preview").filter(function() {
+            console.log($(this).text().toLowerCase().indexOf(value));
+            $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
+          });
+        });
+  });
+</script>
 <script language="JavaScript">
   window.onbeforeunload = confirmExit;
   function confirmExit() {
