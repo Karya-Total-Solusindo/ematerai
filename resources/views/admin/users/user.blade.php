@@ -96,7 +96,7 @@
                                                 <li>
                                                     <a class="dropdown-item" href="{{ route('users.edit',$user->id) }}?active=true"><i class="fas fa-pencil"></i> User Edit</a>
                                                 </li>
-                                                @if($user->id >=2 )
+                                                @if($user->username != 'admin')
                                                 <li>
                                                     <a class="dropdown-item" href="{{ route('users.show',$user->id) }}?active=false"><i class="fas fa-circle-nodes"></i>  Service Accunt</a>
                                                 </li>
@@ -112,8 +112,15 @@
                                                     <form class="dropdown-item" action="{{route('users.active')}}" method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{$user->id}}">
-                                                    <button class="dropdown-item text-danger" type="submit" name="active" value="0"><i class="fas fa-user-shield"></i>  Block</button>
-                                                </form>
+                                                    <button class="dropdown-item text-warning" type="submit" name="active" value="0"><i class="fas fa-user-shield"></i>  Block</button>
+                                                    </form>
+                                                </li>
+                                                <li>
+                                                    <form class="dropdown-item" action="{{route('users.active')}}" method="post">
+                                                    @csrf
+                                                    <input type="hidden" name="id" value="{{$user->id}}">
+                                                    <button class="dropdown-item text-danger" type="submit" name="active" value="2"><i class="fas fa-trash"></i>  Delete</button>
+                                                    </form>
                                                 </li>
                                                 @endif
                                             </ul>

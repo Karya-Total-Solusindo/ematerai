@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\Crypt;
+use Illuminate\Support\Str;
 
 class UserManagementController extends Controller
 {
@@ -31,10 +32,11 @@ class UserManagementController extends Controller
      * @return \Illuminate\Http\Response
      */
     public function index(Request $request){
-        $users = User::orderBy('id','DESC')->latest()
+        $users = User::whereNot('active','=','2')->orderBy('id','DESC')->latest()
         ->filter(request()->all())->paginate(10)->onEachSide(0);;
         if($s = $request->s){
             $users = User::with('pemungut')->latest()
+            ->whereNot('active','=','2')
             ->where('username','like','%'.$s.'%')
             ->orWhere('email','like','%'.$s.'%')
             ->orderBy('created_at', 'desc')
@@ -162,16 +164,31 @@ class UserManagementController extends Controller
             'active' => 'required',
         ]);
         $active = User::find($input['id']);
-        $active->active = $input['active'] ;
-        if($active->id <= 2){
+        
+        if($active->username == 'admin'){
             return redirect()->route('users.index')
             ->with('error',"Action Not Allowed!");
         }
-        $active->update();
+        
         if($input['active']==1){
+            $active->active = '1'; //active
+            $active->update();
             return redirect()->route('users.index')
             ->with('success',"User ".$active->username." Active successfully");
-        }else{
+        }
+        elseif($input['active']==2){
+           
+            $active->active = '2' ;
+            $active->username = Str::uuid()->toString();
+            $active->ematerai_token = 'DELETED';
+            $active->password = Crypt::encrypt(Str::uuid()->toString());
+            $active->update();
+            return redirect()->route('users.index')
+            ->with('success',"User ".$active->username." Deleted successfully");
+        }
+        else{
+            $active->active = '0'; // block user
+            $active->update();
             return redirect()->route('users.index')
             ->with('success',"User ".$active->username." Block successfully");
         }
