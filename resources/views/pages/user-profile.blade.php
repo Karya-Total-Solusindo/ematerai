@@ -71,7 +71,7 @@
     </div>
     <div class="container-fluid py-4">
         <div class="row">
-            <div class="col-md-12">
+            <div class="col-md-6">
                 <div class="card">
                     <form role="form" method="POST" action={{ route('profile.update') }} enctype="multipart/form-data">
                         @csrf
@@ -105,8 +105,9 @@
                     </form>
                 </div>
             </div>
-            {{-- <div class="col-md-6">
+            <div class="col-md-6">
                 <div class="card">
+                    
                     <form role="form" method="POST" action={{ route('profile.password') }}>
                         @csrf
                         <input class="form-control profile" type="email" name="email" id="email" hidden
@@ -119,10 +120,22 @@
                             </div>
                         </div>
                         <div class="card-body">
-                           
+                                {{--SHOW ERROR  --}}
+                                @if ($errors->any())
+                                    <div class="alert m-1 alert-danger text-white">
+                                        <ul>
+                                            @foreach ($errors->all() as $error)
+                                                <li>{{ $error }}</li>
+                                            @endforeach
+                                        </ul>
+                                    </div>
+                                @endif
+                                  {{-- {{ $errors->any() }}
+                                 {{  $errors->password->first('oldPassword') }} --}}
+                                {{--SHOW ERROR  --}}
                                 <div class="col-md-12">
                                     <div class="form-group">
-                                        <label for="oldPassword" class="form-control-label">Old Password&nbsp;<span>*</span></label>
+                                        <label for="oldPassword" class="form-control-label">Current Password&nbsp;<span>*</span></label>
                                         <input class="form-control password-change" type="password" name="oldPassword" id="oldPassword" autocomplete="off" disabled
                                         value="" required>
                                         <span class="validity"></span>
@@ -132,7 +145,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="newPassword" class="form-control-label">New Password&nbsp;<span>*</span></label>
-                                        <input class="form-control password-change" type="password" name="newPassword" id="newPassword" autocomplete="off" disabled
+                                        <input class="form-control password-change" type="password" name="password" id="newPassword" autocomplete="off" disabled
                                         value="" required>
                                         <span class="validity"></span>
                                     </div>
@@ -140,7 +153,7 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="confPassword" class="form-control-label">Confirm Password&nbsp;<span>*</span></label>
-                                        <input class="form-control password-change" type="password" name="confPassword" id="confPassword" autocomplete="off" disabled
+                                        <input class="form-control password-change" type="password" name="password_confirmation" id="confPassword" autocomplete="off" disabled
                                         value="" required>
                                         <span class="validity"></span>
                                     </div>
@@ -148,9 +161,10 @@
                         </div>
                     </form>
                 </div>
-            </div> --}}
+            </div>
         </div>
         {{-- @include('layouts.footers.auth.footer') --}}
     </div>
-
 @endsection
+
+
