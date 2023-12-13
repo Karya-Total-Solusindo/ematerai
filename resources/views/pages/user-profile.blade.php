@@ -1,6 +1,34 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Your Profile'])
+    <style>
+        .input-group{
+            border: solid 1px #d2d6da !important;
+            border-radius: 8px !important;
+            background: #e9ecef !important;
+        }
+        .input-group input{
+            padding: 6px;
+        }
+        .input-group span.input-icon{
+            border: solid 1px #d2d6da !important;
+            border-radius: 5px 0px 0px 8px !important;
+            padding: 8px !important;
+            background: #e9ecef !important;
+        }
+        .input-group span.validity{
+            top: 10px;
+        }
+        .input-group span:after{
+            background: #fff !important;
+                position: absolute;
+                /* content: "✖"; */
+                padding-left: 5px;
+                color: #8b0000;
+                /* top: 41px; */
+                /* right: 13px; */
+        }
+    </style>
     <script>
         function edit(){
             let setDisable = false;
@@ -24,6 +52,7 @@
             document.getElementById("btn-edit").classList.remove();
             document.getElementById("btn-edit").innerHTML = editText;
             document.getElementById("btn-save").style.display = saveDisplay;
+            
 
            
         }
@@ -43,6 +72,23 @@
             document.getElementById("btn-edit-change").classList.remove();
             document.getElementById("btn-edit-change").innerHTML = editText;
             document.getElementById("btn-save-change").style.display = saveDisplay;
+        }
+        
+        function showpass(){
+            let newPassword = document.getElementById('newPassword');
+            let type = newPassword.getAttribute('type');
+            let eyes = document.getElementById('eyes'); 
+            let eyec = document.getElementById('eyec');
+            if(type=='text'){
+                newPassword.setAttribute('type','password');
+                eyes.style.display='block';
+                eyec.style.display='none';
+            }else{
+                eyes.style.display='none';
+                eyec.style.display='block';
+                newPassword.setAttribute('type','text');
+            }
+            console.log(newPassword.getAttribute('type'))
         }
     </script>
     <div class="card shadow-lg mx-4 card-profile-bottom">
@@ -145,9 +191,16 @@
                                 <div class="col-md-12">
                                     <div class="form-group">
                                         <label for="newPassword" class="form-control-label">New Password&nbsp;<span>*</span></label>
-                                        <input class="form-control password-change" type="password" name="password" id="newPassword" autocomplete="off" disabled
-                                        value="" required>
-                                        <span class="validity"></span>
+                                        <div class="input-group">
+                                            <span id="showpass" class="input-icon" onclick="showpass()">
+                                                <i class="fas fa-eye" id="eyes"></i>
+                                                <i class="fas fa-eye-slash" id="eyec"@style('display:none')></i>
+                                            </span>
+                                            <input class="form-control password-change" pattern="^(?=.*[A-Za-z])(?=.*\d)(?=.*[@$!%*#?&])[A-Za-z\d@$!%*#?&]{6,}$" type="password" name="password" id="newPassword" autocomplete="off" disabled
+                                            value="" required>
+                                            <span class="validity"></span>
+                                        </div>
+                                        <span class="text-sm help">Include a numeric, and special character</span>
                                     </div>
                                 </div>
                                 <div class="col-md-12">
