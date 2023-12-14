@@ -36,7 +36,7 @@
             </div> 
             <div class="card-body px-0 pt-0 pb-2">
                 <div class="table-responsive p-0">
-                    <table class="table align-items-center mb-0">
+                    <table class="table align-items-center mb-0" >
                         <thead>
                             <tr>
                                 <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">No</th>
@@ -71,7 +71,7 @@
                                             <span class="badge bg-primary">{{ $role->name }}</span>
                                             @else
                                             <span class="badge bg-primary">{{ $role->name }}</span>
-                                            <span class="badge bg-default">None Active</span>
+                                            <span class="badge bg-default">Non Active</span>
                                             @endif
                                         @endforeach
                                     @else
@@ -79,7 +79,7 @@
                                         @if($user->active == 0)
                                             <span class="badge bg-default">None</span>
                                         @else
-                                            <span class="badge bg-default">None Active</span>
+                                            <span class="badge bg-default">Non Active</span>
                                         @endif
                                     @endif
                                     
@@ -94,9 +94,17 @@
                                             </button>
                                             <ul class="dropdown-menu" aria-labelledby="dropdownMenuButton1">
                                                 <li>
+                                                    <a class="dropdown-item" href="#"><i class="fas fa-user"></i> {{$user->username}}</a>
+                                                </li>
+                                                <li><hr class="dropdown-divider"></li>
+                                                <li>
                                                     <a class="dropdown-item" href="{{ route('users.edit',$user->id) }}?active=true"><i class="fas fa-pencil"></i> User Edit</a>
                                                 </li>
                                                 @if($user->username != 'admin')
+                                                
+                                                <li>
+                                                
+                                                <li>
                                                 <li>
                                                     <a class="dropdown-item" href="{{ route('users.show',$user->id) }}?active=false"><i class="fas fa-circle-nodes"></i>  Service Accunt</a>
                                                 </li>
@@ -119,7 +127,7 @@
                                                     <form class="dropdown-item" action="{{route('users.active')}}" method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{$user->id}}">
-                                                    <button class="dropdown-item text-danger" type="submit" name="active" value="2"><i class="fas fa-trash"></i>  Delete</button>
+                                                    <button class="dropdown-item text-danger" type="submit" name="active" value="2" onclick="return confirm('Are you sure to delete, user '{{ $user->name }}' ?')"><i class="fas fa-trash"></i>  Delete</button>
                                                     </form>
                                                 </li>
                                                 @endif
@@ -145,3 +153,4 @@
         </div>
     </div>
 </div> @endsection
+
