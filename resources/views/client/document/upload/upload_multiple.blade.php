@@ -135,7 +135,7 @@ min-height: 300px;
               <input type="hidden" name="dokumen_page" value={{  $directorys->page }}>
               <div class="dz-default dz-message">
                 <i class="fas fa-cloud-arrow-up" style="font-size:12em;"></i><br>
-                <button class="dz-button" type="button">Click or Drop files here to upload</button>
+                <button class="dz-button" type="button">Search or Drop files here to upload</button>
               </div>
               {{-- <center>
                 <i class="fas fa-cloud-arrow-up" style="font-size:12em;"></i>
