@@ -127,7 +127,7 @@
                                                     <form class="dropdown-item" action="{{route('users.active')}}" method="post">
                                                     @csrf
                                                     <input type="hidden" name="id" value="{{$user->id}}">
-                                                    <button class="dropdown-item text-danger" type="submit" name="active" value="2" onclick="return confirm('Are you sure to delete, user '{{ $user->name }}' ?')"><i class="fas fa-trash"></i>  Delete</button>
+                                                    <button class="dropdown-item text-danger" type="submit" name="active" value="2" onclick="return confirm('Are you sure to delete, user {{ $user->username }} ?')"><i class="fas fa-trash"></i>  Delete</button>
                                                     </form>
                                                 </li>
                                                 @endif
