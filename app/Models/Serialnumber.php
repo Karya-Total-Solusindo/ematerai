@@ -21,6 +21,7 @@ class Serialnumber extends Model
         'docid',
         'nodoc',
         'use',
+        'useby',
     ];
     protected $hidden = [
         'sn',
