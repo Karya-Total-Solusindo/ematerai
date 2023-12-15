@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
 use Session;
+use Illuminate\Http\Response;
 use Illuminate\Support\Facades\Storage;
 
 class BackupController extends Controller{
@@ -25,7 +26,7 @@ class BackupController extends Controller{
            }
         }
 	$backups = array_reverse($backups);
-    //dd($backups,$disk);
+     //dd($backups,$disk);
         return view("admin.backup.backups")->with(compact('backups'));
     }
 
@@ -59,17 +60,20 @@ class BackupController extends Controller{
     public function download($file_name) {
         $file = config('laravel-backup.backup.name') .'/'.env('APP_NAME').'/'. $file_name;
         $disk = Storage::disk(config('laravel-backup.backup.destination.disks'));
-
+        //dd($disk);  
         if ($disk->exists($file)) {
             $fs = Storage::disk(config('laravel-backup.backup.destination.disks'))->getDriver();
             $stream = $fs->readStream($file);
+            
+            //dd(basename($file));
 
-            return \Illuminate\Http\Response::stream(function () use ($stream) {
+            
+            return \Response::stream(function () use ($stream) {
                 fpassthru($stream);
             }, 200, [
-                "Content-Type" => $fs->getMimetype($file),
-                "Content-Length" => $fs->getSize($file),
-                "Content-disposition" => "attachment; filename=\"" . basename($file) . "\"",
+               "Content-Type" => $fs->mimeType($file),
+               "Content-Length" => $fs->fileSize($file),
+               "Content-disposition" => "attachment; filename=\"" . basename($file) . "\"",
             ]);
         } else {
             abort(404, "Backup file doesn't exist.");
