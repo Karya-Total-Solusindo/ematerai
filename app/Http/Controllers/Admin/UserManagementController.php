@@ -73,7 +73,7 @@ class UserManagementController extends Controller
         ]);
 
         $input = $request->all();
-        $input['password'] = Hash::make($input['password']);
+        $input['password'] = $input['password'];
         //$input['active'] = 1;
 
         $user = User::create($input);

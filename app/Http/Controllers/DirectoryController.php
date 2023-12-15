@@ -143,17 +143,27 @@ class DirectoryController extends Controller
     }
     public function upload(Request $request)
     {
-        //multipel upload for ajax  
+        //multipel upload for ajax 
         $input = $request->all();
         $directorys = Directory::where('id',$input['directory']);
         $directory = $directorys->first();
+        $file = $request->file('file');
+
+        if($file->getMimeType() != 'application/pdf'){
+            return response()->json(['error'=>'File type disallow']); 
+        }
         if($directorys->get()->count()==1){
             $file = $request->file('file');
-            $fileName = str_replace(' ','_',$file->getClientOriginalName());
+            // set filename
+            // space to underscore 
+            // intercept uppercase to lowercase extension   
+            $fileName = str_replace(' ','_', pathinfo($file->getClientOriginalName(), PATHINFO_FILENAME).'.pdf');
+            // set path upload to /in directory
             $path = '/app/public/docs/'.Str::upper($directory->company->name).'/'.Str::upper($directory->name).'/in/';
             if (File::exists(storage_path($path).$fileName)) {
                 return response()->json(['error'=>'file exists','message'=>"file exists ".$path.$fileName]);   
             }
+
             //dd(storage_path($path).$fileName,File::exists($path.$fileName));
             $file->move(storage_path($path),$fileName);
             $companyId = $input['company'];
