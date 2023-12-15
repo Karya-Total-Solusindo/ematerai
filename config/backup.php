@@ -81,14 +81,6 @@ return [
              */
             'databases' => [
                 'mysql',
-                    'dump'=>[
-                        'excludeTables' => [
-                            'failed_jobs',
-                            'migrations',
-                            'model_has_permissions',
-                            'personal_access_tokens'
-                        ],
-                    ],
             ],
         ],
 
@@ -116,7 +108,7 @@ return [
          * If not specified, the file extension will be .archive for MongoDB and .sql for all other databases
          * The file extension should be specified without a leading .
          */
-        'database_dump_file_extension' => '.zip',
+        'database_dump_file_extension' => '',
 
         'destination' => [
             /*

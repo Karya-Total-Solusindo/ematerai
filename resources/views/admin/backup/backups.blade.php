@@ -13,28 +13,28 @@
             </div>
         <div class="col-xs-12">
                 @if ( Session::has('success') )
-                    <div class="alert alert-success alert-dismissible">
+                    <div class="alert alert-success alert-dismissible text-white">
                         <a type="button" class="close" data-dismiss="alert">&times;</a>
                         {{ Session::get('success') }}
                     </div>
                     @endif
 
                     @if ( Session::has('update') )
-                    <div class="alert alert-success alert-dismissible">
+                    <div class="alert alert-success alert-dismissible text-white">
                         <a type="button" class="close" data-dismiss="alert">&times;</a>
                         {{ Session::get('update') }}
                     </div>
                     @endif
 
                     @if ( Session::has('delete') )
-                    <div class="alert alert-danger alert-dismissible">
+                    <div class="alert alert-danger alert-dismissible text-white">
                         <a type="button" class="close" data-dismiss="alert">&times;</a>
                         {{ Session::get('delete') }}
                     </div>
                 @endif
 
                 @if (count($backups))
-                    <table class="table table-striped table-bordered">
+                    <table class="table table-striped table-bordered ">
                         <thead>
                         <tr>
                             <th>File Name</th>
@@ -57,11 +57,11 @@
                                 </td>
                                 <td class="text-right">
                                     <a class="btn btn-success"
-                                    href="{{ url('backup/download/'.$backup['file_name']) }}"><i
-                                            class="fa fa-cloud-download"></i> Download</a>
+                                    href="{{ url('backup/download/'.$backup['file_name']) }}">
+                                    <i class="fa fa-cloud-download"></i> Download</a>
                                     <a class="btn btn-danger" onclick="return confirm('Do you really want to delete this file')" data-button-type="delete"
                                     href="{{ url('backup/delete/'.$backup['file_name']) }}"><i class="fas fa-trash"></i>
-                                        Delete</a>
+                                    Delete</a>
                                 </td>
                             </tr>
                         @endforeach

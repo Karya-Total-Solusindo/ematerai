@@ -5,15 +5,14 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Log;
-use Session;
-use Illuminate\Http\Response;
+// use Session;
 use Illuminate\Support\Facades\Storage;
 
 class BackupController extends Controller{
      public function index(){
         $disk = Storage::disk(config('laravel-backup.backup.destination.disks'));
-        $files = $disk->files(env('APP_NAME'));
-        
+        // php artisan config:clear
+        $files = $disk->files('E-MATERAI');
         $backups = [];
         foreach ($files as $k => $f) {
            if (substr($f, -4) == '.zip' && $disk->exists($f)) {
@@ -26,7 +25,6 @@ class BackupController extends Controller{
            }
         }
 	$backups = array_reverse($backups);
-     //dd($backups,$disk);
         return view("admin.backup.backups")->with(compact('backups'));
     }
 
@@ -72,7 +70,7 @@ class BackupController extends Controller{
                 fpassthru($stream);
             }, 200, [
                "Content-Type" => $fs->mimeType($file),
-               "Content-Length" => $fs->fileSize($file),
+                "Content-Length" => $fs->fileSize($file),
                "Content-disposition" => "attachment; filename=\"" . basename($file) . "\"",
             ]);
         } else {
