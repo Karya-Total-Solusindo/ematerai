@@ -164,7 +164,7 @@ class UserManagementController extends Controller
             'active' => 'required',
         ]);
         $active = User::find($input['id']);
-        
+        $emailUser = $active->email;
         if($active->username == 'admin'){
             return redirect()->route('users.index')
             ->with('error',"Action Not Allowed!");
@@ -181,6 +181,8 @@ class UserManagementController extends Controller
             $active->active = '2' ;
             $active->username = Str::uuid()->toString();
             $active->ematerai_token = 'DELETED';
+            $active->about = $active->email;
+            $active->email = Str::uuid()->toString();
             $active->password = Crypt::encrypt(Str::uuid()->toString());
             $active->update();
             return redirect()->route('users.index')

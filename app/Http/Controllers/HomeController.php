@@ -64,9 +64,11 @@ class HomeController extends Controller
             }
             $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
             $users = User::with('pemungut')->latest()
+            ->where('active','<>','2')
             ->filter(request()->all())->paginate(10)->onEachSide(0);
             if($s = $request->s){
                 $users = User::with('pemungut')->latest()
+                ->where('active','<>','2')
                 ->where('username','like','%'.$s.'%')
                 ->orWhere('email','like','%'.$s.'%')
                 ->orderBy('created_at', 'desc')
