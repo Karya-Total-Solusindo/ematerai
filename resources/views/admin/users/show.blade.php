@@ -127,11 +127,11 @@
                                 {{ $user->pemungut->p_user ?? '-' }}
                                 
                             </div>
-                            {{-- <div class="col-12">
+                            <div class="col-12" >
                                 <strong>Password:</strong><br> 
-                               {{ $pass ?? '-' }}
+                               {{ Crypt::decrypt($user->pemungut->p_password)  ?? '-' }}
                                
-                            </div> --}}
+                            </div>
                             {{-- <div class="col-12">
                                 <strong>Nama Pemungut:</strong><br>
                                 {{ $user->pemungut->namedipungut ?? '-' }}
