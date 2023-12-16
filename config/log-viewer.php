@@ -70,6 +70,7 @@ return [
     'middleware' => [
         'web',
         \Opcodes\LogViewer\Http\Middleware\AuthorizeLogViewer::class,
+        'view-logs',
     ],
 
     /*
@@ -99,6 +100,12 @@ return [
     'hosts' => [
         'local' => [
             'name' => ucfirst(env('APP_ENV', 'local')),
+        ],
+        'production' => [
+            'name' => 'Production',
+            'headers' => [
+                'X-Foo' => 'Bar',
+            ],
         ],
 
         // 'staging' => [
@@ -209,4 +216,5 @@ return [
     'lazy_scan_chunk_size_in_mb' => 50,
 
     'strip_extracted_context' => true,
+    
 ];

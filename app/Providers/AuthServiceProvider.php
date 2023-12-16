@@ -29,8 +29,6 @@ class AuthServiceProvider extends ServiceProvider
             }else{
                 abort(401);
             }
-            //dd($user->hasRole('Admin'));
-            // return true if the user is allowed access to the Log Viewer
         });
     }
 }
