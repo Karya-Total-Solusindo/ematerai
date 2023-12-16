@@ -224,9 +224,9 @@ class SignAdapter
                 "namadoc"=> "4b", //mand
                 "namafile"=>  $doc->filename,  //mand
                 "nilaidoc"=> "10000", //op
-                "namejidentitas"=>"KTP",
-                "noidentitas"=> "1251087201650003",
-                "namedipungut"=>"Santoso",
+                //"namejidentitas"=>"KTP", //op
+                //"noidentitas"=> "1251087201650003", //op
+                //"namedipungut"=>"Santoso", //op
                 "snOnly"=> false, //mand
                 "nodoc"=> $doc->docnumber, //mand
                 "tgldoc"=> $doc->created_at->format('Y-m-d') //mand
@@ -322,7 +322,7 @@ class SignAdapter
 
     /**
      * disini method generated Batch Serial number
-     * 
+     * @description method ini Tidak Digunakan
      */
     public static function getBatchSerial(array $arrayDocumentId){
         // {
@@ -445,6 +445,11 @@ class SignAdapter
             return $e;
         }
     }
+
+    /**
+     * TODO: - Get Token Login Peruri 
+     * @return 'json data'
+     */
     static function getToken(array $id)
     {
         try{
@@ -468,7 +473,7 @@ class SignAdapter
         }
     }
     /** 
-     * execusi serial dan lakukan stamp
+     * TODO: execusi serial dan lakukan stamp
     */
     public static function exeSreialStamp(array $arrayDocumentId){
         $dataArray =[];
