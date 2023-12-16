@@ -23,12 +23,12 @@ class AuthServiceProvider extends ServiceProvider
      */
     public function boot(): void
     {
-        Gate::define('viewLogViewer', function (?User $user) {
-            if($user->hasRole('Admin') === true){
-                return true;
-            }else{
-                abort(401);
-            }
-        });
+        // Gate::define('viewLogViewer', function (?User $user) {
+        //     if($user->hasRole('Admin') === true){
+        //         return true;
+        //     }else{
+        //         abort(401);
+        //     }
+        // });
     }
 }
