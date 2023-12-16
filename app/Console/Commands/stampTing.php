@@ -30,6 +30,7 @@ class stampTing extends Command
      */
     public function handle()
     { 
+        Log::info('START STAMP INPROGRESS'); 
         $inprogress = Document::select('id')
         ->where('certificatelevel','=','INPROGRESS')
         //->orWhere('certificatelevel','=','NOT_CERTIFIED')
@@ -37,11 +38,14 @@ class stampTing extends Command
         ->get();
         $arrayId =[];
         foreach($inprogress as $item){
-            array_push($arrayId,$item->id);     
-            $appsing = SignAdapter::exeSreialStamp([$item->id]);
-            Log::info([$arrayId,$appsing]); 
+            if($item->id != null){
+                array_push($arrayId,$item->id);     
+                $appsign = SignAdapter::exeSreialStamp([$item->id]);
+                Log::info([$arrayId,$appsign]); 
+            }
         }
-        Log::info([$inprogress]); 
+        //Log::info([$inprogress]);
+        Log::info('END STAMP INPROGRESS'); 
        
     }
 }
