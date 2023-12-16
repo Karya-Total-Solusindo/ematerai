@@ -36,7 +36,7 @@ class stampTing extends Command
         //->orWhere('certificatelevel','=','NOT_CERTIFIED')
         //->orWhere('certificatelevel','=','FAILUR');
         ->get();
-        Log::debug($inprogress->count());
+        //Log::debug($inprogress->count());
         $arrayId =[];
         if($inprogress->count() > 0){
             Log::info('START STAMP INPROGRESS'); 
