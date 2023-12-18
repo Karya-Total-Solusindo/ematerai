@@ -692,7 +692,7 @@ class StempController extends Controller
                 // $status->message = $zip_file;
                 $status->update();
                 //delete file
-                Storage::delete(storage_path('app/public/doc/'.$doc->company->name.'/'.$doc->directory.'/out/'. $doc->filename));
+                Storage::delete(storage_path('app/public/doc/'.$doc->company->name.'/'.$doc->directory.'/in/'. $doc->filename));
             }
 
             return redirect()->back()->with(['success' => 'Data Berhasil Dihapus!']);
