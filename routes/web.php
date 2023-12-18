@@ -78,6 +78,7 @@ Route::group(['middleware' => ['auth'],], function () {
         Route::post('/users/check', [App\Http\Controllers\Admin\UserManagementController::class,'checkpemungut'])->name('checkpemungut');
         Route::post('/users/active', [App\Http\Controllers\Admin\UserManagementController::class,'active'])->name('users.active');
         Route::get('/test', [App\Http\Controllers\Admin\UserManagementController::class,'test'])->name('test');
+        Route::get('/spesiment', [TestController::class,'spesiment'])->name('spesiment');
     });
 
     Route::get('/filemanager', [FileManagerController::class,'index'])->middleware('auth')->name('filemanager');
@@ -125,12 +126,15 @@ Route::group(['middleware' => ['auth'],], function () {
     Route::get('/stemp/failed', [StempController::class, 'failed'])->middleware('auth')->name('failed');
     Route::get('/stemp/success', [StempController::class, 'success'])->middleware('auth')->name('success');
     Route::get('/stemp/history', [StempController::class, 'history'])->middleware('auth')->name('history');
+    //qrematerai
+    Route::get('/stemp/qrematerai/{qr}', [StempController::class, 'qrematerai'])->middleware('auth')->name('qrematerai');
     
     Route::get('/stemp/_modalProcess', [StempController::class, '_modalProcess'])->middleware('auth')->name('_modalProcess');
     //EXPORT EXCEL
     Route::get('/stemp/exportSuccess', [StempController::class, 'exportSuccecc'])->middleware('auth')->name('exportSuccecc');
     Route::post('/stemp/download', [StempController::class, 'download'])->middleware('auth')->name('stamp.download');
     Route::post('/stemp/trash', [StempController::class, 'trash'])->middleware('auth')->name('stamp.trash');
+    Route::post('/stemp/deleteNewFile', [StempController::class, 'deleteNewFile'])->middleware('auth')->name('stamp.deleteNewFile');
     
     // Route::get('/stemp/{stemp}', [StempController::class, 'show'])->middleware('auth')->name('stemp.show');
     Route::resource('/stemp', StempController::class);
@@ -158,6 +162,7 @@ Route::group(['middleware' => ['auth'],], function () {
 });
 
 Route::get('/stemp/detail/{SN}', [StempController::class, 'stampDetail'])->middleware('auth')->name('stamp.detail');
+Route::get('/stemp/qrimage/{SN}', [StempController::class, 'qrImage'])->middleware('auth')->name('stamp.qrimage');
 
 
 

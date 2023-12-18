@@ -237,7 +237,7 @@ class StempController extends Controller
         $token = new SignAdapter;
         if($getSerialNumber['statusCode'] == '01'){
             $token = new SignAdapter;
-            $token->getToken();
+            $token->setToken($fileUpload->id);
         }else{
             $sn = $getSerialNumber['result']['sn'];
             $image = $getSerialNumber['result']['image'];
@@ -660,7 +660,7 @@ class StempController extends Controller
                 return response()->download($zip_file);
             } catch (\Throwable $th) {
                 //throw $th;
-                \Log::error('Download Failed, file found.  '. $th->getMessage());
+                Log::error('Download Failed, file found.  '. $th->getMessage());
                 return redirect()->back()->with('error','Download Failed, file not found.');
                 // dd($th->getMessage());
             }
@@ -677,6 +677,27 @@ class StempController extends Controller
             }
         }
 
+        public function deleteNewFile(Request $request)
+        {
+            $id = $request->doc;
+            //get post by ID
+            $document = Document::findOrFail($id)
+            ->where('certificatelevel','=','NEW')
+            ->where('user_id','=',Auth::user()->id);
+            foreach($document as $doc){
+                // dd($doc->source,$doc->company->name,$doc->directory->name);
+                $status = Document::find($doc->id);
+                $status->certificatelevel = 'DELETED'; 
+                $status->history = 'DELETED'; 
+                // $status->message = $zip_file;
+                $status->update();
+                //delete file
+                Storage::delete(storage_path('app/public/doc/'.$doc->company->name.'/'.$doc->directory.'/out/'. $doc->filename));
+            }
+
+            return redirect()->back()->with(['success' => 'Data Berhasil Dihapus!']);
+
+        }
 
         public function trash(Request $request)
         {

@@ -75,7 +75,7 @@
                     <a @class(['btn me-5 btn-sm btn-dark', 'font-bold' => true]) href="{{ route('company') }}"> Back</a>
                 </div>
                 <div class="col-4 text-end">
-                    <a @class(['btn ms-5 btn-sm btn-danger', 'font-bold' => true]) href="#" onclick="alert('on dev')"> Delete</a> 
+                    <a @class(['btn ms-5 btn-sm btn-danger', 'font-bold' => true]) href="#" onclick="alert('on dev')" id="delete-new-file"> Delete</a> 
                 </div>
             </div>
             {{-- <p class="card-text">Text</p> --}}
@@ -274,77 +274,89 @@
     
         <script type="text/javascript">
         //load data
-             $(document).ready(function (e) {
-                //daterangepicker
-        var firstDayOfMonth = function() {
-            return 1;
-        };
-        var d = new Date();
-        var currMonth = d.getMonth();
-        var currYear = d.getFullYear();
-        @if(request()->has('periode'))
-            var startDate = "{{explode('-',request()->input('periode'))[0] ?? 'new Date(currYear,currMonth,firstDayOfMonth()'}}";
-            var endDate = "{{explode('-',request()->input('periode'))[1] ?? 'new Date()'}}";
-        @else
-            var startDate = new Date(currYear,currMonth,firstDayOfMonth());
-            var endDate = new Date();
-        @endif
-        $('.daterange').daterangepicker({
-            "alwaysShowCalendars": true,
-            "startDate": startDate,
-            "endDate": endDate,
-            "autoApply": true,
-            "opens": "left",
-            locale: {
-                format: 'DD/MM/YYYY'
-            },
-        });
-        //end daterange
-
-                $('#selectAll').prop('checked', false);
-                $('#btnGetSN').prop('disabled', true);
-                // $('#btnGetSN').hide();
-                $('#selectAll').on('change',(e)=>{
-                    let checkAll = $('#selectAll').is(':checked');
-                    var numberNotChecked = $('input:checkbox:not(":checked")').length;
-                    var chechListChecked = $('input.chechList:checked').length;
-                    if(checkAll==true){
-                        $('.chechList').prop('checked', true);
-                        $('#btnGetSN').show();
-                    }else{
-                        $('.chechList').prop('checked', false);
-                    }
-                    
-                    if($('.chechList:checked').length >= 1){
-                        $('#btnGetSN').prop('disabled', false);
-                        $('#btnGetSN').show();
-                    }else{
-                        $('#btnGetSN').prop('disabled', true);
-                    }
-                    // console.log(checkAll,numberNotChecked,chechListChecked);
+            $(document).ready(function (e) {
+                        //daterangepicker
+                var firstDayOfMonth = function() {
+                    return 1;
+                };
+                var d = new Date();
+                var currMonth = d.getMonth();
+                var currYear = d.getFullYear();
+                @if(request()->has('periode'))
+                    var startDate = "{{explode('-',request()->input('periode'))[0] ?? 'new Date(currYear,currMonth,firstDayOfMonth()'}}";
+                    var endDate = "{{explode('-',request()->input('periode'))[1] ?? 'new Date()'}}";
+                @else
+                    var startDate = new Date(currYear,currMonth,firstDayOfMonth());
+                    var endDate = new Date();
+                @endif
+                $('.daterange').daterangepicker({
+                    "alwaysShowCalendars": true,
+                    "startDate": startDate,
+                    "endDate": endDate,
+                    "autoApply": true,
+                    "opens": "left",
+                    locale: {
+                        format: 'DD/MM/YYYY'
+                    },
                 });
+                //end daterange
 
-
-                // checkbox 
-                $('.table').on('change','.chechList',(e)=>{
-                    var chechListNotChecked = $('input.chechList:not(":checked")').length;
-                    var chechListChecked = $('input.chechList:checked').length;
-                    // console.info('chechList click');
-                    if($('.chechList:checked').length >= 1){
-                        $('#btnGetSN').prop('disabled', false);
-                        $('#btnGetSN').show();
-                    }else{
-                        $('#btnGetSN').prop('disabled', true);
-                    }
-                    if(chechListNotChecked == 0){
-                        $('#selectAll').prop('checked', true);
-                    }else{
                         $('#selectAll').prop('checked', false);
-                    } 
-                    // console.log(chechListChecked,chechListNotChecked);
-                });
+                        $('#btnGetSN').prop('disabled', true);
+                        // $('#btnGetSN').hide();
+                        $('#selectAll').on('change',(e)=>{
+                            let checkAll = $('#selectAll').is(':checked');
+                            var numberNotChecked = $('input:checkbox:not(":checked")').length;
+                            var chechListChecked = $('input.chechList:checked').length;
+                            if(checkAll==true){
+                                $('.chechList').prop('checked', true);
+                                $('#btnGetSN').show();
+                            }else{
+                                $('.chechList').prop('checked', false);
+                            }
+                            
+                            if($('.chechList:checked').length >= 1){
+                                $('#btnGetSN').prop('disabled', false);
+                                $('#btnGetSN').show();
+                            }else{
+                                $('#btnGetSN').prop('disabled', true);
+                            }
+                            // console.log(checkAll,numberNotChecked,chechListChecked);
+                        });
+
+
+                        // checkbox 
+                        $('.table').on('change','.chechList',(e)=>{
+                            var chechListNotChecked = $('input.chechList:not(":checked")').length;
+                            var chechListChecked = $('input.chechList:checked').length;
+                            // console.info('chechList click');
+                            if($('.chechList:checked').length >= 1){
+                                $('#btnGetSN').prop('disabled', false);
+                                $('#btnGetSN').show();
+                            }else{
+                                $('#btnGetSN').prop('disabled', true);
+                            }
+                            if(chechListNotChecked == 0){
+                                $('#selectAll').prop('checked', true);
+                            }else{
+                                $('#selectAll').prop('checked', false);
+                            } 
+                            // console.log(chechListChecked,chechListNotChecked);
+                        });
 
             });    
+
+
+            $('#delete-new-file').click((e)=>{
+                $('#execute').attr("action","{{route('stamp.deleteNewFile')}}");
+                $('#execute').submit();
+                 //console.log($('.chechList').val()); 
+            });
+
+            
+
+
+
         </script>
     @endPushOnce
 @endonce
