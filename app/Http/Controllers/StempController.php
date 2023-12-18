@@ -680,21 +680,32 @@ class StempController extends Controller
         public function deleteNewFile(Request $request)
         {
             $id = $request->doc;
-            //get post by ID
-            $document = Document::findOrFail($id)
-            ->where('certificatelevel','=','NEW')
-            ->where('user_id','=',Auth::user()->id);
-            foreach($document as $doc){
-                // dd($doc->source,$doc->company->name,$doc->directory->name);
-                $status = Document::find($doc->id);
-                $status->certificatelevel = 'DELETED'; 
-                $status->history = 'DELETED'; 
-                // $status->message = $zip_file;
-                $status->update();
-                //delete file
-                Storage::delete(storage_path('app/public/doc/'.$doc->company->name.'/'.$doc->directory.'/in/'. $doc->filename));
-            }
+            $all = $request->all;
 
+            if($all!=null){
+                //All
+                $document = Document::where('directory_id','=',$all)
+                ->where('certificatelevel','=','NEW')
+                ->where('user_id','=',Auth::user()->id)->get();
+            }else{
+                //get post by ID
+                $document = Document::findOrFail($id)
+                ->where('certificatelevel','=','NEW')
+                ->where('user_id','=',Auth::user()->id)->get();
+            }
+            foreach($document as $doc){
+                // dd($all,$doc->filename);
+                //delete file
+                if(Storage::delete('/public/docs/'.$doc->company->name.'/'.$doc->directory->name.'/in/'. $doc->filename)){
+                    // dd($doc->source,$doc->company->name,$doc->directory->name);
+                    $status = Document::find($doc->id);
+                    $status->certificatelevel = 'DELETED'; 
+                    $status->history = 'DELETED'; 
+                    // $status->message = $zip_file;
+                    $status->update();
+                }
+                //dd(Storage::path('/'),'/public/docs/'.$doc->company->name.'/'.$doc->directory->name.'/in/'. $doc->filename,Storage::delete('/public/docs/'.$doc->company->name.'/'.$doc->directory->name.'/in/'. $doc->filename));
+            }
             return redirect()->back()->with(['success' => 'Data Berhasil Dihapus!']);
 
         }
@@ -705,14 +716,15 @@ class StempController extends Controller
             //get post by ID
             $document = Document::findOrFail($id)->where('user_id','=',Auth::user()->id);
             foreach($document as $doc){
-                // dd($doc->source,$doc->company->name,$doc->directory->name);
-                $status = Document::find($doc->id);
-                // $status->certificatelevel = 'DELETED'; 
-                $status->history = 'DELETED'; 
-                // $status->message = $zip_file;
-                $status->update();
                 //delete file
-                Storage::delete(storage_path('app/public/doc/'.$doc->company->name.'/'.$doc->directory.'/out/'. $doc->filename));
+                if(Storage::delete('app/public/doc/'.$doc->company->name.'/'.$doc->directory->name.'/out/'. $doc->filename)){
+                    // dd($doc->source,$doc->company->name,$doc->directory->name);
+                    $status = Document::find($doc->id);
+                    // $status->certificatelevel = 'DELETED'; 
+                    $status->history = 'DELETED'; 
+                    // $status->message = $zip_file;
+                    $status->update();
+                }
                 // dd(storage_path('app/public/doc/'.$doc->company->name.'/'.$doc->directory->name.'/out/'. $doc->filename));
             }
             //delete image

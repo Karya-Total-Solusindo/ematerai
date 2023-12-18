@@ -75,7 +75,7 @@
                     <a @class(['btn me-5 btn-sm btn-dark', 'font-bold' => true]) href="{{ route('company') }}"> Back</a>
                 </div>
                 <div class="col-4 text-end">
-                    <a @class(['btn ms-5 btn-sm btn-danger', 'font-bold' => true]) href="#" onclick="alert('on dev')" id="delete-new-file"> Delete</a> 
+                    <a @class(['btn ms-5 btn-sm btn-danger', 'font-bold' => true]) href="#" onclick="alert('Are you sure you want to delete?')" id="delete-new-file"> Delete</a> 
                 </div>
             </div>
             {{-- <p class="card-text">Text</p> --}}
