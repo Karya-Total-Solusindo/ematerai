@@ -50,7 +50,7 @@ class SignAdapter
                 $token->namedipungut = $response['result']['data']['login']['user']['firstName'];
                 $token->update();
                 //on table user
-                $user = User::find($data->user->id); 
+                $user = User::find($data->pemungut->user_id); 
                 $user->ematerai_token = $response['token'];
                 $user->update();
                 Log::info("Set Token Success");
@@ -546,6 +546,7 @@ class SignAdapter
                                     $status = Document::find($id);
                                     $status->certificatelevel = 'CERTIFIED';
                                     $status->update();
+
                                     $serialUsed = Serialnumber::where('sn','=',$datas->sn);
                                     $serialUsed->use = '1';
                                     $serialUsed->useby = $datas->user->email;
