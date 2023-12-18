@@ -548,7 +548,7 @@ class SignAdapter
                                     $status->update();
                                     $serialUsed = Serialnumber::where('sn','=',$datas->sn);
                                     $serialUsed->use = '1';
-                                    $serialUsed->useby = Auth::user()->email;
+                                    $serialUsed->useby = $datas->user->email;
                                     $serialUsed->update();
                                 }
                                 Log::info('Move IN backup '.$relativePathIn.' to '.$relativePathBackup);
