@@ -252,6 +252,7 @@ min-height: 300px;
                   document.querySelector("#dropzoner2").style.opacity = "1";
                   document.querySelector("#file-success").innerHTML  = 'Success : '+totSuccess;
                   document.querySelector("#file-error").innerHTML  = 'Error : '+totError;
+                  document.getElementById("file-error").setAttribute('data',totError);
                   totFile++;
                   totActionFile++;
                   document.querySelector("#file-total").innerHTML  ='Total : '+ totFile;
@@ -371,6 +372,7 @@ min-height: 300px;
                     file.previewElement.querySelector(['.dz-progress']).style.display = "none";                   
                     totError++;
                     document.querySelector("#file-error").innerHTML  = 'Error : '+totError;
+                    document.getElementById("file-error").setAttribute('data',totError);
                     // $scope.$apply($scope.errorFiles.push(ficheiro));
                 });
                 // Hide the total progress bar when nothing's uploading anymore
@@ -380,6 +382,7 @@ min-height: 300px;
                       document.querySelector("#view-total-process").style.opacity = "0";
                       document.querySelector("#file-success").innerHTML  = 'Success : '+totSuccess;
                       document.querySelector("#file-error").innerHTML  = 'Error : '+totError;
+                      document.getElementById("file-error").setAttribute('data',totError);
                       console.info(totFile,totSuccess,totError);
                       totActionFile =0;
                       totProgress=0;
@@ -407,11 +410,15 @@ min-height: 300px;
             $(this).toggle($(this).text().toLowerCase().indexOf(value) > -1)
           });
         });
+        
   });
 </script>
 <script language="JavaScript">
-  window.onbeforeunload = confirmExit;
-  function confirmExit() {
-      return "You have attempted to leave this page. Are you sure?";
-  }
+  // function confirmExit() {
+  //   var Errors = document.getElementById("file-error").getAttribute('data');
+  //   if(parseInt(Errors) > 0){
+  //     return confirm("You have attempted to leave this page. Are you sure?");
+  //   }
+  // }
+  // window.onbeforeunload = confirmExit;
 </script>
