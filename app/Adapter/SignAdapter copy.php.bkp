@@ -17,7 +17,7 @@ use Illuminate\Support\Facades\Crypt;
  * @config sing-adapter.php
  * @url list of url on sing-adapter.php
  */
-class SignAdapter
+class SignAdapter_copy
 {
     /**
      * How to Call this class
@@ -266,7 +266,7 @@ class SignAdapter
                 "tgldoc"=> $doc['created_at']->format('Y-m-d') //mand
             ];
             // get jwt Token
-            $__token = self::getToken();
+            $__token = self::getToken([$id]);
             // do generated SN
             $Url = config('sign-adapter.API_GENERATE_SERIAL_NUMBER');
             $requestAPI = (string) Http::withHeaders([
