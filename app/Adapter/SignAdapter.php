@@ -258,7 +258,7 @@ class SignAdapter
                     //'namejidentitas'=> 'KTP',
                     //'noidentitas'=> '1251087201650003',
                     //'namedipungut'=> 'Santoso',
-                   'user_id' => Auth::user()->id,
+                   'user_id' => $doc->user->id,
                    'documet_id' =>  $doc['id'],
                 ];
                 $SN = Serialnumber::insert($dataSN);
