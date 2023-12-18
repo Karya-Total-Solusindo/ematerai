@@ -24,6 +24,7 @@ use App\Exports\ExportDocumentSuccessView;
 
 use Maatwebsite\Excel\Concerns\ToModel;
 use Maatwebsite\Excel\Facades\Excel;
+use Illuminate\Support\Facades\Log;
 
 class StempController extends Controller
 {
@@ -563,80 +564,14 @@ class StempController extends Controller
             return   Excel::download(new ExportDocumentSuccess($status,$year,$month,$day), date('Y_m_d').'_Ematerai_Document_Stamp_'.$status_text.'.xlsx',\Maatwebsite\Excel\Excel::XLSX);
         }
 
-
+        public function qrImage(string $sn){
+            return SignAdapter::generatedQRImage($sn);
+         }
 
         public function stampDetail(string $sn){
            return SignAdapter::getCheckSN($sn, true);
            
         }
-
-
-        // public function downloadOne(){
-        //     $zip_file = date('YmdHis').'_ematerai.zip'; // Name of our archive to download
-
-        //     // Initializing PHP class
-        //     $zip = new \ZipArchive();
-        //     $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-
-        //     $invoice_file = 'invoices/aaa001.pdf';
-
-        //     // Adding file: second parameter is what will the path inside of the archive
-        //     // So it will create another folder called "storage/" inside ZIP, and put the file there.
-        //     $zip->addFile(storage_path($invoice_file), $invoice_file);
-        //     $zip->close();
-
-        //     // We return the file immediately after download
-        //     return response()->download($zip_file);
-        //}
-      
-        /**TODO - download
-         * Select array id document to download
-         * and update ststus SUCCESS_DOWNLOAD to show menu history
-         */
-        // public function downloadOld(Request $request){
-        //     $dir_id = $request->doc;
-        //     $all = Document::whereIn('id',$dir_id)->where('user_id','=',Auth::user()->id)->get();
-        //     $explode = explode('/',$all);
-           
-        //     $company = str_replace('\\','',$explode[2]);
-        //     $document = str_replace('\\','',$explode[3]);
-        //     $zip_file = str_replace(' ','_','ematerai_'.date('Ymd').'_'.$company.'_'.$document.'.zip'); // Name of our archive to download
-            
-        //     $zip = new \ZipArchive();
-        //     $zip->open($zip_file, \ZipArchive::CREATE | \ZipArchive::OVERWRITE);
-
-        //     $_DIRECTORY = 'app/public/docs/'.$company.'/'.$document.'/in/';
-        //     //$RESULT_DIRECTORY=  $company.'/'.$document.'/';
-        //     $path = storage_path($_DIRECTORY);
-        //     $files = new \RecursiveIteratorIterator(new \RecursiveDirectoryIterator($path));
-        //    foreach($all as $doc){
-        //        foreach ($files as $name => $file)
-        //        {
-        //            if (!$file->isDir()) {
-        //                $filePath     = $file->getRealPath();
-        //                // extracting filename with substr/strlen
-        //                // $relativePath = 'company/' . substr($filePath, strlen($path) + 1);
-        //                $relativePath = $company.'/'.$document.'/' . substr($filePath, strlen($path) + 1);
-        //                // $notrelativePath = 'company/' . substr($filePath, strlen($path) + 1);
-        //                // $notrelativePath = $_DIRECTORY . substr($filePath, strlen($path) + 1);
-        //                // dd($filePath,$file->getfilename(),$doc->filename);
-        //                if($file->getfilename()==$doc->filename){
-        //                     $zip->addFile($filePath, $relativePath);
-        //                     //update status setelahdidownload
-        //                     $status = Document::find($doc->id);
-        //                     //if success stem and download
-        //                     // $status->certificatelevel = 'HISTORY'; 
-        //                     $status->history = 'HISTORY'; 
-        //                     $status->message = $zip_file;
-        //                     $status->update();
-        //                }
-        //                // $zip->addFile($filePath, $notrelativePath);
-        //            }
-        //        }
-        //    }
-        //     $zip->close();
-        //     return response()->download($zip_file);
-        // }
 
         public function download(Request $request){
             // \DB::enableQueryLog();
@@ -770,4 +705,27 @@ class StempController extends Controller
             //$all = Document::whereIn('id',$dir_id)->where('user_id','=',Auth::user()->id)->get();
         }
 
+        /**TODO - spesiment base64_decode from tabel serialnumber to image png
+         * @methode GET
+         * @param spesiment code.png
+         */
+        public function qrematerai(string $qr){
+            // echo $request->query('spesiment');
+            // dd( $request);
+            if ($qr) {
+                $spesiment =  str_replace('.png','',$qr);
+                $serial = Serialnumber::where('sn','=',$spesiment)->first();
+                if($serial) {
+                    try {
+                        header("Content-type: image/png");
+                        $image = base64_decode($serial->image);
+                        Storage::disk('public')->put('docs/ematerai/'.$spesiment.'.png', $image);
+                        // file_put_contents(public_path('storage/docs/ematerai')."/".$spesiment.".png", $image);
+                        echo $image;
+                    } catch (\Exception $e) {
+                        Log::error($e->getMessage());
+                    }
+                }
+            }
+        }
 }

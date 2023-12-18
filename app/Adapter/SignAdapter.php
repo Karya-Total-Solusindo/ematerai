@@ -47,6 +47,7 @@ class SignAdapter
                 //on table pemungut
                 $token = Pemungut::find($data->pemungut->id); 
                 $token->token = $response['token'];
+                $token->namedipungut = $response['result']['data']['login']['user']['firstName'];
                 $token->update();
                 //on table user
                 $user = User::find($data->user->id); 
@@ -172,7 +173,7 @@ class SignAdapter
      * @return $return = false as boolean
     */
     public static function getCheckSN(string $serialnumber, bool $return = true){
-        $__token = self::getToken();
+        $__token = Auth::user()->ematerai_token;
         $data = [
             'filter' => $serialnumber,
         ];
@@ -232,7 +233,7 @@ class SignAdapter
                 "tgldoc"=> $doc->created_at->format('Y-m-d') //mand
             ];
             // get jwt Token
-            $__token = $doc->user->ematerai_token;
+            $__token = Auth::user()->ematerai_token;
             // do generated SN
             $Url = config('sign-adapter.API_GENERATE_SERIAL_NUMBER');
             $requestAPI = (string) Http::withHeaders([
@@ -253,9 +254,9 @@ class SignAdapter
                 $dataSN =[
                    'sn' => $response['result']['sn'],
                    'image' => $response['result']['image'],
-                //    'namejidentitas'=> 'KTP',
-                //    'noidentitas'=> '1251087201650003',
-                //    'namedipungut'=> 'Santoso',
+                    //'namejidentitas'=> 'KTP',
+                    //'noidentitas'=> '1251087201650003',
+                    //'namedipungut'=> 'Santoso',
                    'user_id' => Auth::user()->id,
                    'documet_id' =>  $doc['id'],
                 ];
@@ -572,6 +573,31 @@ class SignAdapter
         return back()->with($response['message'],'Success');
     }
 
-
+    /*TODO -  API Generate QR Image
+    *
+    */
+    public static function generatedQRImage(string $sn){
+        try{
+            //$documents = Document::with('user','pemungut')->find($id)->first();
+            //return response()->json($documents->pemungut->p_password, 200);
+            $Url = (string) config('sign-adapter.API_GENERATE_QR');
+            $response = Http::withHeaders([
+                'Content-Type' => 'application/json',
+                'Authorization' => 'Bearer ' . Auth::user()->ematerai_token,
+            ])->withBody(json_encode([
+                'serialnumber' => $sn,
+                'onprem' => true,
+            ]))->get($Url);   
+            $data = json_decode($response); 
+            dd($sn,$Url,$data);   
+            if($response['message'] == 'success'){ 
+                return $data;
+            }else{
+                return $data;
+            }
+        }catch(\Exception $e){
+            return $e;
+        }
+    }
 
 }
