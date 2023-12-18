@@ -107,7 +107,7 @@
                                 </div>
                             </div>
                             <div class="col-xs-12 col-sm-12 col-md-12">
-                                    <a class="btn btn-dark btn-sm ms-auto" href="{{ URL::previous() }}"> Back </a>
+                                    <a class="btn btn-dark btn-sm ms-auto" href="{{ URL::previous() ?? route('users.index') }}"> Back </a>
                                     <a type="submit" id="accunt-test" class="btn btn-sm btn-info">Validation</a>
                                     <button type="submit" class="float-end btn btn-sm btn-primary">Save</button>
                             </div>
