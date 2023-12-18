@@ -50,7 +50,7 @@ class SignAdapter
                 $token->namedipungut = $response['result']['data']['login']['user']['firstName'];
                 $token->update();
                 //on table user
-                $user = User::find($data->pemungut->user_id); 
+                $user = User::find($data->user_id); 
                 $user->ematerai_token = $response['token'];
                 $user->update();
                 Log::info("Set Token Success");
