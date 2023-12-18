@@ -516,7 +516,7 @@ class SignAdapter
                     'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
                     'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
                 ];
-                //return response()->json([$dbug,$datas]); 
+                return response()->json([$dbug,$datas]); 
                 $stemting = (string) Http::withHeaders([
                         'Content-Type' => 'application/json',
                         'Authorization' => 'Bearer ' . $__token,
