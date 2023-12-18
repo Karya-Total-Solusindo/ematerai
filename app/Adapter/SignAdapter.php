@@ -505,7 +505,7 @@ class SignAdapter
                     'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
                     "docpass"=> "",
                     "jwToken"=> $__token,
-                    "location"=> "JAKARTA",
+                    "location"=> "PTMitracommEkasarana",//"JAKARTA",
                     "profileName"=> "emeteraicertificateSigner",
                     "reason"=> "Ematerai Farpoint",
                     "refToken"=> $datas->sn,
