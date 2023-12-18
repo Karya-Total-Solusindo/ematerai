@@ -48,6 +48,16 @@
     .select-per-page:hover{
         idth: inherit !important;
     }
+    .btn:disabled{
+            background: lightgray;
+        }
+        .badge.badge-xs{
+            padding: 0.1em 0.3em;
+        }
+        a.disabled {
+            pointer-events: none;
+            background: lightgray !important;
+        }
 </style>
 
 <div class="card">
@@ -59,7 +69,7 @@
                 {{-- {{ ($datas[0]->directory->template ?? '')}} --}}
             </div>
             <div class="col text-end">
-                <span class=""> <i class="fas fa-briefcase"></i> {{ $datas[0]->company->name ?? '' }} @if(!empty($datas[0]->directory))  <i class="fas fa-folder-tree"></i>  @endif  {{ $datas[0]->directory->name ?? ''}}</span>
+                <span class=""> <i class="fas fa-briefcase"></i> {{ $directory->company->name ?? '' }} @if(!empty($directory->name))  <i class="fas fa-folder-tree"></i>  @endif  {{ $directory->name ?? ''}}</span>
                 {{-- {{ URL::previous() }} --}}
                 {{-- <a @class(['btn btn-sm btn-danger', 'font-bold' => true]) href="{{ route('directory', $datas[0]->company->id ?? '') }}"> Back</a> --}}
                 {{-- <a @class(['btn btn-sm btn-primary', 'font-bold' => true]) href="{{ route('add.file', Request::segment(4)) }}"> Create</a> --}}
@@ -75,7 +85,7 @@
                     <a @class(['btn me-5 btn-sm btn-dark', 'font-bold' => true]) href="{{ route('company') }}"> Back</a>
                 </div>
                 <div class="col-4 text-end">
-                    <a @class(['btn ms-5 btn-sm btn-danger', 'font-bold' => true]) href="#" onclick="alert('Are you sure you want to delete?')" id="delete-new-file"> Delete</a> 
+                    <a @class(['btn ms-5 btn-sm btn-danger disabled', 'font-bold' => true]) href="#" onclick="confirm('Are you sure you want to delete?')" id="delete-new-file"> Delete</a> 
                 </div>
             </div>
             {{-- <p class="card-text">Text</p> --}}
@@ -303,6 +313,7 @@
 
                         $('#selectAll').prop('checked', false);
                         $('#btnGetSN').prop('disabled', true);
+                        $('#delete-new-file').addClass('disabled');
                         // $('#btnGetSN').hide();
                         $('#selectAll').on('change',(e)=>{
                             let checkAll = $('#selectAll').is(':checked');
@@ -310,15 +321,19 @@
                             var chechListChecked = $('input.chechList:checked').length;
                             if(checkAll==true){
                                 $('.chechList').prop('checked', true);
+                                $('#delete-new-file').removeClass('disabled all');
                                 $('#btnGetSN').show();
                             }else{
                                 $('.chechList').prop('checked', false);
+                                $('#delete-new-file').addClass('disabled all');
                             }
                             
                             if($('.chechList:checked').length >= 1){
+                                $('#delete-new-file').removeClass('disabled all');
                                 $('#btnGetSN').prop('disabled', false);
                                 $('#btnGetSN').show();
                             }else{
+                                $('#delete-new-file').addClass('disabled all');
                                 $('#btnGetSN').prop('disabled', true);
                             }
                             // console.log(checkAll,numberNotChecked,chechListChecked);
@@ -329,19 +344,18 @@
                         $('.table').on('change','.chechList',(e)=>{
                             var chechListNotChecked = $('input.chechList:not(":checked")').length;
                             var chechListChecked = $('input.chechList:checked').length;
-                            // console.info('chechList click');
-                            if($('.chechList:checked').length >= 1){
+                            
+                            console.info('Not '+chechListNotChecked,chechListChecked);
+                            if(chechListChecked >= 1){
+                                console.info(' removeClass  '+chechListChecked);
+                                $('#delete-new-file').removeClass('disabled');
                                 $('#btnGetSN').prop('disabled', false);
                                 $('#btnGetSN').show();
                             }else{
+                                console.info(' addClass ',chechListChecked);
+                                $('#delete-new-file').addClass('disabled');
                                 $('#btnGetSN').prop('disabled', true);
                             }
-                            if(chechListNotChecked == 0){
-                                $('#selectAll').prop('checked', true);
-                            }else{
-                                $('#selectAll').prop('checked', false);
-                            } 
-                            // console.log(chechListChecked,chechListNotChecked);
                         });
 
             });    

@@ -691,7 +691,7 @@ class StempController extends Controller
                 //get post by ID
                 $document = Document::findOrFail($id)
                 ->where('certificatelevel','=','NEW')
-                ->where('user_id','=',Auth::user()->id)->get();
+                ->where('user_id','=',Auth::user()->id);
             }
             foreach($document as $doc){
                 // dd($all,$doc->filename);
