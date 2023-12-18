@@ -479,6 +479,7 @@ class SignAdapter
     */
     public static function exeSreialStamp(array $arrayDocumentId){
         $dataArray =[];
+        $dbug =[];
        try{
              // check token user documen 
              // do generated SN
@@ -516,7 +517,7 @@ class SignAdapter
                     'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
                     'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
                 ];
-                return response()->json([$dbug,$datas]); 
+                
                 $stemting = (string) Http::withHeaders([
                         'Content-Type' => 'application/json',
                         'Authorization' => 'Bearer ' . $__token,
@@ -562,7 +563,7 @@ class SignAdapter
                             array_push($dataArray,$response);
                             // return json_encode($response);
             }
-            return response()->json($dataArray);    
+            return response()->json([$dataArray,$dbug]);    
         }catch(\GuzzleHttp\Exception\RequestException $e){
             // you can catch here 40X re
             // sponse errors and 500 response errors
