@@ -53,6 +53,7 @@ class SignAdapter
                 $user = User::find($data->user->id); 
                 $user->ematerai_token = $response['token'];
                 $user->update();
+                Log::info("Set Token Success");
                 return true;
             }else{
                 return false;
@@ -493,11 +494,9 @@ class SignAdapter
                     Log::info('STAMP GET SN: '.$datas->id.' '.$datas->source);
                     return self::getSerial([$datas->id]);
                 }
-
                 if($datas->user->ematerai_token!=null){
                     $__token = $datas->user->ematerai_token;
                 }else{
-                    
                     $__token = (self::setToken($datas->id))? $datas->user->ematerai_token:$datas->pemungut->token;
                 }
                 $dbug =[
