@@ -77,8 +77,8 @@ class HomeController extends Controller
             $datas =[
                 "COUNT_MATERAI" => $saldo,
                 "COUNT_MATERAI_NOSTEMP" => $notstamp,
-                'COUNT_DOCUMENT' => Document::count(),
-                'COUNT_NOT_CERTIFIED' => Document::where(['certificatelevel'=>'NOT_CERTIFIED'] )->count(),
+                'COUNT_DOCUMENT' => Document::whereNot('certificatelevel','DELETED')->count(),
+                'COUNT_NOT_CERTIFIED' => Document::where(['certificatelevel'=>'NOT_CERTIFIED'])->count(),
                 'COUNT_SUCCESS' => Document::where(['certificatelevel'=>'CERTIFIED'] )->count(),
                 'COUNT_FAILUR' => Document::where(['certificatelevel'=>'FAILUR'] )->count(),
                 "NOT_STAMPED" => Document::where('certificatelevel','<>','CERTIFIED') ->count(),
@@ -126,8 +126,8 @@ class HomeController extends Controller
             $datas =[
                 "COUNT_MATERAI" => $saldo,
                 "COUNT_MATERAI_NOSTEMP" => $notstamp,
-                'COUNT_DOCUMENT' => (Document::where(['user_id'=> Auth::user()->id])->count()??0),
-                'COUNT_NOT_CERTIFIED' => (Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'NOT_CERTIFIED'] )->count()),
+                'COUNT_DOCUMENT' => (Document::where(['user_id'=> Auth::user()->id])->whereNot('certificatelevel','DELETED')->count()??0),
+                'COUNT_NOT_CERTIFIED' => (Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'NOT_CERTIFIED'])->count()),
                 'COUNT_SUCCESS' => (Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'CERTIFIED'] )->count()),
                 'COUNT_FAILUR' => (Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'FAILUR'] )->count()),
                 "NOT_STAMPED" => (Document::where('user_id',Auth::user()->id)->where('certificatelevel','<>','CERTIFIED') ->count()),
