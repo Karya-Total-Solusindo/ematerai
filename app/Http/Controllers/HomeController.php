@@ -171,7 +171,7 @@ class HomeController extends Controller
                 $responses = json_decode($requestAPIs,true);
                 //dd($requestAPIs,$responses);
                 if(isset($responses['result'])){
-                    if($responses['result']['total']!='0'){
+                    if($responses['result']['total']!=0){
                         $totalUsed = $responses['result']['total'];
                         //$notstamp = $response['notstamp']; 
                     }
