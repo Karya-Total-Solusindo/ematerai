@@ -142,7 +142,30 @@
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai Unused</p>
                                     <h5 class="font-weight-bolder mb-0">
                                         {{-- {{rand(200000,900000)}}  --}}
-                                        {{ $datas['COUNT_MATERAI_NOSTEMP'] }}
+                                        {{ $datas['COUNT_MATERAI_NOTSTAMP'] }}
+                                        <span style="font-size:3vh;"></span>
+                                    </h5>
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                    <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-body p-3 mb-0">
+                        <div class="row mb-0">
+                            <div class="col-8 mb-0">
+                                <div class="numbers mb-0">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai Used</p>
+                                    <h5 class="font-weight-bolder mb-0">
+                                        {{-- {{rand(200000,900000)}}  --}}
+                                        {{ $datas['COUNT_MATERAI_STAMP'] }}
                                         <span style="font-size:3vh;"></span>
                                     </h5>
                                 </div>

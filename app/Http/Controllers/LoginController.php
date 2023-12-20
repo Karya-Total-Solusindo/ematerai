@@ -78,8 +78,12 @@ class LoginController extends Controller
                         if($response_api->successful()){
                             if($response_api['message']=='success'){ 
                                 $e_token = User::find($user->id); 
+                                $e_token->postal = $response_api['result']['data']['login']['user']['id'];
+                                $e_token->address = $response_api['result']['data']['login']['user']['userdetails'][0]['locationother'][0]['id'];
                                 $e_token->ematerai_token = $response_api['token'];
                                 $e_token->update();
+                                //dd($response_api['result']['data']['login']['user']['userdetails']['locationother']['id']);
+                                Log::info($response_api['result']);
                                 Log::info('peruri servise success');
                             }else{
                                 $e_token = User::find($user->id); 
@@ -91,7 +95,7 @@ class LoginController extends Controller
                         
                     } catch (\Exception $e) {
                         //Execp $e;
-                        Log::error('peruri servise failed');
+                        Log::error('peruri servise failed'.$e);
                     }
             $request->session()->regenerate(); 
             return redirect()->intended('dashboard');
