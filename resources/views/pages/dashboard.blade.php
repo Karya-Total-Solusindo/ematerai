@@ -115,7 +115,7 @@
                         <div class="row mb-0">
                             <div class="col-8 mb-0">
                                 <div class="numbers mb-0">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai Balance</p>
                                     <h5 class="font-weight-bolder mb-0">
                                         {{-- {{rand(200000,900000)}}  --}}
                                         {{ $datas['COUNT_MATERAI'] }}
@@ -125,7 +125,7 @@
                                 </div>
                             </div>
                             <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                <div class="icon icon-shape bg-gradient-info shadow-info text-center rounded-circle">
                                     <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
@@ -148,7 +148,7 @@
                                 </div>
                             </div>
                             <div class="col-4 text-end">
-                                <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle">
+                                <div class="icon icon-shape bg-gradient-warning shadow-warning text-center rounded-circle">
                                     <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
