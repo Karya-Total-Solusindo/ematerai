@@ -121,14 +121,17 @@
                                         {{ $datas['COUNT_MATERAI'] }}
                                         <span style="font-size:3vh;"></span>
                                     </h5>
-                                    {{-- <p class="mb-0"></p> --}}
                                 </div>
+                                
                             </div>
                             <div class="col-4 text-end">
                                 <div class="icon icon-shape bg-gradient-info shadow-info text-center rounded-circle">
                                     <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
+                            <p class="mb-0"  style="font-size: 12px;">
+                                {{ Auth::user()->pemungut->p_user }}
+                                </p>
                         </div>
                     </div>
                 </div>
@@ -152,6 +155,7 @@
                                     <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
+                            <p class="mb-0"  style="font-size: 12px;">~</p>
                         </div>
                     </div>
                 </div>
@@ -175,6 +179,7 @@
                                     <i class="ni ni-paper-diploma text-lg opacity-10" aria-hidden="true"></i>
                                 </div>
                             </div>
+                            <p class="mb-0"  style="font-size: 12px;">~</p>
                         </div>
                     </div>
                 </div>
