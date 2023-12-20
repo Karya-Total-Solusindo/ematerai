@@ -52,7 +52,7 @@
     <link href="{{ asset('assets/css/sidebar-nav.css') }}" rel="stylesheet" />
     <!-- toastr css -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-    @if(Route::currentRouteName() == 'filemanager')
+    @if(Route::currentRouteName() == 'filemanager' || Route::currentRouteName() == 'failed')
     <meta name="csrf-token" content="{{ csrf_token() }}">
     {{-- file manager --}}
 
