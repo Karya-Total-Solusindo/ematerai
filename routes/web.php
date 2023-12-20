@@ -100,12 +100,14 @@ Route::group(['middleware' => ['auth'],], function () {
 
     //Document 
     Route::resource('/document', DocumentController::class)->middleware('auth');
+    
     Route::group(['/doicument'], function(){
         Route::get('/document/directory/{company}', [DocumentController::class, 'getDirectory'])->middleware('auth')->name('getDirectory');
         Route::get('/document/create/{directory}', [DocumentController::class, 'create'])->middleware('auth')->name('document.create');
     });
     Route::group([ 'prefix' => 'serialnumber'], function(){
         Route::get('/seriallist', [EmateraiController::class, 'index'])->middleware('auth')->name('seriallist');
+        Route::get('/checkDaftarSerial', [EmateraiController::class, 'checkDaftarSerial'])->middleware('auth')->name('checkDaftarSerial');
 
         // Route::get('/getOne', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
         Route::post('/setInProgres', [DocumentController::class, 'setInProgres'])->middleware('auth')->name('setInProgres');

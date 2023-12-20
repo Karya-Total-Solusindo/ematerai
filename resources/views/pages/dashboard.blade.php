@@ -2,6 +2,9 @@
 
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Dashboard'])
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.7/js/dataTables.bootstrap5.min.js">
+    <link rel="stylesheet" href="https://cdn.datatables.net/autofill/2.6.0/css/autoFill.bootstrap5.min.css">
     <div class="container-fluid py-4">
         <div class="row">
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
@@ -137,13 +140,13 @@
                 </div>
             </div>
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
-                <div class="card">
+                <div class="card" title="Jumlah saldo pada Portal POS">
                     <div class="card-body p-3 mb-0">
                         <div class="row mb-0">
                             <div class="col-8 mb-0">
                                 <div class="numbers mb-0">
                                     <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai Unused</p>
-                                    <h5 class="font-weight-bolder mb-0">
+                                    <h5 class="font-weight-bolder mb-0" title="Jumlah saldo pada Portal POS">
                                         {{-- {{rand(200000,900000)}}  --}}
                                         {{ $datas['COUNT_MATERAI_NOTSTAMP'] }}
                                         <span style="font-size:3vh;"></span>
@@ -186,7 +189,43 @@
             </div>
             
         </div>
+
+
         <div class="row mt-4">
+            <div class="col-lg-12 mb-lg-4 mb-4 ">
+                <div class="card z-index-2 h-100 ">
+                    <div class="card-header pb-0 pt-3 bg-transparent">
+                        <h6 class="text-capitalize">Serial Number</h6>
+                        {{-- <p class="text-sm mb-0">
+                            <i class="fa fa-arrow-up text-success"></i>
+                            <span class="font-weight-bold">4% more</span> in 2021
+                        </p> --}}
+                    </div>
+                    <div class="card-body m-2 p-3 mb-2">
+                        <div class="table-responsive">
+                            {{-- TODO tabel serial  --}}
+                            <table id="TebelSerial" class="table align-items-center">
+                                <thead>
+                                    <tr>
+                                        <th>email</th>
+                                        <th>file</th>
+                                        <th>serialnumber</th>
+                                        <th>status</th>
+                                        <th>statussn</th>
+                                        <th>Date</th>
+                                    </tr>
+                                </thead>
+                                <tbody></tbody>
+                            </table>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
             <div class="col-lg-12 mb-lg-4 mb-4 ">
                 <div class="card z-index-2 h-100 ">
                     <div class="card-header pb-0 pt-3 bg-transparent">
@@ -232,7 +271,6 @@
                                 </tbody>
                             </table>
                         </div>
-                        
                     </div>
                     <div class="card-footer pb-0 pt-3 bg-transparent">
                         {{ $datas['STAMPTING']->links() }}    
@@ -294,8 +332,43 @@
                 </div>
             </div>
             
-        
         </div>
+{{-- {{ config('sign-adapter.API_CHECK_SERIAL_NUMBER') }} --}}
+
+
+<table id="example" class="display" width="100%"></table>
+
+        @push('js')
+        <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
+        <script src="https://cdn.datatables.net/autofill/2.6.0/js/dataTables.autoFill.min.js"></script>
+        <script>
+            $( document ).ready(function() {
+                //?start=0&length=10&status=NOTSTAMP&notEncrypt=true
+                let url = '{{route("checkDaftarSerial")}}';
+                $('#TebelSerial').DataTable( {
+                    // dom: 'Bfrtip',
+                    ajax: {
+                        url: url,
+                        dataType: "json",
+                        type: "GET",
+                        // dataSrc: 'data',                  
+                    }, 
+                    columns: [
+                        { data: 'email' },
+                        { data: 'serialnumber' },
+                        { data: 'status' },
+                        { data: 'statussn' },
+                        { data: 'file' },
+                        { data: 'tgl' }
+                    ],  
+                    // deferLoading: 1,
+                    processing: true,
+                    serverSide: true,
+                });
+            });
+        </script>
+    
+        @endpush
 
         {{-- <div class="row mt-4">
             <div class="col-lg-7 mb-lg-0 mb-4">
