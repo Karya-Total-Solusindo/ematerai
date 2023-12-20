@@ -437,9 +437,9 @@ class StempController extends Controller
         $datas = Document::with(['company','directory'])->latest()
             ->where(function ($query){
                 $query->whereNotIn('history',['HISTORY','DELETED'])
+                ->orWhere('certificatelevel','=','NOT_CERTIFIED')
                 ->orWhereNull('history');
             })->where('certificatelevel','=','FAILUR')
-            ->orWhere('certificatelevel','=','NOT_CERTIFIED')
             ->where('message','!=',NULL)
             ->where('user_id','=',Auth::user()->id)
             ->filter(request()->all())->paginate(10);
