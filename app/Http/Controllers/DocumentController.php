@@ -150,23 +150,54 @@ class DocumentController extends Controller
         
         $document_all = $request->post('all');
         $document_id = $request->post('doc');
+        $document_status = $request->post('status');
         // dd($document_id);
         $countSuccess = 0; 
         $CountError = 0; 
+        $status = '';
+        if($document_status=='NEW'){
+            $status = 'NEW';
+        }else{
+            $status = 'FAILUR';
+        }
         if($request->post('all')){
-                $document = Document::where('directory_id',$document_all)
-                ->update(['certificatelevel' => 'INPROGRESS']);
-                if($document){
-                    $countSuccess++;
-                }else{
-                    $CountError++;
+                //->whereNot('certificatelevel','DELETED')
+                //->whereNot('history','DELETED')
+                $documents = Document::where('directory_id','=',$document_all)
+                ->where('certificatelevel','=',$status)
+                ->orWhere('certificatelevel','=','NOT_CERTIFIED')
+                ->get();
+                foreach($documents as $document){
+                    if(Storage::disk('public')->exists($document->source)){
+                        $document = Document::where('directory_id',$document_all);
+                        $document->where('certificatelevel','=',$status);
+                        $document->orWhere('certificatelevel','=','NOT_CERTIFIED');
+                        $document->update(['certificatelevel' => 'INPROGRESS','history' => $status]);
+                    }
+                    if($document){
+                        $countSuccess++;
+                    }else{
+                        $CountError++;
+                    }
+                    //dd($countSuccess, $document->source);
                 }
                 // dd($request->all());
         }else{
             // dd($request->all());
             foreach ($document_id as $id) {
                 $document = Document::where('id',$id)
-                ->update(['certificatelevel' => 'INPROGRESS']);
+                ->where('certificatelevel','=',$status)
+                ->orWhere('certificatelevel','=','NOT_CERTIFIED')
+                ->first();
+                //dd($document->source);
+                if(Storage::disk('public')->exists($document->source)){
+                    Document::where('id',$id)
+                    ->where('certificatelevel','=',$status)
+                    ->orWhere('certificatelevel','=','NOT_CERTIFIED')
+                    //->whereNot('certificatelevel','DELETED')
+                    //->whereNot('history','DELETED')
+                    ->update(['certificatelevel' => 'INPROGRESS', 'history' => $status]);
+                }
                 if($document){
                     $countSuccess++;
                 }else{
@@ -188,6 +219,29 @@ class DocumentController extends Controller
         return SignAdapter::exeSreialStamp($input['doc']);
     }
     
+    public function updatefile(Request $request, Document $document)
+    {
+        $user_id = Auth::user()->id;
+        $input = $request->all();
+        $filePath = ('/docs/'.$document->company->name.'/'.$document->directory->name.'/in/');
+        $file = $request->file('file'); 
+        //dd($request->file('file'));
+        //dd($request->file,$file->getClientOriginalName());
+
+        $fileName = str_replace(' ','_',$file->getClientOriginalName());
+        $file_path = $filePath.$fileName;
+        //dd(Storage::disk('public')->put($filePath.$fileName,file_get_contents($request->file)));
+        if(Storage::disk('public')->put($filePath.$fileName,file_get_contents($request->file))){
+            $oldMessage =  $document->filename .' Replace '.$fileName ;
+            $document->source = $filePath.$fileName;
+            $document->filename = $fileName;
+            $document->message = $oldMessage;
+            // dd($filePath.$fileName);
+            $document->update();
+            return response()->json(['success'=>true,'message'=>'Document uploaded successfully'],200);
+        }
+        return response()->json(['success'=>false, 'message'=>'Document update failed'],400);
+    }
 
     /**
      * Display the specified resource.
@@ -202,7 +256,7 @@ class DocumentController extends Controller
      */
     public function edit(Document $document)
     {
-        //
+        
     }
 
     /**
@@ -210,7 +264,9 @@ class DocumentController extends Controller
      */
     public function update(Request $request, Document $document)
     {
-        //
+        $input = $request->collect();
+        dd($request->input('file'));
+        dd($input,$document);
     }
 
     /**

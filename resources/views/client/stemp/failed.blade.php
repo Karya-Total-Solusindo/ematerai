@@ -110,10 +110,12 @@
                 <table class="table align-items-center mb-0">
                     <form id="execute" action="{{ route('setInProgres') }}" method="POST"> 
                         @csrf
+                        <input type="hidden" name="status" value="FAILUR">
+                    </form>    
                     <thead>
                         <tr>
                             <th class="align-middle text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
-                                <input type="checkbox" name="all" id="selectAll">
+                                <input form="execute" type="checkbox" name="all" value="{{request()->input('company')}}" id="selectAll">
                             </th>
                             <th class="text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 No</th>
@@ -135,12 +137,12 @@
                         </tr>
                     </thead>
                     <tbody>
-                    {{-- @if(request()->has('company'))     --}}
+                    @if(request()->has('company'))    
                         @if ($datas->count()) 
                             @foreach ($datas as $num => $data)
                             <tr>
                                 <td rowspan="1" class="align-middle text-center" style="border-bottom-width: 0px !important;">
-                                    <input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
+                                    <input form="execute" type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
                                 </td>
                                 <td rowspan="1" class="align-middle text-center" style="border-bottom-width: 0px !important;">
                                     @if (request()->has('page'))
@@ -163,7 +165,11 @@
                                     {{ $data->directory->name }}
                                 </td>
                                 <td class="align-middle text-center" style="border-bottom-width: 0px !important;">
-                                    <span class="badge badge-sm  bg-gradient-warning">{{ $data->certificatelevel ?? 'NOT_CERTIFIED' }}</span>
+                                    @if(Storage::disk('public')->exists($data->source))
+                                    <span class="badge badge-sm  bg-gradient-warning">{{ $data->certificatelevel ?? '_' }}</span>
+                                    @else
+                                    <a href="#" class="badge badge-sm  bg-gradient-warning">FILE NOT FOUND</a>
+                                    @endif
                                     {{-- {{ App\Models\Document::where('directory_id',$data->id)->count() ?? 0 }} --}}
                                 </td>
                                 <td class="align-middle text-center" style="border-bottom-width: 0px !important;">
@@ -172,7 +178,17 @@
                             </tr>
                             <tr class="error text-danger" style="border-bottom-width: 0px !important;">
                                 <td style="margin: 0px !important; padding: 0px !important;"></td>
-                                <td style="margin: 0px !important; padding: 0px !important;" class="m-0" colspan="6"><i class="fas fa-warning"></i> Error: <small class="text-muted"><em>{{$data->message}}</em></small></td>
+                                <td style="margin: 0px !important; padding: 0px !important;" class="m-0" colspan="6">
+                                    @if(!Storage::disk('public')->exists($data->source))
+                                        <form id="fromUpload_{{$data->id??rand()}}" action="{{ route('updatefile',$data->id) }}" class="formUpload" enctype="multipart/form-data" form-data="{{$data->id??rand()}}">@csrf</form>
+                                        <div class="input-group input-sm mb-0" form-input="{{$data->id}}">
+                                            <input form="fromUpload_{{$data->id??rand()}}" class="form-control" type="file" name="file" style="height: fit-content;">
+                                            <input form="fromUpload_{{$data->id??rand()}}" type="hidden" name="id" value="{{$data->id}}">
+                                            <button form="fromUpload_{{$data->id??rand()}}" type="submit" class="btn btn-primary uploadSubmit" style="height: fit-content;"> Upload </button>
+                                        </div>
+                                    @endif
+                                    <i class="fas fa-warning"></i> Error: <small class="text-muted"><em>{{$data->message}}</em></small>
+                                </td>
                             </tr>
                             @endforeach
                             </tbody>
@@ -183,19 +199,19 @@
                                 </td>
                             </tr>
                         @endif
-                    {{-- @else
+                    @else
                         <tr>
                             <td colspan="7" class="text-center pt-5 align-middle text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 <h5>Nothing failed in the process</h5>
                             </td>
                         </tr>
-                    @endif        --}}
+                    @endif       
                 </table>
-            </form>    
+            
             </div>
         </div>
-        {{ $datas->appends(request()->input())->links() }}
         @if(request()->has('company'))
+        {{ $datas->appends(request()->input())->links() }}
         @endif
     </div>
 </div>
@@ -344,8 +360,88 @@
                     } 
                     // console.log(dir,checkAll,$('#selectAll').val(),chechListChecked,chechListNotChecked);
                 });
+            });
+            // $('.uploadSubmit').click((e)=>{
+            //     e.preventDefault();
+            // });
+            // $('.formUpload').submit((e)=>{
+            //     e.preventDefault();
+            // });
+            // $.ajaxSetup({
+            //     headers: {
+            //         'X-CSRF-TOKEN': {{csrf_token()}}// $('meta[name="csrf-token"]').attr('content')
+            //     }
+            // });
+            // form upload
+            $('.formUpload').submit((e)=>{
+                e.preventDefault();
+                let id = $(this).attr('form-data');
+                console.log(e,e.target);
+                var files = e.target[1].files; // for multiple files
+                var fd = new FormData();
+                var other_data = e.target.elements;
+                console.log(other_data);
+                $.each(other_data,function(key,input){
+                    console.log(input);
+                    fd.append(input.name,input.value);
+                });
+                fd.append('file',e.target[1].files[0]);
+                console.log(fd);
+               if(files.length > 0){
+                
+                $.ajax({
+                          url: e.target.action,
+                          method: 'POST',
+                          data: fd,
+                          contentType: false,
+                          processData: false,
+                          dataType: 'json',
+                          headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                          success: function(response){
+                                // Hide error container
+                                $('#err_file').removeClass('d-block');
+                                $('#err_file').addClass('d-none');
+                                if(response.success == true){ // Uploaded successfully
+                                    toastr["success"](response.message, 'Uploaded successfully');
+                                    $(e.target.elements).hide();
+                                      // Response message
+                                      $('#responseMsg').removeClass("alert-danger");
+                                      $('#responseMsg').addClass("alert-success");
+                                      $('#responseMsg').html(response.message);
+                                      $('#responseMsg').show();
+                                      // File preview
+                                      $('#filepreview').show();
+                                      $('#filepreview img,#filepreview a').hide();
+                                      if(response.extension == 'jpg' || response.extension == 'jpeg' || response.extension == 'png'){
+                                            $('#filepreview img').attr('src',response.filepath);
+                                            $('#filepreview img').show();
+                                      }else{
+                                            $('#filepreview a').attr('href',response.filepath).show();
+                                            $('#filepreview a').show();
+                                      }
+                                }else if(response.success == false){ // File not uploaded
+                                     toastr["error"](response.message, 'File not uploaded');
+                                      // Response message
+                                      $('#responseMsg').removeClass("alert-success");
+                                      $('#responseMsg').addClass("alert-danger");
+                                      $('#responseMsg').html(response.message);
+                                      $('#responseMsg').show();
+                                }else{
+                                    // Display Error
+                                    toastr["error"]("error upload", "error")
+                                      e.target.elements.hide();
+                                      $('#err_file').text(response.error);
+                                } 
+                          },
+                          error: function(response){
+                                console.log("error : " + JSON.stringify(response) );
+                          }
+                     });
+               }else{
+                     alert("Please select a file.");
+               }
+            });
 
-            });    
         </script>
     @endPushOnce
 @endonce
