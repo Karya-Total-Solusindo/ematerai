@@ -105,13 +105,19 @@ Route::group(['middleware' => ['auth'],], function () {
         Route::get('/document/create/{directory}', [DocumentController::class, 'create'])->middleware('auth')->name('document.create');
     });
     Route::group([ 'prefix' => 'serialnumber'], function(){
+        Route::get('/seriallist', [EmateraiController::class, 'index'])->middleware('auth')->name('seriallist');
+
         // Route::get('/getOne', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
         Route::post('/setInProgres', [DocumentController::class, 'setInProgres'])->middleware('auth')->name('setInProgres');
         Route::post('/exeStamp', [DocumentController::class, 'stampExecute'])->middleware('auth')->name('stampExecute');
         Route::post('/getOne', [DocumentController::class, 'getSerialNumber'])->middleware('auth')->name('getSerialNumber');
         // getSerialNumberBatch tidakdipakai
         // Route::post('/getBatch', [DocumentController::class, 'getSerialNumberBatch'])->middleware('auth')->name('getSerialNumberBatch');
+        //reupload file
+        Route::post('/updatefile/{document}', [DocumentController::class, 'updatefile'])->middleware('auth')->name('updatefile');
     });
+
+    
 
     // STEMP 
     Route::get('/stemp/company', [StempController::class, 'company'])->middleware('auth')->name('company');
