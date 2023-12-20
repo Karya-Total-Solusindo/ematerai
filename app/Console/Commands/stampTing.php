@@ -31,8 +31,9 @@ class stampTing extends Command
     public function handle()
     { 
         Log::info('SERVICE STAMP RUN'); 
+        //INPROGRESS: not have SN, NOT_CERTIFIED : have SN
         $inprogress = Document::select('id')
-        ->where('certificatelevel','=','INPROGRESS')
+        ->whereIn('certificatelevel',['INPROGRESS','NOT_CERTIFIED'])
         //->orWhere('certificatelevel','=','NOT_CERTIFIED')
         //->orWhere('certificatelevel','=','FAILUR');
         ->get();
@@ -44,7 +45,8 @@ class stampTing extends Command
                 if($item->id != null){
                     array_push($arrayId,$item->id);     
                     $appsign = SignAdapter::exeSreialStamp([$item->id]);
-                    Log::info([$arrayId,$appsign]); 
+                    Log::info(json_encode($appsign)); 
+                    //Log::info([$arrayId,$appsign]); 
                 }
             }
             //Log::info([$inprogress]);
