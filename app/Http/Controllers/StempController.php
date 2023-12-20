@@ -434,15 +434,15 @@ class StempController extends Controller
             $directory = $request->input('directory');
         }
         
-        $datas = Document::with(['company','directory'])->latest()
-            ->where(function ($query){
-                $query->whereNotIn('history',['HISTORY','DELETED'])
-                ->orWhere('certificatelevel','=','NOT_CERTIFIED')
-                ->orWhereNull('history');
-            })->where('certificatelevel','=','FAILUR')
-            ->where('message','!=',NULL)
-            ->where('user_id','=',Auth::user()->id)
-            ->filter(request()->all())->paginate(10);
+        $datas = null;
+           //Document::with(['company','directory'])->latest();
+            // ->where(function ($query){
+            //     $query->whereNotIn('history',['HISTORY','DELETED'])
+            //     ->orWhereNull('history');
+            // })->whereIn('certificatelevel',['FAILUR','NOT_CERTIFIED'])
+            // ->where('message','!=',NULL)
+            // ->where('user_id','=',Auth::user()->id)
+            // ->filter(request()->all())->paginate(10);
         if($request->getRequestUri()){
                 $company = $request->input('company');
                 $directory = $request->input('directory');
@@ -453,8 +453,7 @@ class StempController extends Controller
             ->where(function ($query){
                 $query->whereNotIn('history',['HISTORY','DELETED'])
                 ->orWhereNull('history');
-            })->where('certificatelevel','=','FAILUR')
-            ->orWhere('certificatelevel','=','NOT_CERTIFIED')
+            })->whereIn('certificatelevel',['FAILUR','NOT_CERTIFIED'])
             ->where('message','!=',NULL)
             ->where('user_id','=',Auth::user()->id)
             ->filter(request()->all())->paginate($per_page);
