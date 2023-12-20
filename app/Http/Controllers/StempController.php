@@ -402,8 +402,8 @@ class StempController extends Controller
                 [function ($query) use ($request) {
                     if (($s = $request->s)) {
                         $query->orWhere('filename', 'LIKE', '%' . $s . '%')
-                        ->Where('certificatelevel','=','INPROGRESS')
-                        ->Where('user_id','=',Auth::user()->id)
+                        ->whereIn('certificatelevel',['INPROGRESS','NOT_CERTIFIED'])
+                        ->where('user_id','=',Auth::user()->id)
                         ->orderBy('updated_at', 'desc')
                             ->get();
                     }
@@ -411,8 +411,9 @@ class StempController extends Controller
             ])->with('company')->orderBy('updated_at', 'desc')->paginate(50);
         }else{
             $datas =  Document::with('company')
+            ->whereIn('certificatelevel',['INPROGRESS','NOT_CERTIFIED'])
             ->where('user_id','=',Auth::user()->id)
-            ->where('certificatelevel','=','INPROGRESS')
+            // ->where('certificatelevel','=','INPROGRESS')
             ->orderBy('updated_at', 'desc')
             ->paginate(50);
         }
@@ -420,7 +421,7 @@ class StempController extends Controller
     }
 
      /**
-     * List Success Stemp.
+     * List Failed Stemp.
      */
     public function failed(Request $request)
     {
@@ -438,6 +439,8 @@ class StempController extends Controller
                 $query->whereNotIn('history',['HISTORY','DELETED'])
                 ->orWhereNull('history');
             })->where('certificatelevel','=','FAILUR')
+            ->orWhere('certificatelevel','=','NOT_CERTIFIED')
+            ->where('message','!=',NULL)
             ->where('user_id','=',Auth::user()->id)
             ->filter(request()->all())->paginate(10);
         if($request->getRequestUri()){
@@ -451,6 +454,8 @@ class StempController extends Controller
                 $query->whereNotIn('history',['HISTORY','DELETED'])
                 ->orWhereNull('history');
             })->where('certificatelevel','=','FAILUR')
+            ->orWhere('certificatelevel','=','NOT_CERTIFIED')
+            ->where('message','!=',NULL)
             ->where('user_id','=',Auth::user()->id)
             ->filter(request()->all())->paginate($per_page);
         }
@@ -686,13 +691,17 @@ class StempController extends Controller
                 //All
                 $document = Document::where('directory_id','=',$all)
                 ->where('certificatelevel','=','NEW')
-                ->where('user_id','=',Auth::user()->id)->get();
+                ->where('user_id','=',Auth::user()->id)
+                ->whereNull('sn')->get();
             }else{
                 //get post by ID
                 $document = Document::findOrFail($id)
                 ->where('certificatelevel','=','NEW')
-                ->where('user_id','=',Auth::user()->id);
+                ->where('user_id','=',Auth::user()->id)
+                ->whereNull('sn');
             }
+            dd($document);
+            $resultArray=[];
             foreach($document as $doc){
                 // dd($all,$doc->filename);
                 //delete file
@@ -703,10 +712,14 @@ class StempController extends Controller
                     $status->history = 'DELETED'; 
                     // $status->message = $zip_file;
                     $status->update();
+                    array_push($resultArray, ['success' => 'Data Berhasil Dihapus!']);
+                }else{
+                    array_push($resultArray, ['error' => 'Tidak Dapat Dihapus!']);
                 }
                 //dd(Storage::path('/'),'/public/docs/'.$doc->company->name.'/'.$doc->directory->name.'/in/'. $doc->filename,Storage::delete('/public/docs/'.$doc->company->name.'/'.$doc->directory->name.'/in/'. $doc->filename));
             }
-            return redirect()->back()->with(['success' => 'Data Berhasil Dihapus!']);
+            dd($resultArray);
+            //return redirect()->back()->with($resultArray);
 
         }
 
