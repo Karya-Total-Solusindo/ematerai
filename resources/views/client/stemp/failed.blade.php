@@ -134,6 +134,9 @@
                                 Stemp</th> --}}
                             <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
                                 Last Update</th>
+                            <th class="text-center text-uppercase text-secondary text-xxs font-weight-bolder opacity-7">
+                                   </th>
+                                    
                         </tr>
                     </thead>
                     <tbody>
@@ -141,10 +144,10 @@
                         @if ($datas->count()) 
                             @foreach ($datas as $num => $data)
                             <tr>
-                                <td rowspan="1" class="align-middle text-center" style="border-bottom-width: 0px !important;">
+                                <td rowspan="2" class="align-middle text-center">
                                     <input form="execute" type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
                                 </td>
-                                <td rowspan="1" class="align-middle text-center" style="border-bottom-width: 0px !important;">
+                                <td rowspan="2" class="align-middle text-center">
                                     @if (request()->has('page'))
                                         @if(request()->input('page')>1)
                                             {{ ($datas->perPage() * $datas->currentPage())+($num+1)}}
@@ -175,11 +178,18 @@
                                 <td class="align-middle text-center" style="border-bottom-width: 0px !important;">
                                     <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y - H:i:s') }}</span>
                                 </td>
+                                <td rowspan="2" class="align-middle text-center">
+                                    @if($data->spesimenPath != '')
+                                    @if(Storage::disk('public')->exists($data->spesimenPath))
+                                    <img height="50" src="{{ Storage::url($data->spesimenPath) }}" alt="{{$data->sn}}" srcset="{{ Storage::url($data->spesimenPath) }}">
+                                    @endif
+                                    @endif
+                                </td>
                             </tr>
                             <tr class="error text-danger" style="border-bottom-width: 0px !important;">
-                                <td style="margin: 0px !important; padding: 0px !important;"></td>
-                                <td style="margin: 0px !important; padding: 0px !important;"></td>
-                                <td style="margin: 0px !important; padding: 0px !important;" class="m-0" colspan="6">
+                                <td style="margin: 0px !important; padding: 0px !important;" class="m-0" colspan="5">
+                                    {{-- <div class="badge badge-sm  bg-dager"> </div> --}}
+                                        <i class="fas fa-warning"></i> Error: <small class="text-muted"><em>{{$data->message}}</em></small>
                                     @if(!Storage::disk('public')->exists($data->source))
                                         <form id="fromUpload_{{$data->id??rand()}}" action="{{ route('updatefile',$data->id) }}" class="formUpload" enctype="multipart/form-data" form-data="{{$data->id??rand()}}">@csrf</form>
                                         <div class="input-group input-sm mb-0" form-input="{{$data->id}}">
@@ -188,7 +198,7 @@
                                             <button form="fromUpload_{{$data->id??rand()}}" type="submit" class="btn btn-primary uploadSubmit" style="height: fit-content;"> <i class="fas fa-upload"></i> Reupload </button>
                                         </div>
                                     @endif
-                                    <i class="fas fa-warning"></i> Error: <small class="text-muted"><em>{{$data->message}}</em></small>
+                                    
                                 </td>
                             </tr>
                             @endforeach
