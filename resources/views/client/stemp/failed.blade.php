@@ -178,13 +178,14 @@
                             </tr>
                             <tr class="error text-danger" style="border-bottom-width: 0px !important;">
                                 <td style="margin: 0px !important; padding: 0px !important;"></td>
+                                <td style="margin: 0px !important; padding: 0px !important;"></td>
                                 <td style="margin: 0px !important; padding: 0px !important;" class="m-0" colspan="6">
                                     @if(!Storage::disk('public')->exists($data->source))
                                         <form id="fromUpload_{{$data->id??rand()}}" action="{{ route('updatefile',$data->id) }}" class="formUpload" enctype="multipart/form-data" form-data="{{$data->id??rand()}}">@csrf</form>
                                         <div class="input-group input-sm mb-0" form-input="{{$data->id}}">
                                             <input form="fromUpload_{{$data->id??rand()}}" class="form-control" type="file" name="file" style="height: fit-content;">
                                             <input form="fromUpload_{{$data->id??rand()}}" type="hidden" name="id" value="{{$data->id}}">
-                                            <button form="fromUpload_{{$data->id??rand()}}" type="submit" class="btn btn-primary uploadSubmit" style="height: fit-content;"> Upload </button>
+                                            <button form="fromUpload_{{$data->id??rand()}}" type="submit" class="btn btn-primary uploadSubmit" style="height: fit-content;"> <i class="fas fa-upload"></i> Reupload </button>
                                         </div>
                                     @endif
                                     <i class="fas fa-warning"></i> Error: <small class="text-muted"><em>{{$data->message}}</em></small>

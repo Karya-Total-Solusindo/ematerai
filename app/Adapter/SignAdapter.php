@@ -220,75 +220,85 @@ class SignAdapter
                 return response()->json(['status'=>'error','messega'=>'Document Not Exist'],404);
             }
             Log::info('GET SERIAL NUMBER '.$id.' '.$doc->source);
-            $desPath = '/docs/'.strtoupper($doc->company->name).'/'.strtoupper($doc->directory->name);
-            $data = [
-                "isUpload"=> false, //mand
-                "namadoc"=> "4b", //mand
-                "namafile"=>  $doc->filename,  //mand
-                "nilaidoc"=> "10000", //op
-                //"namejidentitas"=>"KTP", //op
-                //"noidentitas"=> "1251087201650003", //op
-                //"namedipungut"=>"Santoso", //op
-                "snOnly"=> false, //mand
-                "nodoc"=> $doc->docnumber, //mand
-                "tgldoc"=> $doc->created_at->format('Y-m-d') //mand
-            ];
-            // get jwt Token
-            $__token = $doc->user->ematerai_token;
-            // do generated SN
-            $Url = config('sign-adapter.API_GENERATE_SERIAL_NUMBER');
-            $requestAPI = (string) Http::withHeaders([
-                'Content-Type' => 'application/json',
-                'Authorization' => 'Bearer ' . $__token,
-            ])->withBody(json_encode($data))->post($Url);
-            $response = json_decode($requestAPI,true);
-            $response['data'] = $doc; 
-            if($response['statusCode'] != '00'){
-                Document::where('id', $id)
-                ->update(['message'=>$response['result']['err']]);
-                Log::info('SERIAL NUMBER '.__LINE__.' '.$response['result']['err']);
-                //return back()->with($response['message'],$response['result']['err']);
-            }
-            // return response()->json([$response,$data]);
-            if($response['statusCode']=='00'){
-                // save serialnumber
-                $dataSN =[
-                   'sn' => $response['result']['sn'],
-                   'image' => $response['result']['image'],
-                    //'namejidentitas'=> 'KTP',
-                    //'noidentitas'=> '1251087201650003',
-                    //'namedipungut'=> 'Santoso',
-                   'user_id' => $doc->user->id,
-                   'documet_id' =>  $doc['id'],
+            //TODO- Check file exist
+            if(Storage::disk('public')->exists($doc->source)){
+                $desPath = '/docs/'.strtoupper($doc->company->name).'/'.strtoupper($doc->directory->name);
+                $data = [
+                    "isUpload"=> false, //mand
+                    "namadoc"=> "4b", //mand
+                    "namafile"=>  $doc->filename,  //mand
+                    "nilaidoc"=> "10000", //op
+                    //"namejidentitas"=>"KTP", //op
+                    //"noidentitas"=> "1251087201650003", //op
+                    //"namedipungut"=>"Santoso", //op
+                    "snOnly"=> false, //mand
+                    "nodoc"=> $doc->docnumber, //mand
+                    "tgldoc"=> $doc->created_at->format('Y-m-d') //mand
                 ];
-                $SN = Serialnumber::insert($dataSN);
-                //Update date Document
-                $status = Document::find($id);
-                $status->certificatelevel = 'NOT_CERTIFIED';
-                $status->sn = $response['result']['sn'];
-                $status->x1 = $doc->directory->x1;
-                $status->x2 = $doc->directory->x2;
-                $status->y1 = $doc->directory->y1;
-                $status->y2 = $doc->directory->y2;
-                $status->update();                
-                $sn = $response['result']['sn'];
-                $image = $response['result']['image'];
-                $path = $desPath."/spesimen/".$sn.".png";
-                Storage::disk('public')->put($path, base64_decode($image));
-                Document::where('id', $id)
-                ->update(['sn'=>$sn,'spesimenPath' => $desPath."/spesimen/".$sn.".png"]);
-                Log::info('GET SERIAL NUMBER SUCCESS '.$id.' '.$doc->source);
+                // get jwt Token
+                $__token = $doc->user->ematerai_token;
+                // do generated SN
+                $Url = config('sign-adapter.API_GENERATE_SERIAL_NUMBER');
+                $requestAPI = (string) Http::withHeaders([
+                    'Content-Type' => 'application/json',
+                    'Authorization' => 'Bearer ' . $__token,
+                ])->withBody(json_encode($data))->post($Url);
+                $response = json_decode($requestAPI,true);
+                $response['data'] = $doc; 
+                if($response['statusCode'] != '00'){
+                    Document::where('id', $id)
+                    ->update(['message'=>$response['result']['err']]);
+                    Log::info('SERIAL NUMBER '.__LINE__.' '.$response['result']['err']);
+                    //return back()->with($response['message'],$response['result']['err']);
+                }
+                // return response()->json([$response,$data]);
+                if($response['statusCode']=='00'){
+                    // save serialnumber
+                    $dataSN =[
+                    'sn' => $response['result']['sn'],
+                    'image' => $response['result']['image'],
+                        //'namejidentitas'=> 'KTP',
+                        //'noidentitas'=> '1251087201650003',
+                        //'namedipungut'=> 'Santoso',
+                    'user_id' => $doc->user->id,
+                    'documet_id' =>  $doc['id'],
+                    ];
+                    $SN = Serialnumber::insert($dataSN);
+                    //Update date Document
+                    $status = Document::find($id);
+                    $status->certificatelevel = 'NOT_CERTIFIED';
+                    $status->sn = $response['result']['sn'];
+                    $status->x1 = $doc->directory->x1;
+                    $status->x2 = $doc->directory->x2;
+                    $status->y1 = $doc->directory->y1;
+                    $status->y2 = $doc->directory->y2;
+                    $status->update();                
+                    $sn = $response['result']['sn'];
+                    $image = $response['result']['image'];
+                    $path = $desPath."/spesimen/".$sn.".png";
+                    Storage::disk('public')->put($path, base64_decode($image));
+                    Document::where('id', $id)
+                    ->update(['sn'=>$sn,'spesimenPath' => $desPath."/spesimen/".$sn.".png"]);
+                    Log::info('GET SERIAL NUMBER SUCCESS '.$id.' '.$doc->source);
+                }else{
+                    $status = Document::find($id);
+                    $status->certificatelevel = 'FAILUR';
+                    $status->update();
+                    Log::error('GET SERIAL NUMBER FAILUR');
+                    //$status = Document::find($id);
+                    //$status->update();
+                    //$type = 'application/json';
+                    //$datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
+                }
+                array_push($dataArray,$response);
             }else{
+                Log::error('FAILED SERIAL NUMBER, (No such file or directory)  '.$id.' '.$doc->source);
                 $status = Document::find($id);
                 $status->certificatelevel = 'FAILUR';
+                $status->message = 'Get Serial/Ematerai failed  (No such file or directory)';
                 $status->update();
-                Log::error('GET SERIAL NUMBER FAILUR');
-                //$status = Document::find($id);
-                //$status->update();
-                //$type = 'application/json';
-                //$datas = Document::where(['user_id'=> Auth::user()->id,'id'=>$id])->with('company')->paginate(5);
             }
-            array_push($dataArray,$response);
+           
         }
         // $response = json_decode($data,true);
         //return back()->with($response['message'],$response['result']['sn']);
@@ -556,7 +566,9 @@ class SignAdapter
                                 //Storage::disk('document')->move($relativePathIn,$relativePathBackup);
                             }else{
                                 $status = Document::find($id);
-                                $status->certificatelevel = 'FAILUR';
+                                if($status->certificatelevel=='INPROGRESS'){
+                                    $status->certificatelevel = 'FAILUR';
+                                }
                                 $status->message = $response['errorMessage'];
                                 $status->update();
                                 Log::error('STAMPE FAILUR: '.$id);
@@ -564,7 +576,10 @@ class SignAdapter
                             array_push($dataArray,$response);
                             // return json_encode($response);
             }
-            return response()->json([$dataArray,$dbug]);    
+            if(env('APP_DEBUG')==true){
+                return response()->json([$dataArray,$dbug]);    
+            }
+            return response()->json([$dataArray]);    
         }catch(\GuzzleHttp\Exception\RequestException $e){
             // you can catch here 40X re
             // sponse errors and 500 response errors
