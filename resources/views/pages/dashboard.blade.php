@@ -301,7 +301,7 @@
                                                 <div>
                                                     <i class="fa fa-file-pdf"></i>
                                                 </div>
-                                                <div class="ms-4 w-100">
+                                                <div class="ms-4 w-100" id="data-{{$stemp->id}}">
                                                     <p class="text-xs font-weight-bold mb-0">File Name:</p>
                                                     <h6 class="text-sm mb-0">{{ $stemp->filename }}</h6>
                                                     <div class="text-xs font-weight-bold mb-0">
