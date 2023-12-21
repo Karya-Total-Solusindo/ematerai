@@ -66,7 +66,12 @@
                                 {{ $data->directory->name }}
                              </td>
                             <td class="align-middle text-center">
+                                @if($data->certificatelevel == 'NOT_CERTIFIED')
+                                <span class="badge badge-sm  bg-gradient-info">PROCESSING STAMPS</span>
+                                {{-- <br><span style="font-size: 9px;">{{ $data->sn }}</span> --}}
+                                @else
                                 <span class="badge badge-sm  bg-gradient-info">{{ $data->certificatelevel ?? 'NOT_CERTIFIED' }}</span>
+                                @endif
                                 {{-- {{ App\Models\Document::where('directory_id',$data->id)->count() ?? 0 }} --}}
                             </td>
                             <td class="align-middle text-center">

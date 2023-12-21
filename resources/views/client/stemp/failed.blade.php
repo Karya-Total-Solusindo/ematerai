@@ -169,7 +169,7 @@
                                 </td>
                                 <td class="align-middle text-center" style="border-bottom-width: 0px !important;">
                                     @if(Storage::disk('public')->exists($data->source))
-                                    <span class="badge badge-sm  bg-gradient-warning">{{ $data->certificatelevel ?? '_' }}</span>
+                                    <span class="badge badge-sm  bg-gradient-warning">{{ ($data->certificatelevel == 'FAILUR')? 'FILED': $data->certificatelevel }}</span>
                                     @else
                                     <a href="#" class="badge badge-sm  bg-gradient-warning">FILE NOT FOUND</a>
                                     @endif

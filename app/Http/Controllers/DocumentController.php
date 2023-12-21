@@ -188,10 +188,12 @@ class DocumentController extends Controller
                 $document = Document::where('id',$id)
                 ->where('certificatelevel','=',$status)
                 ->orWhere('certificatelevel','=','NOT_CERTIFIED')
+                ->orWhere('certificatelevel','=','FAILUR')
                 ->first();
                 //dd($document->source);
                 if(Storage::disk('public')->exists($document->source)){
                     Document::where('id',$id)
+                    ->where('user_id','=',Auth::user()->id)
                     ->where('certificatelevel','=',$status)
                     ->orWhere('certificatelevel','=','NOT_CERTIFIED')
                     //->whereNot('certificatelevel','DELETED')
@@ -205,6 +207,7 @@ class DocumentController extends Controller
                 }
             }
         }
+        //dd( $countSuccess,$CountError);
         return redirect()->back()->with('success','The document was successfully sent in the processing queue.<br> 
         Success: '.$countSuccess.'<br> Failed: '.$CountError);        
     }

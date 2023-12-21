@@ -27,7 +27,6 @@ class EmateraiController extends Controller
            
        try {   
                 $status = $request->get('status') ?? $request->get('search')['value']; 
-
                 $query = [
                     Auth::user()->postal,
                     'start'=> $request->get('start') ?? 0,
@@ -43,7 +42,6 @@ class EmateraiController extends Controller
                 $responses = json_decode($requestAPIs,true);
                 //dd($requestAPIs,$responses);
                
-                
                 if(isset($responses['result'])){
                     $dataArray =[];    
                     $dataSN = $responses['result']['data'];
@@ -51,18 +49,30 @@ class EmateraiController extends Controller
                         $user = Serialnumber::where('sn','=',$value['serialnumber'])
                                 ->join('users','users.id','serialnumber.user_id')
                         ->first();
-                        // dd($user->username);
-                       $isUser = str_contains($user->email,'@')? $user->email : '(DELETED) '. $user->about;
-                        $td =[
-
-                            "user" => $isUser,
-                            'docId' => $user->dociment_id ?? null,
-                            "serialnumber" => $value['serialnumber'],
-                            "status"=> $value['status'],
-                            "file"=> $value['file'],
-                            "tgl"  => date_format(date_create($value['tgl']),'d/m/Y H:i:s'),
-                            "tglupdate" => date_format(date_create($value['tglupdate']),'d/m/Y H:i:s'),
-                        ];
+                        if($user){
+                                // dd($user->username);
+                            $isUser = str_contains($user->email,'@')? $user->email : '(DELETED) '. $user->about;
+                                $td =[
+                                    "user" => $isUser,
+                                    'docId' => $user->dociment_id ?? null,
+                                    "serialnumber" => $value['serialnumber'],
+                                    "status"=> $value['status'],
+                                    "file"=> $value['file'],
+                                    "tgl"  => date_format(date_create($value['tgl']),'d/m/Y H:i:s'),
+                                    "tglupdate" => date_format(date_create($value['tglupdate']),'d/m/Y H:i:s'),
+                                ];
+                        }else{
+                                $td =[
+                                    "user" => $value['email'],
+                                    'docId' => $user->dociment_id ?? null,
+                                    "serialnumber" => $value['serialnumber'],
+                                    "status"=> $value['status'],
+                                    "file"=> $value['file'],
+                                    "tgl"  => date_format(date_create($value['tgl']),'d/m/Y H:i:s'),
+                                    "tglupdate" => date_format(date_create($value['tglupdate']),'d/m/Y H:i:s'),
+                                ];
+                        }
+                        
                         array_push($dataArray, $td);
                     }
                   
@@ -85,7 +95,7 @@ class EmateraiController extends Controller
                 //throw $th;
                 Log::error($e->getMessage());
             }
-            $data =['draw'=>0,'recordsTotal'=>0,'recordsFiltered'=>0,'data'=>null];
+            $data =['draw'=>0,'recordsTotal'=>0,'recordsFiltered'=>0,'data'=>[]];
         return response()->json($data,200);
     }
 

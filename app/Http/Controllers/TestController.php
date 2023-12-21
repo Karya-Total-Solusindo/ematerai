@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Serialnumber;
 use Illuminate\Http\Request;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
@@ -75,6 +76,22 @@ class TestController extends Controller
         $responseBody = json_decode($response->getBody(), true);
         dd($responseBody,$statusCode);
         return response()->json($responseBody);
-
+    }
+    public function spesiment(Request $request){
+        // echo $request->query('spesiment');
+        // dd( $request);
+        if ($request->has('spesiment')) {
+            $spesiment =  str_replace('.png','',$request->query('spesiment'));
+            $serial = Serialnumber::where('sn','=',$spesiment)->first();
+            if($serial) {
+                try {
+                    header("Content-type: image/png");
+                    $image = base64_decode($serial->image);
+                    echo $image;
+                } catch (FileNotFoundException $e) {
+                    echo "catch";
+                }
+            }
+        }
     }
 }
