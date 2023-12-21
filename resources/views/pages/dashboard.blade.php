@@ -194,12 +194,16 @@
         <div class="row mt-4">
             <div class="col-lg-12 mb-lg-4 mb-4 ">
                 <div class="card z-index-2 h-100 ">
-                    <div class="card-header pb-0 pt-3 bg-transparent">
-                        <h6 class="text-capitalize">Serial Number</h6>
-                        {{-- <p class="text-sm mb-0">
-                            <i class="fa fa-arrow-up text-success"></i>
-                            <span class="font-weight-bold">4% more</span> in 2021
-                        </p> --}}
+                    <div class="card-header pb-0 pt-3 bg-transparent row">
+                        <div class="col-6 text-start">
+                            <h6 class="text-capitalize">Serial Number</h6>
+
+                        </div>
+                        <div class="col-6 text-end">
+                            <button id="getStamp" value="STAMP" class="btn btn-success">STAMP</button>
+                            <button id="getNotStamp" value="NOTSTAMP" class="btn btn-primary">Not STAMP</button>
+                        </div>
+
                     </div>
                     <div class="card-body m-2 p-3 mb-2">
                         <div class="table-responsive">
@@ -208,10 +212,10 @@
                                 <thead>
                                     <tr>
                                         <th>email</th>
-                                        <th>file</th>
                                         <th>serialnumber</th>
                                         <th>status</th>
                                         <th>statussn</th>
+                                        <th>file</th>
                                         <th>Date</th>
                                     </tr>
                                 </thead>
@@ -336,35 +340,52 @@
 {{-- {{ config('sign-adapter.API_CHECK_SERIAL_NUMBER') }} --}}
 
 
-<table id="example" class="display" width="100%"></table>
+
 
         @push('js')
         <script src="https://cdn.datatables.net/1.13.8/js/jquery.dataTables.min.js"></script>
         <script src="https://cdn.datatables.net/autofill/2.6.0/js/dataTables.autoFill.min.js"></script>
+        <script src="https://cdn.datatables.net/buttons/2.4.2/js/dataTables.buttons.min.js"></script>
         <script>
             $( document ).ready(function() {
+                let ststusSN = 'stamp';
                 //?start=0&length=10&status=NOTSTAMP&notEncrypt=true
                 let url = '{{route("checkDaftarSerial")}}';
-                $('#TebelSerial').DataTable( {
-                    // dom: 'Bfrtip',
-                    ajax: {
-                        url: url,
-                        dataType: "json",
-                        type: "GET",
-                        // dataSrc: 'data',                  
-                    }, 
-                    columns: [
-                        { data: 'email' },
-                        { data: 'serialnumber' },
-                        { data: 'status' },
-                        { data: 'statussn' },
-                        { data: 'file' },
-                        { data: 'tgl' }
-                    ],  
-                    // deferLoading: 1,
-                    processing: true,
-                    serverSide: true,
-                });
+                var tableSerial = $('#TebelSerial').DataTable( {
+                        // deferLoading: 1,
+                        "dom": '<"top"i>rt<"bottom"><"clear">',
+                        order: [[5, 'desc']],
+                        searchDelay: 500,
+                        processing: true,
+                        serverSide: true,
+                        dom: 'lfrBtip',
+                        ajax: {
+                            url: url,
+                            dataType: "json",
+                            type: "GET",
+                            // dataSrc: 'data',                  
+                        }, 
+                        columns: [
+                            { data: 'email' },
+                            { data: 'serialnumber' },
+                            { data: 'status' },
+                            { data: 'statussn' },
+                            { data: 'file' },
+                            { data: 'tgl' }
+                        ],                        
+                    });
+                    $('#getStamp').on('click', function(e){
+                        //tableSerial.search($('#getStamp').val()).draw();
+                        //tableSerial.input($('#getStamp').val()).draw();
+                        tableSerial.ajax.url(url+"?status=STAMP").load();
+                        ststusSN = 'STAMP';
+                    });
+                    $('#getNotStamp').on('click', function(e){
+                        //tableSerial.search($('#getNotStamp').val()).draw();
+                        tableSerial.ajax.url(url+"?status=NOTSTAMP").load();
+                        ststusSN = 'NOTSTAMP';
+                    });
+                    
             });
         </script>
     
