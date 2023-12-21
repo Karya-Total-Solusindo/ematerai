@@ -23,13 +23,16 @@ class EmateraiController extends Controller
     }
 
     public function checkDaftarSerial(Request $request){
-       // CEK NOTSTAMP
+       // CEK SERIAL NUMBER STEM OR NOTSTAMP
             try {
+                
+                $status = $request->get('status') ?? $request->get('search')['value']; 
+
                 $query = [
                     Auth::user()->postal,
                     'start'=> $request->get('start') ?? 0,
                     'length'=> $request->get('length') ?? 100,
-                    'status'=>'NOTSTAMP',
+                    'status'=>  $status ?? 'NOTSTAMP',
                     'notEncrypt'=>'true',
                 ];
                 $Urls = (string) config('sign-adapter.API_CHECK_DAFTAR_SN');
@@ -48,6 +51,7 @@ class EmateraiController extends Controller
                             // 'recordsFiltered' => $responses['result']['limit']?? 0,
                             'recordsFiltered' => $responses['result']['total'] ?? 1,
                             'data' => $responses['result']['data'],
+                            'search' => $request->get('search'),
                         ];
                         return response()->json( $data,200);
                         //$notstamp = $response['notstamp']; 
