@@ -24,8 +24,8 @@ class EmateraiController extends Controller
 
     public function checkDaftarSerial(Request $request){
        // CEK SERIAL NUMBER STEM OR NOTSTAMP
-            try {
-                
+           
+       try {   
                 $status = $request->get('status') ?? $request->get('search')['value']; 
 
                 $query = [
@@ -42,7 +42,29 @@ class EmateraiController extends Controller
                 ])->withUrlParameters($query)->get($Urls,$query);
                 $responses = json_decode($requestAPIs,true);
                 //dd($requestAPIs,$responses);
+               
+                
                 if(isset($responses['result'])){
+                    $dataArray =[];    
+                    $dataSN = $responses['result']['data'];
+                    foreach ($dataSN as $key => $value) {
+                        $user = Serialnumber::where('sn','=',$value['serialnumber'])
+                                ->join('users','users.id','serialnumber.user_id')
+                        ->first();
+                        // dd($user->username);
+                        $td =[
+
+                            "user" => $user->username ?? null,
+                            'docId' => $user->dociment_id ?? null,
+                            "serialnumber" => $value['serialnumber'],
+                            "status"=> $value['status'],
+                            "file"=> $value['file'],
+                            "tgl"  => date_format(date_create($value['tgl']),'d/m/Y H:i:s'),
+                            "tglupdate" => date_format(date_create($value['tglupdate']),'d/m/Y H:i:s'),
+                        ];
+                        array_push($dataArray, $td);
+                    }
+                  
                     if($responses['result']['total']!='0'){
                         $totalUnUsed = $responses['result']['total'];
                         $data = [
@@ -50,19 +72,20 @@ class EmateraiController extends Controller
                             'recordsTotal'=> $responses['result']['total']?? 0,
                             // 'recordsFiltered' => $responses['result']['limit']?? 0,
                             'recordsFiltered' => $responses['result']['total'] ?? 1,
-                            'data' => $responses['result']['data'],
+                            'data' => $dataArray,//$responses['result']['data'],
                             'search' => $request->get('search'),
                         ];
                         return response()->json( $data,200);
                         //$notstamp = $response['notstamp']; 
                     }
                 }   
-                
+              
             } catch (\Exception $e) {
                 //throw $th;
                 Log::error($e->getMessage());
             }
-        return response()->json('server',200);
+            $data =['draw'=>0,'recordsTotal'=>0,'recordsFiltered'=>0,'data'=>null];
+        return response()->json($data,200);
     }
 
 

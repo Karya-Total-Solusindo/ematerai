@@ -27,4 +27,9 @@ class Serialnumber extends Model
         'sn',
         'noidentitas',
     ];
+
+    public function document()
+    {
+        return $this->belongsTo(Document::class,'documet_id','id','serialnumber')->withDefault();
+    }
 }
