@@ -699,7 +699,7 @@ class StempController extends Controller
                 ->where('user_id','=',Auth::user()->id)
                 ->whereNull('sn');
             }
-            dd($document);
+            //dd($document);
             $resultArray=[];
             foreach($document as $doc){
                 // dd($all,$doc->filename);
@@ -717,8 +717,8 @@ class StempController extends Controller
                 }
                 //dd(Storage::path('/'),'/public/docs/'.$doc->company->name.'/'.$doc->directory->name.'/in/'. $doc->filename,Storage::delete('/public/docs/'.$doc->company->name.'/'.$doc->directory->name.'/in/'. $doc->filename));
             }
-            dd($resultArray);
-            //return redirect()->back()->with($resultArray);
+            //dd($resultArray);
+            return redirect()->back()->with($resultArray);
 
         }
 
