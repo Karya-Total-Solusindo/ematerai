@@ -199,7 +199,7 @@ class HomeController extends Controller
                 ->count()),
                 "STAMPTING" => Document::where('user_id',Auth::user()->id)->where('certificatelevel','=','CERTIFIED')->orderBy('updated_at', 'desc')
                 ->paginate(5,['*'],'stemp_page')->setPageName('stemp_page'),
-                "NOT_STAMPTING" => Document::where('user_id',Auth::user()->id)->where('certificatelevel','<>','CERTIFIED')->orderBy('updated_at', 'desc')
+                "NOT_STAMPTING" => Document::where('user_id',Auth::user()->id)->whereNotIn('certificatelevel',['CERTIFIED','DELETED'])->orderBy('updated_at', 'desc')
                 ->paginate(5,['*'],'nostemp_page')->setPageName('nostemp_page'),
             ];
             return view('pages.dashboard', compact('datas'));
