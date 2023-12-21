@@ -54,7 +54,7 @@ class EmateraiController extends Controller
                         // dd($user->username);
                         $td =[
 
-                            "user" => ($user->ematerai_token == 'DELETED')? '(DELETED) '. $user->ebout :  $user->email,
+                            "user" => ($user->ematerai_token == 'DELETED')? '(DELETED) '. $user->about :  $user->email,
                             'docId' => $user->dociment_id ?? null,
                             "serialnumber" => $value['serialnumber'],
                             "status"=> $value['status'],
