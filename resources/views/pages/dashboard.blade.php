@@ -118,7 +118,7 @@
                         <div class="row mb-0">
                             <div class="col-8 mb-0">
                                 <div class="numbers mb-0">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai Balance</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">SALDO MATERAI</p>
                                     <h5 class="font-weight-bolder mb-0">
                                         {{-- {{rand(200000,900000)}}  --}}
                                         {{ $datas['COUNT_MATERAI'] }}
@@ -145,7 +145,7 @@
                         <div class="row mb-0">
                             <div class="col-8 mb-0">
                                 <div class="numbers mb-0">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai Unused</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">MATERAI NOT STAMP</p>
                                     <h5 class="font-weight-bolder mb-0" title="Jumlah saldo pada Portal POS">
                                         {{-- {{rand(200000,900000)}}  --}}
                                         {{ $datas['COUNT_MATERAI_NOTSTAMP'] }}
@@ -169,7 +169,7 @@
                         <div class="row mb-0">
                             <div class="col-8 mb-0">
                                 <div class="numbers mb-0">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Materai Used</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">MATERAI STAMP</p>
                                     <h5 class="font-weight-bolder mb-0">
                                         {{-- {{rand(200000,900000)}}  --}}
                                         {{ $datas['COUNT_MATERAI_STAMP'] }}
