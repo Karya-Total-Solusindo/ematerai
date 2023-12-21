@@ -180,9 +180,9 @@
                                 </td>
                                 <td rowspan="2" class="align-middle text-center">
                                     @if($data->spesimenPath != '')
-                                    @if(Storage::disk('public')->exists($data->spesimenPath))
-                                    <img height="50" src="{{ Storage::url($data->spesimenPath) }}" alt="{{$data->sn}}" srcset="{{ Storage::url($data->spesimenPath) }}">
-                                    @endif
+                                        @if(Storage::disk('public')->exists($data->spesimenPath))
+                                            <img height="50" src="{{ Storage::url($data->spesimenPath) }}" title="Serial Ematerai: {{$data->sn}}" alt="{{$data->sn}}" srcset="{{ Storage::url($data->spesimenPath) }}">
+                                        @endif
                                     @endif
                                 </td>
                             </tr>
@@ -191,12 +191,12 @@
                                     {{-- <div class="badge badge-sm  bg-dager"> </div> --}}
                                         <i class="fas fa-warning"></i> Error: <small class="text-muted"><em>{{$data->message}}</em></small>
                                     @if(!Storage::disk('public')->exists($data->source))
-                                        <form id="fromUpload_{{$data->id??rand()}}" action="{{ route('updatefile',$data->id) }}" class="formUpload" enctype="multipart/form-data" form-data="{{$data->id??rand()}}">@csrf</form>
+                                        {{-- <form id="fromUpload_{{$data->id??rand()}}" action="{{ route('updatefile',$data->id) }}" class="formUpload" enctype="multipart/form-data" form-data="{{$data->id??rand()}}">@csrf</form>
                                         <div class="input-group input-sm mb-0" form-input="{{$data->id}}">
                                             <input form="fromUpload_{{$data->id??rand()}}" class="form-control" type="file" name="file" style="height: fit-content;">
                                             <input form="fromUpload_{{$data->id??rand()}}" type="hidden" name="id" value="{{$data->id}}">
                                             <button form="fromUpload_{{$data->id??rand()}}" type="submit" class="btn btn-primary uploadSubmit" style="height: fit-content;"> <i class="fas fa-upload"></i> Reupload </button>
-                                        </div>
+                                        </div> --}}
                                     @endif
                                     
                                 </td>

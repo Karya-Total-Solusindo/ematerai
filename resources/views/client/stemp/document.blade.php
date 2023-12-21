@@ -131,14 +131,17 @@
                 {{-- Show data with template --}}
                     {{-- <form id="execute" action="{{ route('getSerialNumber') }}" method="POST"> --}}
                         {{-- Update status to INPROGRES --}}
-                    <form id="execute" action="{{ route('setInProgres') }}" method="POST"> 
+                    <form id="execute" action="{{ route('setInProgres') }}" method="POST">
+                        @csrf
+                        <input type="hidden" name="status" value="NEW">
+                    </form>    
                         {{-- <form id="execute" action="{{ route('stampExecute') }}" method="POST">  --}}    
                     <table class="table align-items-center mb-0">
                         <thead>
                             <tr>
                                 @if($directory->count()>0)
                                     @if($directory->template==1)
-                                    <td><input type="checkbox" name="all" value="{{$directory->id}}" id="selectAll"></td>
+                                    <td><input form="execute" type="checkbox" name="all" value="{{$directory->id}}" id="selectAll"></td>
                                     @endif
                                 @endif
                                 <th class="text-uppercase text-start text-secondary text-xxs font-weight-bolder opacity-7">
@@ -163,13 +166,13 @@
                             @foreach ($datas  as $key =>  $data)
                             <tr>
                                 @if($data->directory->template==1)    
-                                <td>
-                                    <input type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
+                                <td rowspan="2">
+                                    <input form="execute" type="checkbox" class="chechList" name="doc[]" value="{{$data->id}}" id="">
                                     @if($data->sn == '')
                                     @endif
                                 </td>
                                 @endif
-                                <td class="align-middle text-center">
+                                <td rowspan="2" class="align-middle text-center" >
                                     @if (request()->has('page'))
                                         @if(request()->input('page')>1)
                                             {{ ($datas->perPage() * $datas->currentPage())+($key+1)}}
@@ -180,18 +183,18 @@
                                     {{$key+1}}
                                     @endif
                                 </td>
-                                <td class="align-middle text-sm">
+                                <td class="align-middle text-sm" style="border-bottom-width: 0px !important;">
                                     <h6 class="mb-0">
                                         <a target="_blank" title="Click to show file" class="mb-0" href="{{ asset('storage'.$data->source) }}">{{ $data->filename }}</a>
                                     </h6>
                                 </td>
-                                <td class="align-middle text-sm">
+                                <td class="align-middle text-sm" style="border-bottom-width: 0px !important;">
                                     {{ $data->sn ?? 'NOT_CERTIFIED' }}
                                 </td>
-                                <td class="align-middle text-center">
+                                <td class="align-middle text-center" style="border-bottom-width: 0px !important;">
                                     <span class="text-secondary text-xs font-weight-bold">{{ $data->updated_at->format('d/m/Y H:i:s') }}</span>
                                 </td>
-                                <td class="align-middle text-end ">
+                                <td class="align-middle text-end" style="border-bottom-width: 0px !important;">
                                     {{-- <a href="{{ route('stemp.show',$data->id) }}" class="btn btn-s btn-primary text-white font-weight-bold text-xs"
                                         data-toggle="tooltip" data-original-title="Edit Company">
                                         Detail 
@@ -207,6 +210,18 @@
                                     @endif
                                 </td>
                             </tr>
+                            <tr>
+                                <td colspan="5" style="border-bottom-width: 1px !important;">
+                                    @if(!Storage::disk('public')->exists($data->source))
+                                        <form id="fromUpload_{{$data->id??rand()}}" action="{{ route('updatefile',$data->id) }}" class="formUpload" enctype="multipart/form-data" form-data="{{$data->id??rand()}}">@csrf</form>
+                                        <div class="input-group input-sm mb-0" form-input="{{$data->id}}">
+                                            <input form="fromUpload_{{$data->id??rand()}}" class="form-control" accept=".pdf" type="file" name="file" style="height: fit-content;">
+                                            <input form="fromUpload_{{$data->id??rand()}}" type="hidden" name="id" value="{{$data->id}}">
+                                            <button form="fromUpload_{{$data->id??rand()}}" type="submit" class="btn btn-primary uploadSubmit" style="height: fit-content;"> <i class="fas fa-upload"></i> Reupload </button>
+                                        </div>
+                                    @endif
+                                </td>
+                            </tr>
                             @endforeach
                             @else
                                 <tr>
@@ -217,9 +232,9 @@
                             @endif
                             </tbody>
                     </table>
-                        @csrf
+                      
                         
-                    </form>
+                   
     
                 {{-- data don have template --}}
             </div>
@@ -310,7 +325,6 @@
                     },
                 });
                 //end daterange
-
                         $('#selectAll').prop('checked', false);
                         $('#btnGetSN').prop('disabled', true);
                         $('#delete-new-file').addClass('disabled');
@@ -360,17 +374,85 @@
 
             });    
 
-
             $('#delete-new-file').click((e)=>{
                 $('#execute').attr("action","{{route('stamp.deleteNewFile')}}");
                 $('#execute').submit();
                  //console.log($('.chechList').val()); 
             });
 
-            
-
-
-
         </script>
     @endPushOnce
 @endonce
+
+@push('js')
+<script>
+                $('.formUpload').submit((e)=>{
+                e.preventDefault();
+                let id = $(this).attr('form-data');
+                console.log(e,e.target);
+                var files = e.target[1].files; // for multiple files
+                var fd = new FormData();
+                var other_data = e.target.elements;
+                console.log(other_data);
+                $.each(other_data,function(key,input){
+                    console.log(input);
+                    fd.append(input.name,input.value);
+                });
+                fd.append('file',e.target[1].files[0]);
+                console.log(fd);
+               if(files.length > 0){
+                
+                $.ajax({
+                          url: e.target.action,
+                          method: 'POST',
+                          data: fd,
+                          contentType: false,
+                          processData: false,
+                          dataType: 'json',
+                          headers: {'X-CSRF-TOKEN': $('meta[name="csrf-token"]').attr('content')},
+                          success: function(response){
+                                // Hide error container
+                                $('#err_file').removeClass('d-block');
+                                $('#err_file').addClass('d-none');
+                                if(response.success == true){ // Uploaded successfully
+                                    toastr["success"](response.message, 'Uploaded successfully');
+                                    $(e.target.elements).hide();
+                                      // Response message
+                                      $('#responseMsg').removeClass("alert-danger");
+                                      $('#responseMsg').addClass("alert-success");
+                                      $('#responseMsg').html(response.message);
+                                      $('#responseMsg').show();
+                                      // File preview
+                                      $('#filepreview').show();
+                                      $('#filepreview img,#filepreview a').hide();
+                                      if(response.extension == 'jpg' || response.extension == 'jpeg' || response.extension == 'png'){
+                                            $('#filepreview img').attr('src',response.filepath);
+                                            $('#filepreview img').show();
+                                      }else{
+                                            $('#filepreview a').attr('href',response.filepath).show();
+                                            $('#filepreview a').show();
+                                      }
+                                }else if(response.success == false){ // File not uploaded
+                                     toastr["error"](response.message, 'File not uploaded');
+                                      // Response message
+                                      $('#responseMsg').removeClass("alert-success");
+                                      $('#responseMsg').addClass("alert-danger");
+                                      $('#responseMsg').html(response.message);
+                                      $('#responseMsg').show();
+                                }else{
+                                    // Display Error
+                                    toastr["error"]("error upload", "error")
+                                      e.target.elements.hide();
+                                      $('#err_file').text(response.error);
+                                } 
+                          },
+                          error: function(response){
+                                console.log("error : " + JSON.stringify(response) );
+                          }
+                     });
+               }else{
+                     alert("Please select a file.");
+               }
+            });
+</script>
+@endpush
