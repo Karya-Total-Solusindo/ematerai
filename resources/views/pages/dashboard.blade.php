@@ -211,7 +211,7 @@
                                 <thead>
                                     <tr>
                                         <th>By</th>
-                                        {{-- <th>SERIALNUMBER</th> --}}
+                                        <th>SERIALNUMBER</th>
                                         <th>STATUS</th>
                                         <th>File</th>
                                         <th>Date</th>
@@ -394,7 +394,7 @@
                         ],
                         columns: [
                             { data: 'user'},
-                            // { data: 'serialnumber'},
+                            { data: 'serialnumber'},
                             { data: 'status'},
                             { data: 'file'},
                             { data: 'tgl'},
