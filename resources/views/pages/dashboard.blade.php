@@ -311,9 +311,12 @@
                                                                 @break
                                                             @case('FAILUR')
                                                                 <span class="badge badge-sm min-vw-20 bg-gradient-danger">{{ $stemp->certificatelevel }}</span>
+                                                                @break
+                                                            @case('INPROGRESS')
+                                                                <span class="badge badge-sm min-vw-20 bg-gradient-info">{{ $stemp->certificatelevel }}</span>
                                                                 @break    
-                                                                <span class="badge badge-sm min-vw-20 bg-gradient-default">{{ $stemp->certificatelevel }}</span>
-                                                            @default
+                                                                @default
+                                                                <span class="badge badge-sm min-vw-20 bg-gradient-success">{{ $stemp->certificatelevel }}</span>
                                                         @endswitch
                                                         <span class="float-end" style="font-size: smaller !important; bottom: -9px;">
                                                             {{ $stemp->updated_at->format('d/m/Y H:i:s') }} 
