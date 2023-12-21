@@ -108,6 +108,7 @@ class HomeController extends Controller
             $totalUnUsed = 0;
             $totalUsed = 0;
             $daftarSN = [];
+            $DATA_STAMP = [];
             
             try {
                 $Url = config('sign-adapter.API_CHECK_SALDO');
@@ -173,6 +174,7 @@ class HomeController extends Controller
                 if(isset($responses['result'])){
                     if($responses['result']['total']!=0){
                         $totalUsed = $responses['result']['total'];
+                        $DATA_STAMP = $responses['result'];
                         //$notstamp = $response['notstamp']; 
                     }
                 }   
@@ -187,11 +189,14 @@ class HomeController extends Controller
                 "COUNT_MATERAI_NOSTEMP" => $notstamp,
                 'COUNT_MATERAI_NOTSTAMP' => $notstamp, //$totalUnUsed,
                 'COUNT_MATERAI_STAMP' => $totalUsed,
+                'DATA_STEMP' => $DATA_STAMP,
                 'COUNT_DOCUMENT' => (Document::where(['user_id'=> Auth::user()->id])->whereNot('certificatelevel','DELETED')->count()??0),
                 'COUNT_NOT_CERTIFIED' => (Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'NOT_CERTIFIED'])->count()),
                 'COUNT_SUCCESS' => (Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'CERTIFIED'] )->count()),
                 'COUNT_FAILUR' => (Document::where(['user_id'=> Auth::user()->id,'certificatelevel'=>'FAILUR'] )->count()),
-                "NOT_STAMPED" => (Document::where('user_id',Auth::user()->id)->whereNotIn('certificatelevel',['CERTIFIED','DELETED'])->count()),
+                "NOT_STAMPED" => (Document::where('user_id',Auth::user()->id)->where('certificatelevel','=','NEW')
+                //->whereNotIn('certificatelevel',['CERTIFIED','FAILUR','DELETED'])
+                ->count()),
                 "STAMPTING" => Document::where('user_id',Auth::user()->id)->where('certificatelevel','=','CERTIFIED')->orderBy('updated_at', 'desc')
                 ->paginate(5,['*'],'stemp_page')->setPageName('stemp_page'),
                 "NOT_STAMPTING" => Document::where('user_id',Auth::user()->id)->where('certificatelevel','<>','CERTIFIED')->orderBy('updated_at', 'desc')
