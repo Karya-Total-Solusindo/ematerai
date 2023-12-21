@@ -97,6 +97,10 @@ class StempController extends Controller
         return redirect()->route('home')->with('error', 'Directory not found!');
        
     }
+    /** ANCHOR - Menu NEW Documents 
+     *   
+     * 
+     */
     public function document($directory_id, Request $request)
     {
         $user = Auth::user()->id;
@@ -104,32 +108,49 @@ class StempController extends Controller
         $directory = null;
         $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
         $request['directory_id'] = $directory_id;
-        $datas = Document::with(['company','directory'])->latest()
-        ->where(['user_id'=>$user,'directory_id'=> $directory_id])
-        ->Where('certificatelevel','=', 'NEW')
-        ->where('user_id','=',Auth::user()->id)
-        ->orderBy('updated_at', 'desc')->paginate($per_page);
-        if (($s = $request->s)) {
-            $datas = Document::with(['company','directory'])->latest()
-            ->where(function ($query){
-                $query->whereNotIn('history',['HISTORY','DELETED'])
-                ->orWhereNull('history');
-            })->where('certificatelevel','=','NEW')
-            ->Where('filename', 'LIKE', '%' . $s . '%')
-            ->where('user_id','=',Auth::user()->id)
-            ->orderBy('updated_at', 'desc')
-            ->filter(request()->all())->paginate($per_page);
-        }
 
-        if($request->input('view')){
-            $datas = Document::with(['company','directory'])->latest()
-            ->where(function ($query){
-                $query->whereNotIn('history',['HISTORY','DELETED'])
-                ->orWhereNull('history');
-            })->where('certificatelevel','=','NEW')
-            ->where('user_id','=',Auth::user()->id)
-            ->filter(request()->all())->paginate($per_page);
+        $datas = Document::with(['company','directory'])->latest()
+        ->where(function ($query){
+            $query->where('certificatelevel','=','NEW')
+            ->where('user_id','=',Auth::user()->id);
+        })->orWhere(function ($query){
+            $query->WhereNotNull('sn')
+            ->where('certificatelevel','=','FAILUR');
+        })->where('user_id','=',Auth::user()->id)
+        ->orderBy('updated_at', 'desc')->paginate($per_page);
+        
+        //if search
+        if (($s = $request->s)) {
+            $datas = Document::with(['company','directory'])->latest();
+            $datas->Where('user_id','=',Auth::user()->id);
+            if($request->by == 'filename'){
+                $datas->where('filename', 'LIKE', '%' . $s . '%')
+                ->where('certificatelevel','=','NEW');
+            }
+            elseif($request->by == 'sn'){
+                $datas->where('certificatelevel','=','FAILUR')
+                ->whereNotNull('spesimenPath')
+                ->where('filename', 'LIKE', '%' . $s . '%')
+                ->orWhere('sn', 'LIKE', '%' . $s . '%');
+                
+            }
+            $datas->orderBy('updated_at', 'desc')
+            ->filter(request()->all())->paginate($per_page); 
         }
+        //filter
+        elseif($request->input('view')){
+            $datas = Document::with(['company','directory'])->latest()
+                ->where(function ($query){
+                    $query->where('certificatelevel','=','NEW')
+                    ->where('user_id','=',Auth::user()->id);
+                })->orWhere(function ($query){
+                    $query->WhereNotNull('sn')
+                    ->where('certificatelevel','=','FAILUR');
+                })->where('user_id','=',Auth::user()->id)
+                    ->orderBy('updated_at', 'desc')
+                    ->filter(request()->all())->paginate($per_page);
+        }
+        
        
         $directory = Directory::find(['id',$directory_id])->where('user_id',$user)->first();
         if($directory){
@@ -162,6 +183,7 @@ class StempController extends Controller
 
     /**
      * Store a newly created resource in storage.
+     * FIXME - REMOVE
      */
     public function store(Request $request)
     {
