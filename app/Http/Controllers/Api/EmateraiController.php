@@ -52,9 +52,10 @@ class EmateraiController extends Controller
                                 ->join('users','users.id','serialnumber.user_id')
                         ->first();
                         // dd($user->username);
+                       $isUser = str_contains($user->email,'@')? $user->email : '(DELETED) '. $user->about;
                         $td =[
 
-                            "user" => ($user->ematerai_token == 'DELETED')? '(DELETED) '. $user->about :  $user->email,
+                            "user" => $isUser,
                             'docId' => $user->dociment_id ?? null,
                             "serialnumber" => $value['serialnumber'],
                             "status"=> $value['status'],
