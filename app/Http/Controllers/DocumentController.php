@@ -172,6 +172,7 @@ class DocumentController extends Controller
                         $document = Document::where('directory_id',$document_all);
                         $document->where('certificatelevel','=',$status);
                         $document->orWhere('certificatelevel','=','NOT_CERTIFIED');
+                        $document->orWhere('history','=','reupload');
                         $document->update(['certificatelevel' => 'INPROGRESS','history' => $status]);
                     }
                     if($document){
@@ -196,6 +197,7 @@ class DocumentController extends Controller
                     ->where('user_id','=',Auth::user()->id)
                     ->where('certificatelevel','=',$status)
                     ->orWhere('certificatelevel','=','NOT_CERTIFIED')
+                    ->orWhere('history','=','reupload')
                     //->whereNot('certificatelevel','DELETED')
                     //->whereNot('history','DELETED')
                     ->update(['certificatelevel' => 'INPROGRESS', 'history' => $status]);
@@ -235,10 +237,14 @@ class DocumentController extends Controller
         $file_path = $filePath.$fileName;
         //dd(Storage::disk('public')->put($filePath.$fileName,file_get_contents($request->file)));
         if(Storage::disk('public')->put($filePath.$fileName,file_get_contents($request->file))){
-            $oldMessage =  $document->filename .' Replace '.$fileName ;
+            $oldMessage =  $document->filename .' Replace '.$fileName;
+            $document->history = 'reupload';
             $document->source = $filePath.$fileName;
             $document->filename = $fileName;
-            $document->message = $oldMessage;
+            $document->x1 = $document->directory->x1;
+            $document->x2 = $document->directory->x2;
+            $document->y1 = $document->directory->y1;
+            $document->y2 = $document->directory->y2;
             // dd($filePath.$fileName);
             $document->update();
             return response()->json(['success'=>true,'message'=>'Document uploaded successfully'],200);
