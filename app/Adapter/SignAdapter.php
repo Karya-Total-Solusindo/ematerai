@@ -581,7 +581,7 @@ class SignAdapter
                                 $status->message = $response['errorMessage'];
                                 $status->update();
                                 Log::error('STAMPE FAILUR: '.$id);
-                                Log::error('DBUG: '.$dbug);
+                                Log::error('DBUG: '.[$dbug]);
                                 
                             }
                             array_push($dataArray,$response);
