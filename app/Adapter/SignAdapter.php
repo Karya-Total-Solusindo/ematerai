@@ -565,7 +565,7 @@ class SignAdapter
                                     $status = Document::find($id);
                                     $status->certificatelevel = 'CERTIFIED';
                                     $status->update();
-
+                                    //update serial
                                     $serialUsed = Serialnumber::where('sn','=',$datas->sn);
                                     $serialUsed->use = 1;
                                     $serialUsed->useby = $datas->user->email;
