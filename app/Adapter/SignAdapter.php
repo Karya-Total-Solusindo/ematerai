@@ -567,9 +567,9 @@ class SignAdapter
                                     $status->update();
                                     //update serial
                                     $serialUsed = Serialnumber::where('sn','=',$datas->sn);
-                                    $serialUsed->used = 1;
-                                    $serialUsed->useby = $datas->user->email;
-                                    $serialUsed->update();
+                                    // $serialUsed->used = 1;
+                                    // $serialUsed->useby = $datas->user->email;
+                                    $serialUsed->update(['used' => 1, 'useby' => $datas->user->email ]);
                                     Log::info('STAMPE Success: '.$id);
                                 //}
                                 //Log::info('Move IN to backup '.$relativePathIn.' to '.$relativePathBackup);
