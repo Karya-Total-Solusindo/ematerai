@@ -554,12 +554,13 @@ class SignAdapter
                         'visURX'=> $datas->x2, //$input['upper_right_x'] ?? '0',
                         'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
                         'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
+                        'retryFlag'=> 1,
                     ]))->post($Url)->getBody();
                     
                     $response = json_decode($stemting,true);
                             //Update status document jika stemting berhasil berhasil
                             if($response['status']=='True'){
-                                if(Storage::disk('document')->move($relativePathIn,$relativePathBackup)){
+                                //if(Storage::disk('document')->move($relativePathIn,$relativePathBackup)){
                                     $status = Document::find($id);
                                     $status->certificatelevel = 'CERTIFIED';
                                     $status->update();
@@ -568,8 +569,8 @@ class SignAdapter
                                     $serialUsed->use = '1';
                                     $serialUsed->useby = $datas->user->email;
                                     $serialUsed->update();
-                                }
-                                Log::info('Move IN to backup '.$relativePathIn.' to '.$relativePathBackup);
+                                //}
+                                //Log::info('Move IN to backup '.$relativePathIn.' to '.$relativePathBackup);
                                 //Storage::disk('document')->move($relativePathIn,$relativePathBackup);
                             }else{
                                 $status = Document::find($id);
