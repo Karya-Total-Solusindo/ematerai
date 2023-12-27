@@ -79,7 +79,7 @@ a.btn-sm{
 </style>
 <div class="card mb-4">
 
-  <input type="text" placeholder="Lower Left X" class="form-control input-sm" name="x1" value="" hidden />
+  <input type="text" placeholder="Lower Left X" class="form-control input-sm" name="x1" value="" hidden/>
   <input type="text" placeholder="Lower Left Y" class="form-control input-sm" name="y1" value="" hidden/>
   <input type="text" placeholder="Upper Right X" class="form-control input-sm" name="x2" value="" hidden/>
   <input type="text" placeholder="Upper Right Y" class="form-control input-sm" name="y2" value="" hidden/>
@@ -146,10 +146,10 @@ a.btn-sm{
                   @endif
                     <input type="text" name="template" id="template" value=""  required style="z-index: -4; display:none; position: absolute;"/>
                     <input type="file" name="file" id="file-to-upload" accept="application/pdf" />
-                    {{-- <input type="hidden" name="lower_left_x" value="" required/>
+                    <input type="hidden" name="lower_left_x" value="" required/>
                     <input type="hidden" name="lower_left_y" value="" required />
                     <input type="hidden" name="upper_right_x" value="" required />
-                    <input type="hidden" name="upper_right_y" value="" required /> --}}
+                    <input type="hidden" name="upper_right_y" value="" required />
                     <input type="hidden" name="dokumen_height" value="" required="required" />
                     <input type="hidden" name="dokumen_width" value="" required="required" />
                     <input type="hidden" name="dokumen_page" id="dokumen_page" required>
@@ -471,4 +471,3 @@ a.btn-sm{
   showPDF('{{ $fileThemp }}');
 </script>
 @endif
-
