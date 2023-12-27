@@ -15,9 +15,9 @@
                     <option value="{{ $directory->company->id ?? '' }}" @selected(old('company_id') == $directory->company->name)>
                         {{$directory->company->name .' '.old('company_id')}}
                     </option>
-                    @foreach ($company[0]->company as $d)
+                    {{-- @foreach ($company[0]->company as $d)
                         <option value="{{ $d->id }}">{{ $d->name }}</option>
-                    @endforeach
+                    @endforeach --}}
                 </select>
                 <span></span>
             </div>
