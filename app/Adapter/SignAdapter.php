@@ -567,7 +567,7 @@ class SignAdapter
                                     $status->update();
                                     //update serial
                                     $serialUsed = Serialnumber::where('sn','=',$datas->sn);
-                                    $serialUsed->use = 1;
+                                    $serialUsed->used = 1;
                                     $serialUsed->useby = $datas->user->email;
                                     $serialUsed->update();
                                     Log::info('STAMPE Success: '.$id);
