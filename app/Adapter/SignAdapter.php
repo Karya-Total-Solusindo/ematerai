@@ -554,7 +554,7 @@ class SignAdapter
                         'visURX'=> $datas->x2, //$input['upper_right_x'] ?? '0',
                         'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
                         'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
-                        'retryFlag'=> 1,
+                        'retryFlag'=> "1", //can retry signing request, using same api with specified parameter 'retryFlag':'1'
                     ]))->post($Url)->getBody();
                     
                     $response = json_decode($stemting,true);
