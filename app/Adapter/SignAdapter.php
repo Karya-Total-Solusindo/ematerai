@@ -522,8 +522,8 @@ class SignAdapter
                     'dest'=>  '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/out/'.$datas->filename, 
                     "docpass"=> "",
                     "jwToken"=> $__token,
-                    "location"=> "PTMitracommEkasarana",//"JAKARTA",
-                    "profileName"=> "emeteraicertificateSigner", //"emeteraicertificateSigner",
+                    "location"=> "PTMitracommEkasarana",
+                    "profileName"=> "emeteraicertificateSigner",
                     "reason"=> "Ematerai Farpoint",
                     "refToken"=> $datas->sn,
                     "spesimenPath"=> '/sharefolder/docs/'.$datas->company->name.'/'.$datas->directory->name.'/spesimen/'.$datas->sn.'.png',//"{{fileQr}}",
@@ -533,6 +533,7 @@ class SignAdapter
                     'visURX'=> $datas->x2, //$input['upper_right_x'] ?? '0',
                     'visURY'=> $datas->y2, //$input['upper_right_y'] ?? '0',
                     'visSignaturePage' => $datas->page, //$input['dokumen_page'] ?? '0',
+                    'retryFlag'=> "1", //can retry signing request, using same api with specified parameter 'retryFlag':'1'
                 ];
                
                 $stemting = (string) Http::withHeaders([
@@ -579,7 +580,7 @@ class SignAdapter
                                 }
                                 $status->message = $response['errorMessage'];
                                 $status->update();
-                                Log::error('STAMPE FAILUR: '.$id);
+                                Log::error('STAMPE FAILUR: '.$id,$dbug);
                             }
                             array_push($dataArray,$response);
                             // return json_encode($response);
