@@ -198,6 +198,7 @@ class DocumentController extends Controller
                     ->where('certificatelevel','=',$status)
                     ->orWhere('certificatelevel','=','NOT_CERTIFIED')
                     ->orWhere('history','=','reupload')
+                    ->orWhere('certificatelevel','=','FAILUR')
                     //->whereNot('certificatelevel','DELETED')
                     //->whereNot('history','DELETED')
                     ->update(['certificatelevel' => 'INPROGRESS', 'history' => $status]);
