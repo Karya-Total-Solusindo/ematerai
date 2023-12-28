@@ -284,7 +284,7 @@
             </div>
         </div>
         @if(request()->has('company') || request()->has('s'))
-        {{ $datas->appends(request()->input())->links() }}
+        {{ $datas->appends(['sort' => 'updated_at'],request()->input())->links() }}
         @endif
     </div>
 </div>

@@ -41,7 +41,7 @@ class Document extends Model
             return $query->whereHas('directory', function($query) use ($directory){
                 $query->where('id', $directory)
                 ->where('user_id','=',Auth::user()->id)
-                ->orderBy('updated_at', 'desc');
+                ->orderBy('updated_at', 'DESC');
             });  
         });
 
@@ -52,7 +52,7 @@ class Document extends Model
                 $dateEnd = date('Y-m-d 23:59:59', strtotime(str_replace('/', '-',$splitdate[1])));
                 return    $query->where('user_id','=',Auth::user()->id)
                 ->whereBetween('updated_at',[$dateStart, $dateEnd])
-                ->orderBy('updated_at', 'desc');
+                ->orderBy('updated_at', 'DESC');
             //});   
         });
 

@@ -478,6 +478,7 @@ class StempController extends Controller
             })->whereIn('certificatelevel',['FAILUR','NOT_CERTIFIED'])
             ->where('message','!=',NULL)
             ->where('user_id','=',Auth::user()->id)
+            ->orderBy('updated_at', 'DESC')
             ->filter(request()->all())->paginate($per_page);
         }
         return view("client.stemp.index", compact("datas","company","directory"));
@@ -495,13 +496,14 @@ class StempController extends Controller
         $per_page = (int) $request->input('view') ?  $request->input('view'):1000000;  
         //dd($per_page);
         $user = Auth::user()->id;
-        $datas = Document::with(['company','directory'])->latest()
+        $datas = Document::with(['company','directory'])
+            ->orderBy('updated_at', 'DESC')->latest()
             ->where(function ($query){
                 $query->whereNotIn('history',['HISTORY','DELETED'])
                 ->orWhereNull('history');
             })->where('certificatelevel','=','CERTIFIED')
             ->where('user_id','=',Auth::user()->id)
-            ->orderBy('updated_at', 'DESC')
+            // ->orderBy('updated_at', 'DESC')
             ->filter(request()->all())->paginate($per_page);
         if($request->getRequestUri()){
                 $company = $request->input('company');
@@ -509,26 +511,28 @@ class StempController extends Controller
         }
 
         if (($s = $request->s)) {
-            $datas = Document::with(['company','directory'])->latest()
+            $datas = Document::with(['company','directory'])
+            ->orderBy('updated_at', 'DESC')->latest()
             ->where(function ($query){
                 $query->whereNotIn('history',['HISTORY','DELETED'])
                 ->orWhereNull('history');
             })->where('certificatelevel','=','CERTIFIED')
             ->Where('filename', 'LIKE', '%' . $s . '%')
             ->where('user_id','=',Auth::user()->id)
-            ->orderBy('updated_at', 'DESC')
+            // ->orderBy('updated_at', 'DESC')
             ->filter(request()->all())->paginate($per_page);
         }
         
         if($request->input('company')){
-            $datas = Document::with(['company','directory'])->latest()
+            $datas = Document::with(['company','directory'])
+            ->orderBy('updated_at', 'DESC')->latest()
             ->where(function ($query){
                 $query->whereNotIn('history',['HISTORY','DELETED'])
                 ->orWhereNull('history');
             })->where('certificatelevel','=','CERTIFIED')
             ->where('user_id','=',Auth::user()->id)
-            ->orderBy('updated_at', 'DESC')
-            ->filter(request()->all())->paginate($per_page);
+            ->filter(request()->all())
+            ->paginate($per_page);
         }
         return view("client.stemp.index", compact("datas","company","directory"));
     }
@@ -556,12 +560,14 @@ class StempController extends Controller
             ->where('certificatelevel','=','CERTIFIED')
             ->where('history','=','HISTORY')
             ->where('user_id','=',Auth::user()->id)
+            ->orderBy('updated_at', 'DESC')
             ->filter(request()->all())->paginate($per_page); 
         if($request->input('company')){
                 $datas = Document::with(['company','directory'])->latest()
                 ->where('certificatelevel','=','CERTIFIED')
                 ->where('history','=','HISTORY')
                 ->where('user_id','=',Auth::user()->id)
+                ->orderBy('updated_at', 'DESC')
                 ->filter(request()->all())->paginate($per_page);
         }
         $filePath = asset('/storage/docs/');
