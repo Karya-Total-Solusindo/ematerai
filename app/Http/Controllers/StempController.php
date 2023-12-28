@@ -501,6 +501,7 @@ class StempController extends Controller
                 ->orWhereNull('history');
             })->where('certificatelevel','=','CERTIFIED')
             ->where('user_id','=',Auth::user()->id)
+            ->orderBy('updated_at', 'DESC')
             ->filter(request()->all())->paginate($per_page);
         if($request->getRequestUri()){
                 $company = $request->input('company');
@@ -515,6 +516,7 @@ class StempController extends Controller
             })->where('certificatelevel','=','CERTIFIED')
             ->Where('filename', 'LIKE', '%' . $s . '%')
             ->where('user_id','=',Auth::user()->id)
+            ->orderBy('updated_at', 'DESC')
             ->filter(request()->all())->paginate($per_page);
         }
         
@@ -525,6 +527,7 @@ class StempController extends Controller
                 ->orWhereNull('history');
             })->where('certificatelevel','=','CERTIFIED')
             ->where('user_id','=',Auth::user()->id)
+            ->orderBy('updated_at', 'DESC')
             ->filter(request()->all())->paginate($per_page);
         }
         return view("client.stemp.index", compact("datas","company","directory"));
